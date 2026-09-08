@@ -1,0 +1,219 @@
+{
+  "version": "0.8.16",
+  "features": {
+    "database": {
+      "description": "Neon PostgreSQL + Drizzle",
+      "optional": false,
+      "env": [
+        "DATABASE_URL"
+      ],
+      "files": [
+        "db/index.ts",
+        "db/schema/index.ts",
+        "drizzle.config.ts"
+      ],
+      "routes": [],
+      "removalComplexity": "never",
+      "dependsOn": []
+    },
+    "auth": {
+      "description": "Better Auth, rôles, organisations, 2FA",
+      "optional": false,
+      "env": [
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "AUTH_EMAIL_PASSWORD_ENABLED",
+        "AUTH_REQUIRE_EMAIL_VERIFICATION"
+      ],
+      "files": [
+        "lib/auth/index.ts",
+        "app/api/auth/[...all]/route.ts"
+      ],
+      "routes": [
+        "/api/auth/[...all]"
+      ],
+      "notes": [
+        "Email/password est optionnel seulement si un autre mode d’auth réel (ex. Google OAuth) est activé.",
+        "En production, email/password ne doit pas être activé sans canal de livraison Resend opérationnel lorsque la vérification email est requise."
+      ],
+      "removalComplexity": "never",
+      "dependsOn": [
+        "database"
+      ]
+    },
+    "health": {
+      "description": "Liveness/readiness backend",
+      "optional": false,
+      "env": [],
+      "files": [
+        "app/api/health/route.ts",
+        "app/api/readyz/route.ts",
+        "lib/health/readiness.ts"
+      ],
+      "routes": [
+        "/api/health",
+        "/api/readyz"
+      ],
+      "removalComplexity": "never",
+      "dependsOn": [
+        "database"
+      ]
+    },
+    "payments": {
+      "description": "Smart Router + providers africains optionnels + réconciliation",
+      "optional": true,
+      "env": [
+        "PAYMENT_WEBHOOK_BASE_URL"
+      ],
+      "files": [
+        "lib/payments/routing.ts",
+        "lib/billing/reconcile.ts",
+        "app/api/payments/checkout/route.ts",
+        "app/api/webhooks/[provider]/route.ts",
+        "lib/payments/health.ts"
+      ],
+      "routes": [
+        "/api/payments/checkout",
+        "/api/webhooks/[provider]"
+      ],
+      "removalComplexity": "with-care",
+      "dependsOn": [
+        "database",
+        "auth"
+      ],
+      "disableBehavior": "paymentsEnabled=false + providers=[]; garder le code inerte si aucun paiement n’est requis."
+    },
+    "payment-reconciliation-cron": {
+      "description": "Rattrapage des paiements asynchrones ou tardifs",
+      "optional": true,
+      "env": [
+        "CRON_SECRET"
+      ],
+      "files": [
+        "app/api/cron/reconcile-payments/route.ts",
+        "lib/cron/auth.ts"
+      ],
+      "routes": [
+        "/api/cron/reconcile-payments"
+      ],
+      "removalComplexity": "safe-if-payments-disabled",
+      "dependsOn": [
+        "payments"
+      ],
+      "disableBehavior": "Ne pas générer le cron lorsque paymentsEnabled=false."
+    },
+    "cloudinary": {
+      "description": "Upload d'images optionnel avec validation MIME + magic bytes",
+      "optional": true,
+      "env": [
+        "CLOUDINARY_CLOUD_NAME",
+        "CLOUDINARY_API_KEY",
+        "CLOUDINARY_API_SECRET"
+      ],
+      "files": [
+        "lib/storage/cloudinary.ts",
+        "app/api/uploads/images/route.ts"
+      ],
+      "routes": [
+        "/api/uploads/images"
+      ],
+      "removalComplexity": "safe",
+      "dependsOn": [
+        "auth"
+      ],
+      "disableBehavior": "cloudinaryEnabled=false; la route d’upload reste inerte/non disponible."
+    },
+    "email": {
+      "description": "Emails transactionnels Resend; requis si email/password + vérification/récupération sont activés",
+      "optional": "conditional",
+      "env": [
+        "RESEND_API_KEY",
+        "EMAIL_FROM"
+      ],
+      "files": [
+        "lib/email/index.ts"
+      ],
+      "routes": [],
+      "requiredWhen": "AUTH_EMAIL_PASSWORD_ENABLED=true",
+      "disableBehavior": "Si Resend est absent, désactiver email/password et utiliser un autre provider d’auth; ne jamais laisser un flux de vérification/récupération sans livraison.",
+      "removalComplexity": "conditional",
+      "dependsOn": [
+        "auth"
+      ]
+    },
+    "google": {
+      "description": "Google OAuth + Search Console",
+      "optional": true,
+      "env": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ],
+      "files": [
+        "lib/google/search-console.ts",
+        "app/admin/integrations/google/page.tsx"
+      ],
+      "routes": [],
+      "removalComplexity": "safe",
+      "dependsOn": [
+        "auth"
+      ],
+      "disableBehavior": "googleAuth=false/searchConsole=false selon les besoins."
+    },
+    "seo": {
+      "description": "Metadata, sitemap, robots, Open Graph",
+      "optional": false,
+      "env": [],
+      "files": [
+        "lib/seo/metadata.ts",
+        "app/sitemap.ts",
+        "app/robots.ts",
+        "app/opengraph-image.tsx"
+      ],
+      "routes": [],
+      "removalComplexity": "safe",
+      "dependsOn": []
+    },
+    "banani-planner": {
+      "description": "Handoff Banani + plan d'implémentation",
+      "optional": true,
+      "env": [],
+      "files": [
+        "DESIGN.md",
+        "design/banani/screens.json",
+        "scripts/generate-implementation-plan.mjs"
+      ],
+      "routes": [],
+      "removalComplexity": "safe",
+      "dependsOn": []
+    },
+    "observability-core": {
+      "description": "Logs structurés, redaction des secrets et request IDs",
+      "optional": false,
+      "env": [],
+      "files": [
+        "lib/observability/logger.ts",
+        "lib/observability/request-id.ts"
+      ],
+      "routes": [],
+      "removalComplexity": "never",
+      "dependsOn": []
+    },
+    "api-client": {
+      "description": "Fetch client avec timeout et retry uniquement GET/HEAD",
+      "optional": false,
+      "env": [],
+      "files": [
+        "lib/api/client.ts"
+      ],
+      "routes": [],
+      "removalComplexity": "safe",
+      "dependsOn": []
+    }
+  },
+  "removalProtocol": [
+    "Avant de retirer une feature, vérifier dependsOn et les routes/fichiers possédés.",
+    "Préférer désactiver une feature env-gated plutôt que supprimer son code si elle peut être réutilisée.",
+    "Après toute suppression: npm run features:check && npm run verify:code.",
+    "Ne jamais supprimer database/auth/observability-core comme une feature optionnelle."
+  ]
+}

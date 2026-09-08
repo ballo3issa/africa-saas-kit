@@ -1,0 +1,21 @@
+{
+  "version": "0.8.16",
+  "appName": "My Africa SaaS",
+  "appUrl": "http://localhost:3000",
+  "country": "CI",
+  "currency": "XOF",
+  "database": "neon",
+  "auth": "better-auth",
+  "email": "resend",
+  "storage": "none",
+  "securityLevel": "high",
+  "paymentsEnabled": false,
+  "providers": [],
+  "defaultProvider": null,
+  "methods": [],
+  "googleAuth": true,
+  "searchConsole": true,
+  "banani": true,
+  "cloudinaryEnabled": false,
+  "emailPasswordEnabled": true
+}

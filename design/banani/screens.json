@@ -1,0 +1,24 @@
+{
+  "project": "Africa SaaS Kit",
+  "source": "banani",
+  "screens": [
+    {
+      "id": "landing",
+      "name": "Landing page",
+      "route": "/",
+      "auth": "public",
+      "purpose": "Présenter la proposition de valeur et conduire vers l'inscription ou le pricing.",
+      "states": ["default", "mobile"],
+      "notes": "Remplacer ou compléter cet exemple après import Banani."
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "route": "/dashboard",
+      "auth": "authenticated",
+      "purpose": "Vue synthétique du compte, abonnement, crédits et activité.",
+      "states": ["default", "empty", "loading", "error"],
+      "notes": "Exemple de structure attendue."
+    }
+  ]
+}
