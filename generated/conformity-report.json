@@ -1,7 +1,7 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-10T06:58:31.569Z",
-  "status": "FAIL",
+  "generatedAt": "2026-09-10T20:12:17.679Z",
+  "status": "PASS",
   "passes": [
     "Fichier requis: AGENTS.md",
     "Fichier requis: README.md",
@@ -191,14 +191,13 @@
     "Premium Icon Gate présent",
     "Security Baseline Gate présent",
     "General Refactor Gate présent",
-    "SEO crawl files présents"
+    "SEO crawl files présents",
+    "package-lock.json présent"
   ],
   "warnings": [
     "africa-saas.config.json absent — normal seulement si le setup n’a pas encore été exécuté",
     "Deployment handoff non généré — lancer npm run deploy:handoff avant mise en ligne",
     "Production Doctor non généré — lancer npm run doctor:production avant mise en ligne"
   ],
-  "failures": [
-    "package-lock.json absent — exécuter npm install puis relancer ce test"
-  ]
+  "failures": []
 }

@@ -1,6 +1,22 @@
 import { HttpPaymentProvider } from "../provider-base";
 import type { CheckoutInput, CheckoutResult } from "../types";
 import { requireEnv } from "@/lib/security/env";
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+const WEBHOOK_TOLERANCE_SECONDS = 300;
+
+function asRecord(value: unknown): Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Invalid FedaPay webhook payload");
+  }
+  return value as Record<string, unknown>;
+}
+
+function secureEqual(left: string, right: string) {
+  const leftBuffer = Buffer.from(left, "utf8");
+  const rightBuffer = Buffer.from(right, "utf8");
+  return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
+}
 
 const baseUrl = () => process.env.FEDAPAY_ENVIRONMENT === "live"
   ? "https://api.fedapay.com/v1"
@@ -62,12 +78,23 @@ export class FedapayProvider extends HttpPaymentProvider {
   }
 
   private async constructEvent(request: Request) {
-    const signature = request.headers.get("x-fedapay-signature");
-    if (!signature) throw new Error("Missing X-FEDAPAY-SIGNATURE");
-    const raw = Buffer.from(await request.arrayBuffer());
+    const header = request.headers.get("x-fedapay-signature");
+    if (!header) throw new Error("Missing X-FEDAPAY-SIGNATURE");
+    const raw = Buffer.from(await request.arrayBuffer()).toString("utf8");
     const secret = requireEnv("FEDAPAY_WEBHOOK_SECRET");
-    const sdk = await import("fedapay");
-    return sdk.Webhook.constructEvent(raw, signature, secret) as unknown as Record<string, any>;
+    const fields = header.split(",").map((field) => field.trim());
+    const timestamp = Number(fields.find((field) => field.startsWith("t="))?.slice(2));
+    const signatures = fields.filter((field) => field.startsWith("s=")).map((field) => field.slice(2));
+    if (!Number.isInteger(timestamp) || timestamp <= 0 || signatures.length === 0) {
+      throw new Error("Invalid FedaPay signature header");
+    }
+    const age = Math.abs(Math.floor(Date.now() / 1000) - timestamp);
+    if (age > WEBHOOK_TOLERANCE_SECONDS) throw new Error("Expired FedaPay webhook signature");
+    const expected = createHmac("sha256", secret).update(`${timestamp}.${raw}`, "utf8").digest("hex");
+    if (!signatures.some((signature) => secureEqual(signature, expected))) {
+      throw new Error("Invalid FedaPay webhook signature");
+    }
+    return asRecord(JSON.parse(raw) as unknown);
   }
 
   async verifyWebhook(request: Request): Promise<boolean> {
@@ -76,7 +103,7 @@ export class FedapayProvider extends HttpPaymentProvider {
 
   async parseWebhook(request: Request) {
     const event = await this.constructEvent(request);
-    const entity = event.entity ?? event.data ?? event.object ?? {};
+    const entity = asRecord(event.entity ?? event.data ?? event.object ?? {});
     const id = String(event.id ?? `${event.name ?? event.type}:${entity.id ?? entity.reference ?? "unknown"}`);
     const type = String(event.name ?? event.type ?? "unknown");
     return { id, type, payload: event };

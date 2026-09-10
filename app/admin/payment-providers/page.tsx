@@ -5,6 +5,8 @@ import { providerCapabilities } from "@/lib/payments/capabilities";
 import { saveCountryRoute, savePlanMapping, saveProvider } from "./actions";
 
 export default async function PaymentProvidersPage(){
+ // This Server Component is evaluated once per request; the rolling window is intentionally request-relative.
+ // eslint-disable-next-line react-hooks/purity
  const since=new Date(Date.now()-24*60*60*1000);
  const [configs,routes,allPlans,mappings,attempts]=await Promise.all([
   db.select().from(paymentProviderConfigs).orderBy(asc(paymentProviderConfigs.priority)),

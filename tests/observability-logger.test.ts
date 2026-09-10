@@ -4,7 +4,8 @@ import { createLogger } from "@/lib/observability/logger";
 describe("structured logger", () => {
   it("redacts nested secret-like keys in production logs", () => {
     const old = process.env.NODE_ENV;
-    process.env.NODE_ENV = "production";
+    const mutableEnv = process.env as Record<string, string | undefined>;
+    mutableEnv.NODE_ENV = "production";
     const spy = vi.spyOn(console, "log").mockImplementation(() => undefined);
     createLogger("test").info("hello", { user: { email: "user@example.com" }, token: "abc", safe: "ok" });
     const line = String(spy.mock.calls[0]?.[0] ?? "");
@@ -12,6 +13,6 @@ describe("structured logger", () => {
     expect(line).not.toContain("user@example.com");
     expect(line).not.toContain("abc");
     spy.mockRestore();
-    process.env.NODE_ENV = old;
+    mutableEnv.NODE_ENV = old;
   });
 });

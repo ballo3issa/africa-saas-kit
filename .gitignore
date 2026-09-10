@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Next.js and test outputs
+.next/
+out/
+coverage/
+
+# Local environment and secrets
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+.env.*.local
+
+# Local generated configuration
+africa-saas.config.json
+.africa-saas/
+.codex/config.toml
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editors and operating systems
+.DS_Store
+._*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

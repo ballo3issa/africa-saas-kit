@@ -158,7 +158,7 @@ export async function getKitDashboardChecks(): Promise<KitCheck[]> {
   checks.push({ id: "skeleton", label: "Skeleton loaders", status: exists("components/ui/skeleton.tsx") && exists("scripts/loading-check.mjs") ? "ok" : "missing", detail: "Primitives et contrôle de chargement présents.", group: "Qualité" });
   checks.push({ id: "seo", label: "SEO / Social Preview", status: exists("app/sitemap.ts") && exists("app/opengraph-image.tsx") && exists("scripts/seo-check.mjs") ? "ok" : "missing", detail: "Sitemap, Open Graph et SEO gate présents.", group: "Qualité" });
   {
-    const codexPath = path.join(root, ".codex/config.toml");
+    const codexPath = path.join(process.cwd(), ".codex/config.toml");
     const codexText = fs.existsSync(codexPath) ? fs.readFileSync(codexPath, "utf8") : "";
     const mcpOk = /\[\s*mcp_servers\.banani\s*\]/i.test(codexText) && /Authorization/i.test(codexText);
     checks.push({ id: "banani", label: "Banani MCP / Implementation Planner", status: mcpOk && exists("DESIGN.md") && exists("scripts/generate-implementation-plan.mjs") ? "ok" : "missing", detail: mcpOk ? "MCP Banani configuré localement; token non affiché." : "Exécute npm run banani:prepare puis complète .codex/config.toml manuellement.", group: "Qualité" });

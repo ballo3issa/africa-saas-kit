@@ -18,9 +18,10 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     const validated=(mode==="register"?registerSchema:loginSchema).safeParse(raw);
     if(!validated.success){setError(validated.error.issues[0]?.message||"Données invalides");setBusy(false);return;}
     const {email,password}=validated.data;
+    const name="name" in validated.data && typeof validated.data.name === "string" ? validated.data.name : "";
     const fetchOptions = captchaToken ? { headers: { "x-captcha-response": captchaToken } } : undefined;
     if(mode==="register"){
-      const r=await authClient.signUp.email({name:(validated.data as {name:string}).name,email,password,callbackURL:"/dashboard",fetchOptions});
+      const r=await authClient.signUp.email({name,email,password,callbackURL:"/dashboard",fetchOptions});
       if(r.error){setError(r.error.message||"Inscription impossible");setBusy(false);return;}
     } else {
       const r=await authClient.signIn.email({email,password,callbackURL:"/dashboard",fetchOptions});

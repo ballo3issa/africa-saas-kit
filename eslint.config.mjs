@@ -5,7 +5,14 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react/no-unescaped-entities": "warn",
+    },
+  },
   globalIgnores([
+    "**/._*",
     ".next/**",
     "out/**",
     "build/**",

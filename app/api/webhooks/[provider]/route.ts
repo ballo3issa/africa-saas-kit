@@ -50,7 +50,7 @@ function replayRequest(request: Request, body: Uint8Array) {
   return new Request(request.url, {
     method: "POST",
     headers: new Headers(request.headers),
-    body,
+    body: body.buffer as ArrayBuffer,
   });
 }
 
