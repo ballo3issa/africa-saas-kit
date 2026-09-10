@@ -4,6 +4,7 @@ import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { requireUser } from "@/lib/auth/session";
 
 export const metadata: Metadata = privatePageMetadata;
+export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Authoritative server-side guard for every current and future /dashboard page.

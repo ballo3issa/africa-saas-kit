@@ -26,6 +26,6 @@
     "team": "Better Auth framework-owned team table",
     "team_member": "Better Auth framework-owned team membership table",
     "two_factor": "Better Auth framework-owned 2FA secret table; server access only",
-    "rateLimit": "Better Auth framework-owned rate-limit table"
+    "rate_limit": "Better Auth framework-owned rate-limit table"
   }
 }

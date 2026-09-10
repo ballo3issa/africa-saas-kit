@@ -9,6 +9,7 @@ const failures = [];
 function walk(dir) {
   if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith("._")) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(full);
     else if (extensions.has(path.extname(entry.name))) check(full);
@@ -16,6 +17,7 @@ function walk(dir) {
 }
 
 function check(file) {
+  if (file.startsWith(path.join("db", "migrations", "meta") + path.sep)) return;
   const text = fs.readFileSync(file, "utf8");
   if (!text.endsWith("\n")) failures.push(`${file}: newline final manquant`);
   const lines = text.split(/\r?\n/);
