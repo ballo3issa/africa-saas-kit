@@ -2,6 +2,7 @@
 import { FormEvent,useState } from "react";
 import { authClient } from "@/lib/auth/client";
 import { TurnstileWidget } from "@/components/turnstile-widget";
+import { forgotPasswordSchema } from "@/lib/validation/auth";
 
 export function ForgotPasswordForm(){
   const[msg,setMsg]=useState(""); const[error,setError]=useState(""); const[captchaToken,setCaptchaToken]=useState("");
@@ -9,7 +10,9 @@ export function ForgotPasswordForm(){
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault(); setError("");
     if(captchaEnabled&&!captchaToken){setError("Veuillez terminer la vérification anti-bot.");return;}
-    const email=String(new FormData(e.currentTarget).get("email")||"");
+    const parsed=forgotPasswordSchema.safeParse({email:String(new FormData(e.currentTarget).get("email")||"")});
+    if(!parsed.success){setError(parsed.error.issues[0]?.message||"E-mail invalide");return;}
+    const {email}=parsed.data;
     await authClient.requestPasswordReset({email,redirectTo:`${window.location.origin}/reset-password`,fetchOptions:captchaToken?{headers:{"x-captcha-response":captchaToken}}:undefined});
     setMsg("Si ce compte existe, un e-mail de réinitialisation a été envoyé.");
   }

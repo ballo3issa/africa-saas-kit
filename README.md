@@ -1,6 +1,38 @@
-> **Version : V0.8.16 — Robustesse serveur, anti-doublons & smoke tests**
+# Africa SaaS Kit V0.8.28
 
-# Africa SaaS Kit V0.8.16
+> **Version : V0.8.28 — General Refactor Gate + Zod Validation Gate + Security Baseline + Premium Icon Gate**
+
+
+## V0.8.28 — General Refactor Gate
+
+Le kit possède maintenant un contrôle global permanent avec `npm run refactor:check`. Il protège notamment les frontières d’authentification serveur de `/dashboard` et `/admin`, interdit l’exposition des réponses brutes des passerelles de paiement, impose des gardes d’origine/taille/type sur les endpoints mutateurs sensibles, interdit `Math.random()` pour les identifiants/tokens du kit et vérifie la cohérence des workflows CI. Ce contrôle est exécuté automatiquement par `verify:code`, `verify:production`, `ci:check` et `security:release`.
+
+Voir `docs/audit/general-refactor-v0.8.28.md`.
+
+
+## Zod Validation Gate — validation client + serveur obligatoire
+
+Zod est maintenant un garde-fou permanent. Les formulaires sensibles valident les entrées côté client avec `safeParse`, puis les données sont **revalidées côté serveur** avant toute mutation. Les Server Actions et routes API mutantes de première partie qui ne respectent pas ce contrat bloquent la CI. Commande : `npm run validation:zod-check`. Voir `docs/security/zod-validation-gate.md`.
+
+## Premium Icon Gate — aucune Sparkle/Sparklet dans l’UI
+
+Le kit applique désormais un contrôle visuel permanent : les composants/pages sous `app/` et `components/` sont scannés afin d’empêcher le retour d’icônes Sparkle/Sparkles, baguettes scintillantes et glyphes décoratifs génériques associés aux interfaces IA. Utiliser des pictogrammes sémantiques cohérents via `components/ui/premium-icon.tsx` ou une bibliothèque professionnelle auditée.
+
+Commande dédiée : `npm run ui:icons-check`. Le gate fait partie de `verify:code`, `verify:production` et `ci:check`, donc les nouvelles pages sont contrôlées elles aussi. Voir `docs/ui/premium-icons.md`.
+
+
+## Computer Use / Browser Tools (Antigravity)
+
+Dans Antigravity, le kit utilise le **Browser Subagent / Browser Tools** comme couche de vérification visuelle continue. Il n’existe aucun package npm `computer-use` à installer. La Phase 2 de `/setup-saas` vérifie l’activation réelle en demandant au Browser Subagent d’ouvrir une page web; après `npm install`, l’agent teste ensuite le SaaS local, les viewports mobile, les formulaires, OAuth, uploads, paiements sandbox, previews Vercel et le domaine final.
+
+Commandes :
+
+```bash
+npm run computer-use:check
+npm run computer-use:mark -- --status=verified --evidence="preuve navigateur réelle"
+```
+
+Le statut local est stocké dans `.africa-saas/` (ignoré par Git). Une preuve Browser ne remplace jamais les tests CLI, le build ou l’audit sécurité. Voir `docs/computer-use/antigravity-browser.md`.
 
 Starter Next.js + Neon + Better Auth conçu pour construire des SaaS adaptés aux réalités africaines : Mobile Money, XOF/XAF, paiements asynchrones, sécurité intégrée et routage multi-gateway.
 
@@ -70,7 +102,7 @@ npm run payments:local
 npm run payments:local:apply
 ```
 
-Le Local Payment Lab est **optionnel** et ne s’utilise que si le SaaS active des paiements en Phase 15. Il génère alors `generated/local-payment-lab.md` avec les URL webhook exactes. `PAYMENT_WEBHOOK_BASE_URL` est séparé de `NEXT_PUBLIC_APP_URL`.
+Le Local Payment Lab est **optionnel** et ne s’utilise que si le SaaS active des paiements en Phase 17. Il génère alors `generated/local-payment-lab.md` avec les URL webhook exactes. `PAYMENT_WEBHOOK_BASE_URL` est séparé de `NEXT_PUBLIC_APP_URL`.
 
 ### Mobile-first
 
@@ -134,7 +166,7 @@ npm run security:check
 npm run dev
 ```
 
-`npm run payments:routes` n’est utilisé qu’en Phase 15 si des paiements sont activés. Il génère alors un fichier SQL **à relire** dans `generated/payment-routes.sql` et ne modifie pas automatiquement une base de production.
+`npm run payments:routes` n’est utilisé qu’en Phase 17 si des paiements sont activés. Il génère alors un fichier SQL **à relire** dans `generated/payment-routes.sql` et ne modifie pas automatiquement une base de production.
 
 ## Presets pays V0.7
 
@@ -315,15 +347,21 @@ L'écran admin `/admin/integrations/google` affiche uniquement l'état de config
 
 ## Banani
 
-Banani n'était pas réellement intégré avant la V0.8.1. Le dépôt contient désormais :
+La connexion Banani/Codex utilise désormais `.codex/config.toml`. Le fichier est volontairement vide dans le starter et ignoré par Git.
 
-```text
-DESIGN.md
-design/banani/screens/
-docs/design/banani.md
+```bash
+npm run banani:prepare
 ```
 
-Utiliser l'export Banani/Figma ou le MCP proposé par Banani, puis demander à Antigravity/Codex d'implémenter les écrans en respectant `DESIGN.md`. Le kit ne fabrique pas de faux endpoint Banani : le handoff suit les mécanismes actuellement exposés par Banani.
+Ensuite, ouvre `.codex/config.toml` et colle manuellement la configuration MCP obtenue depuis ton compte Banani. Le kit n’écrit jamais automatiquement l’URL ou le bearer token.
+
+Vérification sans afficher le token :
+
+```bash
+npm run banani:check
+```
+
+Après connexion MCP, importe les écrans, mets à jour `design/banani/screens.json`, puis lance `npm run design:check` et `npm run design:plan`. Voir `docs/design/banani.md`.
 
 ## Réconciliation paiements
 
@@ -444,7 +482,7 @@ Le kit démarre et reste valide avec :
 
 Le wizard initial `npm run setup` **ne demande plus aucun provider**.
 
-En Phase 15 seulement :
+En Phase 17 seulement :
 
 ```bash
 # SaaS avec paiements
@@ -473,13 +511,13 @@ npm run setup-saas
 ```
 
 
-## Cloudflare (optionnel, Phase 16)
-Le kit peut guider l’achat/gestion du domaine et la configuration DNS via Cloudflare, mais Cloudflare n’est jamais requis. Utiliser `npm run cloudflare:setup` seulement en Phase 16. Sans Cloudflare, exécuter `npm run cloudflare:setup -- --none` puis marquer la phase `skipped`. Cette option domaine/DNS est distincte de Cloudflare R2, qui reste non intégré.
+## Cloudflare (optionnel, Phase 18)
+Le kit peut guider l’achat/gestion du domaine et la configuration DNS via Cloudflare, mais Cloudflare n’est jamais requis. Utiliser `npm run cloudflare:setup` seulement en Phase 18. Sans Cloudflare, exécuter `npm run cloudflare:setup -- --none` puis marquer la phase `skipped`. Cette option domaine/DNS est distincte de Cloudflare R2, qui reste non intégré.
 
 
 ## Cloudinary (optionnel)
 
-Les uploads d’images peuvent être activés tardivement en Phase 17 avec `npm run cloudinary:setup`. Un SaaS sans upload d’images n’a besoin d’aucun compte Cloudinary. Le endpoint de référence `/api/uploads/images` est authentifié et limite types/taille côté serveur.
+Les uploads d’images peuvent être activés tardivement en Phase 19 avec `npm run cloudinary:setup`. Un SaaS sans upload d’images n’a besoin d’aucun compte Cloudinary. Le endpoint de référence `/api/uploads/images` est authentifié et limite types/taille côté serveur.
 
 ## Commande `/provider`
 
@@ -528,3 +566,43 @@ npm run setup-saas
 npm run provider
 npm run provider -- chariow
 ```
+
+
+## Compatibilité de tests
+
+Le starter fixe **Vitest 4.1.11** avec Better Auth 1.7.3. Ne remplacez pas automatiquement Vitest par la major 5 sans vérifier les peer-dependencies. Évitez `npm install --force` et `--legacy-peer-deps` : corrigez les versions à la source.
+
+## Protection contre les faux avertissements d’hydratation
+
+Le `RootLayout` applique `suppressHydrationWarning` **uniquement** sur `<body>`. Cela évite le panneau d’erreur React/Next.js lorsque certaines extensions navigateur injectent un attribut dans `<body>` avant l’hydratation (par exemple `__processed_...="true"`).
+
+Cette protection est volontairement limitée au `<body>` : elle ne masque pas les vraies divergences d’hydratation dans les composants de l’application. Vérification :
+
+```bash
+npm run ui:hydration-check
+```
+
+
+## Import Banani après connexion MCP
+Après `npm run banani:check`, utilise `/import-banani` dans Antigravity/Codex. L’agent récupère les écrans accessibles via Banani MCP, écrit un snapshot sans secret, compare avec les routes/composants/features du starter puis génère un gap analysis et le plan d’implémentation avant le code. Voir `docs/design/import-banani.md`.
+
+## Upstash Redis (optionnel)
+
+Upstash peut être activé en **Phase 16** pour le cache TTL, le rate limiting distribué et les états temporaires. Neon reste la source de vérité.
+
+```bash
+npm run upstash:setup
+npm run upstash:check
+npm run upstash:check:online
+```
+
+Pour ne pas l’utiliser :
+
+```bash
+npm run upstash:setup -- --none
+```
+
+
+
+### Dependency security floor
+`npm run security:versions` bloque les régressions sous les versions minimales de sécurité revues pour Next.js, React, Drizzle ORM et Better Auth. Ce contrôle complète `npm audit`; il ne le remplace pas.

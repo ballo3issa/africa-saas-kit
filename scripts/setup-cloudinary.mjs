@@ -15,7 +15,7 @@ if (none) {
   writeCfg(false);
   fs.writeFileSync(out, `# Cloudinary — non utilisé\n\nCe SaaS n'utilise pas Cloudinary. La phase peut être marquée SKIPPED.\n`);
   console.log("✓ Cloudinary skipped. No image-upload provider is required.");
-  console.log("Next: npm run setup-saas:mark -- --phase=17 --status=skipped --note=\"Cloudinary non utilisé\"");
+  console.log("Next: npm run setup-saas:mark -- --phase=19 --status=skipped --note=\"Cloudinary non utilisé\"");
   process.exit(0);
 }
 

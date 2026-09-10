@@ -1,5 +1,5 @@
 {
-  "version": "0.8.16",
+  "version": "0.8.28",
   "features": {
     "database": {
       "description": "Neon PostgreSQL + Drizzle",
@@ -174,13 +174,18 @@
       "dependsOn": []
     },
     "banani-planner": {
-      "description": "Handoff Banani + plan d'implémentation",
+      "description": "Connexion Banani MCP + /import-banani + gap analysis + plan d’implémentation",
       "optional": true,
       "env": [],
       "files": [
         "DESIGN.md",
         "design/banani/screens.json",
-        "scripts/generate-implementation-plan.mjs"
+        "scripts/generate-implementation-plan.mjs",
+        ".agents/skills/import-banani/SKILL.md",
+        "design/banani/import-schema.json",
+        "scripts/import-banani-analyze.mjs",
+        "scripts/import-banani-check.mjs",
+        "docs/design/import-banani.md"
       ],
       "routes": [],
       "removalComplexity": "safe",
@@ -208,6 +213,109 @@
       "routes": [],
       "removalComplexity": "safe",
       "dependsOn": []
+    },
+    "computer-use": {
+      "description": "Assistance navigateur/Computer Use Antigravity pour vérification continue du SaaS",
+      "optional": "environment-conditional",
+      "env": [],
+      "files": [
+        ".agents/skills/computer-use/SKILL.md",
+        "scripts/computer-use-check.mjs",
+        "scripts/computer-use-mark.mjs",
+        "docs/computer-use/antigravity-browser.md"
+      ],
+      "routes": [],
+      "removalComplexity": "safe-outside-antigravity",
+      "dependsOn": [],
+      "disableBehavior": "Hors Antigravity, utiliser un outil navigateur équivalent ou marquer la phase Computer Use skipped avec justification. Dans Antigravity, Browser Tools doivent être vérifiés avant de poursuivre."
+    },
+    "upstash": {
+      "description": "Upstash Redis optionnel pour cache TTL, rate limiting distribué et états temporaires",
+      "optional": true,
+      "env": [
+        "UPSTASH_REDIS_REST_URL",
+        "UPSTASH_REDIS_REST_TOKEN"
+      ],
+      "files": [
+        "lib/cache/upstash.ts",
+        "lib/security/rate-limit.ts",
+        "lib/health/readiness.ts"
+      ],
+      "routes": [],
+      "removalComplexity": "safe",
+      "dependsOn": [],
+      "disableBehavior": "upstashEnabled=false et variables absentes; le SaaS continue directement avec Neon."
+    },
+    "premium-icons": {
+      "description": "Qualité visuelle permanente : icônes SVG premium cohérentes + blocage Sparkle/Sparklet et glyphes UI génériques",
+      "optional": false,
+      "env": [],
+      "files": [
+        "components/ui/premium-icon.tsx",
+        "scripts/premium-icon-check.mjs",
+        "docs/ui/premium-icons.md"
+      ],
+      "routes": [],
+      "removalComplexity": "never",
+      "dependsOn": []
+    },
+    "security-baseline-gate": {
+      "description": "Garde-fou permanent de sécurité: secrets/.env, inventaire API, validation serveur, auth middleware, email verification, rate limiting, RLS/policies et audit dépendances",
+      "optional": false,
+      "env": [
+        "DATABASE_URL",
+        "DATABASE_URL_DIRECT",
+        "UPSTASH_REDIS_REST_URL",
+        "UPSTASH_REDIS_REST_TOKEN",
+        "AUTH_REQUIRE_EMAIL_VERIFICATION"
+      ],
+      "files": [
+        "scripts/security-baseline-check.mjs",
+        "scripts/security-db-check.mjs",
+        "config/security-routes.json",
+        "config/security-rls.json",
+        "db/security/rls-baseline.sql",
+        "docs/security/security-baseline-gate.md"
+      ],
+      "routes": [],
+      "removalComplexity": "never",
+      "dependsOn": [
+        "observability-core"
+      ]
+    },
+    "zod-validation-gate": {
+      "description": "Validation Zod permanente côté client et serveur : Server Actions, routes API mutantes et formulaires sensibles contrôlés avant CI/livraison.",
+      "optional": false,
+      "env": [],
+      "files": [
+        "lib/validation/auth.ts",
+        "scripts/zod-validation-check.mjs",
+        "config/zod-validation.json",
+        "docs/security/zod-validation-gate.md"
+      ],
+      "routes": [],
+      "removalComplexity": "never",
+      "dependsOn": [
+        "security-baseline-gate"
+      ]
+    },
+    "continuous-refactor-gate": {
+      "description": "Garde-fou global permanent : autorisation serveur des zones privées, hygiène des réponses paiements, protections requêtes mutantes, identifiants cryptographiques, headers prod/dev et cohérence CI.",
+      "optional": false,
+      "env": [],
+      "files": [
+        "scripts/general-refactor-check.mjs",
+        "lib/security/request-guards.ts",
+        "lib/payments/public-result.ts",
+        "scripts/dependency-security-floor.mjs",
+        "config/security-dependency-floors.json"
+      ],
+      "routes": [],
+      "removalComplexity": "never",
+      "dependsOn": [
+        "security-baseline-gate",
+        "zod-validation-gate"
+      ]
     }
   },
   "removalProtocol": [

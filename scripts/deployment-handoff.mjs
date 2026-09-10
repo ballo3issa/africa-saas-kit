@@ -29,6 +29,7 @@ const paymentsEnabled = appCfg.paymentsEnabled === true || selected.length > 0;
 const base = '<TON-DOMAINE-HTTPS>';
 const configured = (name) => Boolean(env[name] && env[name].trim());
 const cloudinaryEnabled = appCfg.cloudinaryEnabled === true || ['CLOUDINARY_CLOUD_NAME','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET'].some(configured);
+const upstashEnabled = appCfg.upstashEnabled === true || ['UPSTASH_REDIS_REST_URL','UPSTASH_REDIS_REST_TOKEN'].some(configured);
 
 const providerRows = [];
 for (const [id,p] of Object.entries(providers)) {
@@ -39,7 +40,7 @@ for (const [id,p] of Object.entries(providers)) {
 }
 
 const visibleGroups = deployment.groups.filter(group => (paymentsEnabled || group.id !== "payments-core") && (cloudinaryEnabled || group.id !== "cloudinary"));
-const variableRows = visibleGroups.flatMap(group => group.variables.filter(v => paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name)).map(v => ({...v,group:group.label,configured:configured(v.name)})));
+const variableRows = visibleGroups.flatMap(group => group.variables.filter(v => (paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name)) && (upstashEnabled || !["UPSTASH_REDIS_REST_URL","UPSTASH_REDIS_REST_TOKEN"].includes(v.name))).map(v => ({...v,group:group.label,configured:configured(v.name)})));
 const missing = variableRows.filter(v => ['always','production-security'].includes(v.required) && !v.configured);
 
 const md = [];
@@ -59,7 +60,7 @@ for (const group of visibleGroups) {
   md.push(`### ${group.label}`);
   md.push('| Variable | État local | Secret ? | Vercel | Obligatoire quand | Où obtenir / quoi mettre |');
   md.push('|---|---|---:|---|---|---|');
-  for (const v of group.variables.filter(v => paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name))) {
+  for (const v of group.variables.filter(v => (paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name)) && (upstashEnabled || !["UPSTASH_REDIS_REST_URL","UPSTASH_REDIS_REST_TOKEN"].includes(v.name)))) {
     md.push(`| \`${v.name}\` | ${configured(v.name)?'✅ CONFIGURÉE':'❌ MANQUANTE'} | ${v.sensitive?'Oui':'Non'} | ${(v.vercel||[]).join(' + ')} | ${v.required} | ${v.source} |`);
   }
   md.push('');

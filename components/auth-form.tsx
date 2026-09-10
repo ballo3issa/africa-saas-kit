@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth/client";
 import { TurnstileWidget } from "@/components/turnstile-widget";
+import { loginSchema, registerSchema } from "@/lib/validation/auth";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
@@ -12,10 +13,14 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault(); setBusy(true); setError("");
     if(captchaEnabled && !captchaToken){ setError("Veuillez terminer la vérification anti-bot."); setBusy(false); return; }
-    const f=new FormData(e.currentTarget); const email=String(f.get("email")||""); const password=String(f.get("password")||"");
+    const f=new FormData(e.currentTarget);
+    const raw={name:String(f.get("name")||""),email:String(f.get("email")||""),password:String(f.get("password")||"")};
+    const validated=(mode==="register"?registerSchema:loginSchema).safeParse(raw);
+    if(!validated.success){setError(validated.error.issues[0]?.message||"Données invalides");setBusy(false);return;}
+    const {email,password}=validated.data;
     const fetchOptions = captchaToken ? { headers: { "x-captcha-response": captchaToken } } : undefined;
     if(mode==="register"){
-      const r=await authClient.signUp.email({name:String(f.get("name")||""),email,password,callbackURL:"/dashboard",fetchOptions});
+      const r=await authClient.signUp.email({name:(validated.data as {name:string}).name,email,password,callbackURL:"/dashboard",fetchOptions});
       if(r.error){setError(r.error.message||"Inscription impossible");setBusy(false);return;}
     } else {
       const r=await authClient.signIn.email({email,password,callbackURL:"/dashboard",fetchOptions});

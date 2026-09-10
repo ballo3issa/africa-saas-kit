@@ -67,13 +67,13 @@ export function SetupSaasDashboard({ checks }: { checks: KitCheck[] }) {
           <li>Neon PostgreSQL + Drizzle + migrations versionnées</li>
           <li>Admin, paiements optionnels, webhooks, cron et uploads Cloudinary optionnels</li>
           <li>Health/readiness, tests Vitest, ESLint, Prettier, typecheck, build et audit npm</li>
-          <li>Mobile-first, skeleton loaders, SEO, Banani planner et handoff GitHub/Vercel</li>
+          <li>Computer Use / Browser Tools, mobile-first, skeleton loaders, SEO, Banani planner et handoff GitHub/Vercel</li>
         </ul>
       </section>
 
       <section className="card kit-next">
         <h2>Ordre recommandé</h2>
-        <p className="muted">1. Lance <code>/setup-saas</code> → 2. configure Neon et les services de base → 3. importe Banani et construis le SaaS → 4. teste/build → 5. prépare GitHub/Vercel → 6. configure les paiements seulement en Phase 15 si nécessaire → 7. décide si Cloudflare sera utilisé en Phase 16 → 8. décide si Cloudinary sera utilisé pour les images en Phase 17 → 9. finalise la production en Phase 18.</p>
+        <p className="muted">1. Lance <code>/setup-saas</code> → 2. vérifie Computer Use / Browser Tools → 3. configure Neon et les services de base → 4. importe Banani et construis le SaaS → 5. teste/build → 6. prépare GitHub/Vercel → 7. configure les paiements seulement en Phase 16 si nécessaire → 8. décide si Cloudflare sera utilisé en Phase 17 → 9. décide si Cloudinary sera utilisé pour les images en Phase 18 → 10. finalise la production en Phase 19.</p>
       </section>
     </main>
   );

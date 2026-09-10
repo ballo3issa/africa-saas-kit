@@ -2,7 +2,7 @@
 
 Le kit n'impose aucun cron tant que les paiements sont désactivés.
 
-Après activation d'au moins un provider en Phase 15 :
+Après activation d'au moins un provider en Phase 16 :
 
 ```bash
 npm run cron:generate

@@ -1,43 +1,40 @@
 
-# Règle prioritaire V0.8.10 — Cloudflare optionnel
+## Upstash optionnel
+- Upstash Redis est **optionnel** et se configure en Phase 16, après le staging de base et avant les paiements.
+- Neon reste la source de vérité. Upstash sert au cache TTL, au rate limiting distribué et aux états temporaires.
+- Ne jamais mettre `UPSTASH_REDIS_REST_TOKEN` dans une variable `NEXT_PUBLIC_*`, dans Git ou dans le chat.
+- Si Upstash n’est pas utilisé, marquer la Phase 16 `skipped`; le SaaS doit continuer à fonctionner directement avec Neon.
+- Si Upstash est activé, valider `npm run upstash:check:online` et `/api/readyz` avant production.
+
+
+# Règle prioritaire — Cloudflare optionnel
 - Cloudflare n’est jamais obligatoire pour construire ou déployer un SaaS avec le kit.
-- Le proposer seulement en **Phase 16**, après le staging et après la décision paiements.
-- La Phase 16 concerne domaine/DNS/proxy éventuel, pas Cloudflare R2.
-- Si Cloudflare n’est pas utilisé, marquer la Phase 16 `skipped` et continuer vers la production.
+- Le proposer seulement en **Phase 18**, après le staging et après la décision paiements.
+- La Phase 18 concerne domaine/DNS/proxy éventuel, pas Cloudflare R2.
+- Si Cloudflare n’est pas utilisé, marquer la Phase 18 `skipped` et continuer vers la production.
 - Ne jamais demander un token API Cloudflare pour une configuration DNS manuelle guidée.
 
-# Règle prioritaire V0.8.9 — paiements optionnels
+# Règle prioritaire — paiements optionnels
 
 Les providers de paiement ne sont **jamais obligatoires** pour utiliser, construire ou déployer un SaaS avec ce kit.
 
 - Ne demander aucun provider pendant le setup initial.
-- Ne configurer les paiements qu’en **Phase 15**, juste avant la mise en ligne, si le produit en a besoin.
-- Si le SaaS n’a pas besoin de paiement, marquer la Phase 15 `skipped` et continuer.
+- Ne configurer les paiements qu’en **Phase 17**, juste avant la mise en ligne, si le produit en a besoin.
+- Si le SaaS n’a pas besoin de paiement, marquer la Phase 17 `skipped` et continuer.
 - Ne jamais considérer l’absence de provider comme une erreur de configuration.
 - `npm run payments:setup` est la commande officielle de configuration tardive des paiements.
 
 # /setup-saas — point d’entrée officiel du kit
 
 Quand l’utilisateur écrit exactement `/setup-saas` dans Antigravity/Codex :
-1. Lire `.agents/skills/setup-saas/SKILL.md` et `.agents/skills/setup-saas/SKILL.md`.
+1. Lire `.agents/skills/setup-saas/SKILL.md`.
 2. Exécuter `npm run setup-saas`.
 3. Lire `generated/setup-saas-report.md` et `generated/setup-saas-report.json`.
-4. Présenter la roadmap complète des **18 phases** avec 🟢 / 🟡 / 🔴 / ⚪ et une courte explication du rôle de chaque phase.
+4. Présenter la roadmap complète des **20 phases** avec 🟢 / 🟡 / 🔴 / ⚪ et une courte explication du rôle de chaque phase.
 5. Détailler ensuite uniquement la première phase non verte : objectif, étapes exactes, emplacement des paramètres, commandes, résultat attendu et validation.
 6. Après chaque correction, relancer `npm run setup-saas` avant de passer à la phase suivante.
 7. Ne jamais demander de secret dans le chat : indiquer où le saisir localement puis demander seulement confirmation.
 8. Distinguer toujours CONFIGURÉ, TESTÉ et NON VÉRIFIÉ.
-
-# /setup-saas — point d’entrée officiel du kit
-
-Quand l’utilisateur écrit exactement `/setup-saas` dans Antigravity/Codex :
-1. Lire `.agents/skills/setup-saas/SKILL.md`.
-2. Exécuter `npm run setup-saas`.
-3. Lire `generated/setup-saas-report.md`.
-4. Présenter les contrôles rouges puis verts et guider un seul gate à la fois.
-5. Ne jamais demander une inscription au kit et ne jamais rediriger vers `/register` ou `/login` pour effectuer le setup.
-6. Après chaque correction, relancer `npm run setup-saas` jusqu’à ce que les contrôles locaux requis soient verts.
-7. Ne jamais afficher une valeur secrète dans le chat.
 
 # Instructions IA — Africa SaaS Kit
 
@@ -49,10 +46,17 @@ Avant toute action dans une phase `/setup-saas`, expliquer en langage simple :
 4. le résultat attendu à la fin ;
 5. puis seulement les étapes à exécuter.
 
-À la fin de la Phase 18, lancer `npm run conformity:check`, lire `generated/conformity-report.md` et corriger tout FAIL avant de considérer le parcours terminé.
+À la fin de la Phase 20, lancer `npm run conformity:check`, lire `generated/conformity-report.md` et corriger tout FAIL avant de considérer le parcours terminé.
 
 
 ## Banani / Design
+Pour connecter Banani dans Codex/Antigravity :
+1. Exécute `npm run banani:prepare`. Cette commande doit seulement créer `.codex/config.toml` vide s’il manque et ne jamais écraser une configuration existante.
+2. Demande à l’utilisateur d’ouvrir `.codex/config.toml` et d’y coller lui-même la configuration MCP fournie par Banani.
+3. Ne demande jamais le token Banani dans le chat et ne l’écris jamais automatiquement dans un fichier.
+4. Exécute `npm run banani:check` après configuration. Le contrôle ne doit jamais afficher la valeur du token.
+5. `.codex/config.toml` doit rester ignoré par Git. Si le fichier est suivi par Git ou si un token a été exposé, demander une rotation/révocation du token avant de continuer.
+
 Quand des écrans Banani, Figma ou captures sont importés :
 1. Ne code pas immédiatement tout le SaaS.
 2. Mets à jour `design/banani/screens.json` avec les écrans réellement observés.
@@ -62,6 +66,20 @@ Quand des écrans Banani, Figma ou captures sont importés :
 6. Présente le plan d'implémentation à l'utilisateur et avance phase par phase.
 7. À la fin de chaque phase, exécute les tests/gates demandés avant de continuer.
 8. N'invente jamais une règle métier, un endpoint de paiement ou une permission non démontrée.
+
+
+## /import-banani — import design complet puis comparaison
+Quand l’utilisateur saisit `/import-banani` après avoir connecté Banani :
+1. Lire `.agents/skills/import-banani/SKILL.md`.
+2. Exécuter `npm run banani:check`.
+3. Utiliser les outils MCP Banani réellement disponibles pour parcourir le projet et observer **tous les écrans accessibles** ; ne jamais inventer un nom d’outil MCP.
+4. Écrire le snapshot sans secret dans `design/banani/imported-design.json` selon `design/banani/import-schema.json`.
+5. Exécuter `npm run import-banani:check` puis `npm run import-banani:analyze`.
+6. Lire `generated/banani-gap-analysis.md` et `generated/implementation-plan.md`.
+7. Présenter d’abord RÉUTILISER / ADAPTER / CRÉER / À CONFIRMER.
+8. Ne coder qu’après validation du plan par l’utilisateur.
+9. Avant toute nouvelle feature transversale, lire `config/features.json` pour éviter les doublons.
+10. Toute donnée non observable depuis Banani reste `NON VÉRIFIÉ` ou `À CONFIRMER`.
 
 ## Mobile-First obligatoire
 Africa SaaS Kit cible une vraie application mobile-first et responsive.
@@ -143,6 +161,18 @@ Quand l'utilisateur demande de mettre le SaaS en ligne, de connecter GitHub/Verc
 Gate de livraison : une mise en ligne sans `generated/deployment-handoff.md` actualisé est INCOMPLÈTE.
 
 
+
+## Computer Use / Browser Tools — vérification continue obligatoire dans Antigravity
+
+- Dans Antigravity, la capacité navigateur est fournie par le **Browser Subagent / Browser Tools**; ne jamais inventer un package npm `computer-use`.
+- La Phase 2 doit vérifier cette capacité par une vraie action navigateur avant de poursuivre. Utiliser `npm run computer-use:check`, puis marquer une preuve réelle avec `npm run computer-use:mark`.
+- Si Browser Tools sont désactivés : guider vers **Settings → Browser → Browser Tools** et demander leur activation.
+- Pour les actions sensibles, recommander **Request Review** et respecter l’Allowlist/Denylist; ne jamais désactiver les garde-fous pour gagner du temps.
+- Pendant toutes les phases suivantes, utiliser Computer Use lorsqu’une surface web/visuelle doit être vérifiée : pages Banani, responsive, loading/empty/error, auth/OAuth, uploads, checkout sandbox, health/readiness, Vercel Preview, domaine final, SEO et Search Console.
+- Une observation navigateur ne remplace jamais `test`, `typecheck`, `build`, `security:audit`, signature webhook ou `conformity:check`.
+- L’utilisateur garde le contrôle des identifiants, MFA, achats, DNS critiques et passage sandbox → live.
+- Si Computer Use est indisponible hors Antigravity, marquer la vérification `NON VÉRIFIÉE` ou `skipped` avec justification et fournir un test manuel équivalent.
+
 ## Mémoire de progression locale
 Après un **vrai test réussi** (connexion DB, paiement sandbox, build, staging, etc.), l’agent peut mémoriser la phase avec :
 
@@ -152,12 +182,12 @@ Puis relancer `npm run setup-saas`. Ne jamais marquer une phase passée sur simp
 
 
 ## Cloudinary optionnel
-- Ne proposer Cloudinary qu’en **Phase 17**, si le SaaS a besoin d’uploads d’images.
-- Sans upload : phase 17 `skipped`.
+- Ne proposer Cloudinary qu’en **Phase 19**, si le SaaS a besoin d’uploads d’images.
+- Sans upload : phase 18 `skipped`.
 - Avec upload : utiliser `npm run cloudinary:setup`, tester réellement un upload et des refus de sécurité, puis seulement marquer la phase `passed`.
 - `CLOUDINARY_API_SECRET` reste serveur-only et ne doit jamais être exposé via `NEXT_PUBLIC_`.
 
-## Gate qualité backend — Phase 12
+## Gate qualité backend — Phase 13
 
 Avant le staging, l'agent doit aussi valider :
 - `GET /api/health` répond 200 ;
@@ -196,3 +226,51 @@ Pour les nouveaux appels JSON côté client, préférer `lib/api/client.ts`. Les
 ## Suppression sûre des features
 
 Avant de supprimer une feature optionnelle, lire `config/features.json`. Vérifier `dependsOn`, `disableBehavior` et `removalComplexity`. Ne jamais supprimer un fichier simplement parce que l’écran qui l’utilisait a disparu. Préférer une désactivation par configuration pour les briques réutilisables. Après toute suppression ou refactorisation structurelle, exécuter `npm run features:check && npm run verify:code`.
+
+
+## Premium Icon Gate — obligatoire et permanent
+
+- Avant toute livraison et après chaque ajout/refactorisation de page, exécuter `npm run ui:icons-check`.
+- Ne jamais utiliser `Sparkle`, `Sparkles`, `WandSparkles`, `WandSparkle`, `✨`, `✦`, `✧`, `★` ou des variantes décoratives équivalentes pour donner un aspect « IA » à l’interface.
+- Ne pas remplacer ces icônes par des glyphes Unicode génériques (`⌂`, `◫`, `◉`, `◇`, etc.).
+- Choisir une icône selon la fonction réelle. Pour le starter, préférer `components/ui/premium-icon.tsx`; toute bibliothèque externe doit conserver un style cohérent et accessible.
+- Ce contrôle concerne toutes les pages existantes **et les futures pages** : une occurrence interdite sous `app/` ou `components/` bloque `verify:code`, `verify:production` et la CI.
+- Après modification visuelle importante, compléter le contrôle statique par une vérification navigateur responsive lorsqu’un Browser Tool est disponible.
+
+Gate de livraison : une page contenant une icône Sparkle/Sparklet ou un substitut décoratif interdit est INCOMPLÈTE.
+
+
+## Security Baseline Gate (obligatoire)
+
+Après toute création/modification d’une route API, table Drizzle, auth, upload, paiement ou fonctionnalité sensible :
+
+1. exécuter `npm run security:baseline`;
+2. toute nouvelle route `app/api/**/route.ts` doit être classifiée dans `config/security-routes.json` (auth + validation serveur + rate limiting/exemption justifiée);
+3. toute nouvelle table doit être classifiée dans `config/security-rls.json`; préférer RLS pour toute donnée utilisateur/tenant/privée/financière;
+4. ne jamais retirer `.env.local` du `.gitignore`, la vérification email production, le proxy auth ou le rate limiting;
+5. avant livraison, exécuter `npm run security:release` et `npm run verify:production`;
+6. sur une base Neon accessible, exécuter aussi `npm run security:db-check` pour vérifier réellement RLS + policies.
+
+Une erreur du Security Baseline Gate est bloquante : ne pas contourner le contrôle par suppression du script, de la règle ou par exemption sans justification de sécurité.
+
+
+## Zod Validation Gate — obligatoire et permanent
+
+- Toute entrée non fiable structurée de première partie doit être validée par Zod.
+- Le front-end peut valider avec `safeParse` pour l’UX, mais **le serveur doit toujours revalider** : ne jamais faire confiance au navigateur.
+- Toute Server Action doit valider son `FormData`/payload avec Zod avant mutation.
+- Toute nouvelle route API `POST`, `PUT`, `PATCH` ou `DELETE` doit utiliser Zod ou avoir une exemption explicite et justifiée dans `config/zod-validation.json`.
+- Partager les schémas dans `lib/validation/` lorsqu’un contrat sert au client et au serveur.
+- Après validation, utiliser uniquement `parsed.data`; éviter `z.any()` aux frontières de confiance et poser des bornes (`min`, `max`, `enum`, `regex`, `url`).
+- Après toute nouvelle page/formulaire/API/Server Action, exécuter `npm run validation:zod-check`. Le gate fait partie de `verify:code`, `verify:production`, `ci:check` et `security:release`.
+
+Une modification qui contourne ce gate est INCOMPLÈTE.
+
+
+## General Refactor Gate — obligatoire
+
+Après toute création ou modification importante de page, route API, Server Action, paiement, upload, authentification ou workflow CI, exécuter `npm run refactor:check`. Ne jamais contourner ce gate. Les pages `/dashboard/*` doivent hériter d'une validation serveur réelle via `requireUser()` et `/admin/*` via `requireAdmin()`. Ne jamais renvoyer le champ `raw` d’un provider de paiement au navigateur. Pour les endpoints mutateurs authentifiés de première partie, conserver les gardes d’origine/cross-site, de Content-Type et de taille avant parsing. Utiliser `node:crypto` et non `Math.random()` pour les identifiants ou tokens.
+
+
+### Dependency security floor
+`npm run security:versions` bloque les régressions sous les versions minimales de sécurité revues pour Next.js, React, Drizzle ORM et Better Auth. Ce contrôle complète `npm audit`; il ne le remplace pas.

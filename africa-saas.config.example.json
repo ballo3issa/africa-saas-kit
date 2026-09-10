@@ -1,5 +1,5 @@
 {
-  "version": "0.8.16",
+  "version": "0.8.28",
   "appName": "My Africa SaaS",
   "appUrl": "http://localhost:3000",
   "country": "CI",
@@ -17,5 +17,6 @@
   "searchConsole": true,
   "banani": true,
   "cloudinaryEnabled": false,
-  "emailPasswordEnabled": true
+  "emailPasswordEnabled": true,
+  "upstashEnabled": null
 }

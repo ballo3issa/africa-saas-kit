@@ -1,5 +1,84 @@
 # Changelog
 
+## 0.8.28 — General Refactor & Security/Quality Gate
+- ajout de `refactor:check`, garde-fou global permanent branché sur les principaux pipelines de livraison ;
+- protection serveur héritée de toutes les pages `/dashboard/*` via `requireUser()` dans le layout ;
+- suppression de l’exposition navigateur des payloads `raw` des passerelles de paiement ;
+- ajout de contrôles origin/cross-site, Content-Type et taille déclarée sur checkout et upload ;
+- remplacement de `Math.random()` par `crypto.randomUUID()` pour les identifiants générés ;
+- HSTS et `upgrade-insecure-requests` limités à la production pour préserver le développement HTTP local ;
+- CI et Security Guard recentrés sur les commandes canoniques `ci:check` / `security:release` ;
+- Zod Gate renforcé pour vérifier aussi l’autorisation serveur des Server Actions admin/dashboard ;
+- ajout de tests Vitest ciblés pour les request guards et la non-exposition des données brutes de paiement.
+
+
+## V0.8.26 — Security Baseline Gate
+- Ajout d’un garde-fou permanent issu de la checklist sécurité: `.env.local`, secrets, RLS/policies, validation serveur, middleware auth, vérification email, rate limiting et audit npm.
+- Toute nouvelle route API doit désormais être classifiée pour auth/validation/rate-limit.
+- Toute nouvelle table DB doit être classifiée RLS ou exemption justifiée.
+- Ajout de `security:db-check` pour vérifier réellement RLS + policies dans Neon/Postgres.
+- Ajout d’un rate limit fail-closed sur l’upload d’images.
+- Intégration de `security:baseline` dans `verify:code`, `verify:production` et `ci:check`.
+
+## 0.8.25
+
+- Ajout du **Premium Icon Gate** permanent (`npm run ui:icons-check`) qui scanne toutes les pages et composants du SaaS.
+- Interdiction des icônes `Sparkle`, `Sparkles`, `WandSparkles`, des glyphes scintillants (`✨`, `✦`, `✧`, etc.) et des anciens symboles Unicode utilisés comme raccourcis d’icônes.
+- Refactorisation de la navigation mobile : remplacement de `⌂`, `◫`, `◉`, `◇` par des SVG premium homogènes via `components/ui/premium-icon.tsx`.
+- Intégration du contrôle dans `verify:code`, `verify:production`, `ci:check` et `conformity:check` afin qu’une nouvelle page non conforme bloque la livraison.
+- Documentation de la politique d’icônes dans `docs/ui/premium-icons.md` et règle persistante ajoutée à `AGENTS.md`.
+
+## 0.8.24
+- Ajout d’une phase Upstash Redis **optionnelle** dans `/setup-saas`.
+- Ajout de `npm run upstash:setup`, `upstash:check` et `upstash:check:online`.
+- Ajout d’un helper de cache Redis REST (`lib/cache/upstash.ts`) avec TTL et fallback direct vers Neon.
+- Upstash est séparé de la phase sécurité pour éviter les doublons : il sert au cache, rate limiting distribué et états temporaires.
+- Paiements/Cloudflare/Cloudinary/Production sont décalés aux phases 17/18/19/20.
+- Nettoyage de l’artefact `tsconfig.tsbuildinfo`.
+
+# CHANGELOG
+
+## 0.8.23
+
+- Ajout de `/computer-use` et des scripts `computer-use:check` / `computer-use:mark`.
+- Ajout d’une Phase 2 dédiée à l’activation/vérification réelle des Browser Tools Antigravity; la roadmap passe à 19 phases.
+- Computer Use devient un assistant transversal : chaque phase affiche une consigne de vérification navigateur adaptée quand une surface web/visuelle existe.
+- Aucun faux package npm `computer-use` n’est installé : Antigravity fournit nativement le Browser Subagent.
+- Ajout d’un guide sécurité Browser Tools (Request Review, Allowlist/Denylist, secrets, MFA, achats et DNS sensibles).
+- Ajout du statut Computer Use au dashboard local et au registre anti-doublons des features.
+- Correction des numéros de phases paiements/Cloudflare/Cloudinary après insertion de la nouvelle Phase 2.
+
+## 0.8.22
+
+- Ajout d’un contrat de version unique (`scripts/lib/version.mjs`) et de `npm run version:check`.
+- Correction des anciennes versions hardcodées dans payments setup, setup progress, Production Doctor et SQL de routage.
+- `africa-saas.config.example.json` et `config/features.json` alignés sur la version du package.
+- Phase 18: un rapport Production Doctor `NOT_READY`/`NEEDS_REVIEW` ne peut plus être considéré comme validé.
+- Régression testée: Banani MCP local, import Banani/gap analysis, SaaS sans paiement, paiements tardifs optionnels, Cloudflare/Cloudinary optionnels, handoff Vercel.
+
+# Changelog
+
+## 0.8.21
+- Ajout du vrai workflow `/import-banani` après connexion MCP.
+- Snapshot design sans secret dans `design/banani/imported-design.json`.
+- Gap analysis automatique RÉUTILISER / ADAPTER / CRÉER / À CONFIRMER.
+- Comparaison des écrans Banani avec pages, composants et `config/features.json`.
+- Génération du plan d’implémentation seulement après comparaison anti-doublons.
+
+## V0.8.18 — Hydration guard
+
+- Ajout de `suppressHydrationWarning` uniquement sur `<body>` pour tolérer les attributs injectés par des extensions navigateur avant l’hydratation React.
+- Ajout de `npm run ui:hydration-check` et intégration dans les gates de vérification.
+- La protection reste localisée au body afin de ne pas masquer les vraies erreurs d’hydratation dans les composants de l’application.
+
+# Changelog
+
+## V0.8.17 — Compatibility fix: Better Auth / Vitest
+
+- Downgrade volontaire de Vitest `5.0.0` vers `4.1.11` pour respecter la plage de peer-dependency attendue par Better Auth 1.7.3 et éviter une installation npm incohérente.
+- Aucun `--force` ni `--legacy-peer-deps` requis/recommandé.
+- Les scripts `test` et `test:watch` restent inchangés (`vitest run`, `vitest`).
+
 ## V0.8.15 — Health, tests et CI de qualité
 - Ajout de `/api/health` et `/api/readyz`.
 - Ajout de Vitest et de tests unitaires sur les garde-fous de paiement/providers.
@@ -115,3 +194,26 @@
 - Resend devient une dépendance conditionnelle de l’auth email/password, pas une dépendance globale du SaaS.
 - En production, les e-mails d’auth critiques ne sont plus silencieusement abandonnés si Resend manque.
 - Le setup refuse une configuration sans aucune méthode d’auth réelle.
+
+## V0.8.19 — Banani MCP local via `.codex/config.toml`
+
+- connexion Banani standardisée sur `.codex/config.toml` pour Codex/Antigravity ;
+- fichier livré vide, jamais rempli automatiquement ;
+- `.codex/config.toml` ajouté au `.gitignore` ;
+- `npm run banani:prepare` crée le fichier vide sans écraser l'existant ;
+- `npm run banani:check` vérifie la structure et la protection Git sans afficher le token ;
+- Phase 8 `/setup-saas` mise à jour ;
+- documentation sécurité ajoutée pour la rotation des tokens exposés.
+
+
+## V0.8.20 — Validation Banani + conformité workspace
+- `banani:check` exige désormais HTTPS et avertit si le host n'est pas `app.banani.co`, sans afficher le token.
+- `conformity:check` accepte `.env.local` après setup si le fichier est ignoré/non suivi par Git.
+- Batterie de tests V0.8.19 relancée avant packaging.
+
+## 0.8.27 — Zod Validation Gate
+- Zod devient un garde-fou permanent de validation des entrées de première partie.
+- Validation client ajoutée aux flux connexion, inscription, mot de passe oublié/réinitialisation et 2FA.
+- Revalidation serveur obligatoire pour les Server Actions et routes API mutantes, avec exceptions documentées pour contrats framework/raw-signature.
+- Upload image désormais validé via Zod avant traitement du fichier.
+- Nouveau `validation:zod-check`, branché sur `verify:code`, `verify:production` et `ci:check`.

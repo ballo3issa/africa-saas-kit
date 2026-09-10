@@ -24,7 +24,7 @@ CLOUDINARY_FOLDER=africa-saas-kit
 
 ## Activation tardive
 
-Cloudinary est proposé en Phase 17 de `/setup-saas`, après le staging et avant la validation finale production.
+Cloudinary est proposé en Phase 18 de `/setup-saas`, après le staging et avant la validation finale production.
 
 - Sans Cloudinary : `npm run cloudinary:setup -- --none` puis phase `skipped`.
 - Avec Cloudinary : `npm run cloudinary:setup`, renseigner les variables, puis tester réellement un upload et plusieurs refus de sécurité.

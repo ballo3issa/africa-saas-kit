@@ -11,6 +11,8 @@ import type { PaymentProviderId } from "@/lib/payments/types";
 import { clientIp, rateLimit } from "@/lib/security/rate-limit";
 import { getSecurityLevel, securityPolicy } from "@/lib/security/config";
 import { writeAuditLog } from "@/lib/security/audit";
+import { publicCheckoutResult } from "@/lib/payments/public-result";
+import { rejectCrossSiteMutation, rejectOversizedRequest, requireContentType } from "@/lib/security/request-guards";
 
 
 export const runtime = "nodejs";
@@ -24,6 +26,13 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const originFailure = rejectCrossSiteMutation(request);
+  if (originFailure) return originFailure;
+  const sizeFailure = rejectOversizedRequest(request, 64 * 1024);
+  if (sizeFailure) return sizeFailure;
+  const typeFailure = requireContentType(request, "application/json");
+  if (typeFailure) return typeFailure;
+
   const session = await auth.api.getSession({ headers: request.headers });
   if (!session?.user) return Response.json({ error: "Authentication required" }, { status: 401 });
   const level = getSecurityLevel(); const ip = clientIp(request);
@@ -70,7 +79,7 @@ export async function POST(request: Request) {
       await db.update(paymentAttempts).set({ outcome: "checkout_created", latencyMs: Date.now() - started }).where(eq(paymentAttempts.id, attemptId));
       await db.update(payments).set({ provider: providerId, providerPaymentId: result.externalId, providerAmount: result.money?.amount, providerCurrency: result.money?.currency }).where(eq(payments.id, paymentId));
       await writeAuditLog({ action: "payment.checkout.created", actorId: session.user.id, targetType: "payment", targetId: paymentId, ip, metadata: { provider: providerId, planId: plan.id, routerScore: candidate.score, fallbackCount: failures.length } });
-      return Response.json({ ...result, router: { selected: providerId, fallbacks: failures.map(f => f.provider) } }, { headers: { "Cache-Control": "no-store" } });
+      return Response.json({ ...publicCheckoutResult(result), router: { selected: providerId, fallbacks: failures.map(f => f.provider) } }, { headers: { "Cache-Control": "no-store" } });
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown provider error";
       const safeFallback = isSafeProviderFallbackError(error);

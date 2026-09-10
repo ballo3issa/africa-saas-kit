@@ -82,6 +82,12 @@ export async function getKitDashboardChecks(): Promise<KitCheck[]> {
   checks.push({ id: "node", label: "Node.js", status: nodeMajor >= 20 ? "ok" : "missing", detail: `Version active : ${process.versions.node} (>=20 requis).`, group: "Base" });
   checks.push({ id: "lockfile", label: "package-lock.json", status: exists("package-lock.json") ? "ok" : "missing", detail: exists("package-lock.json") ? "Lockfile présent." : "Exécute npm install puis conserve package-lock.json dans Git.", group: "Base" });
   checks.push({ id: "config", label: "Configuration du kit", status: config ? "ok" : "missing", detail: config ? "africa-saas.config.json présent." : "Lance /setup-saas ou npm run setup pour créer la configuration.", group: "Base" });
+  let computerUseVerified = false;
+  try {
+    const state = JSON.parse(fs.readFileSync(path.join(process.cwd(), ".africa-saas/computer-use.json"), "utf8")) as { status?: string };
+    computerUseVerified = state.status === "verified";
+  } catch {}
+  checks.push({ id: "computer-use", label: "Computer Use / Browser Tools", status: computerUseVerified ? "ok" : "missing", detail: computerUseVerified ? "Browser Subagent vérifié par un test réel." : "NON VÉRIFIÉ — exécute /computer-use ou npm run computer-use:check puis teste le Browser Subagent.", group: "Base" });
   checks.push({ id: "auth", label: "Better Auth", status: hasEnv("BETTER_AUTH_SECRET") ? "ok" : "missing", detail: hasEnv("BETTER_AUTH_SECRET") ? "Secret Better Auth configuré." : "BETTER_AUTH_SECRET manquant.", group: "Services" });
   const emailPasswordMode = process.env.AUTH_EMAIL_PASSWORD_ENABLED !== "false";
   checks.push({ id: "auth-mode", label: "Mode d’authentification", status: emailPasswordMode || (hasEnv("GOOGLE_CLIENT_ID") && hasEnv("GOOGLE_CLIENT_SECRET")) ? "ok" : "missing", detail: emailPasswordMode ? "Email/mot de passe activé (Resend requis en production)." : "Email/mot de passe désactivé : Google OAuth doit être configuré.", group: "Services" });
@@ -117,11 +123,11 @@ export async function getKitDashboardChecks(): Promise<KitCheck[]> {
   checks.push({ id: "search-console", label: "Google Search Console", status: hasEnv("GOOGLE_SITE_VERIFICATION") ? "ok" : "missing", detail: hasEnv("GOOGLE_SITE_VERIFICATION") ? "Jeton de vérification configuré. La validation dans Search Console reste à confirmer." : searchRequired ? "Search Console prévu mais GOOGLE_SITE_VERIFICATION manque." : "Non configuré.", group: "Services" });
 
   const cloudinaryOk = hasEnv("CLOUDINARY_CLOUD_NAME") && hasEnv("CLOUDINARY_API_KEY") && hasEnv("CLOUDINARY_API_SECRET");
-  checks.push({ id: "cloudinary", label: "Cloudinary images (optionnel)", status: cloudinaryOk ? "ok" : "warning", detail: cloudinaryOk ? "Variables Cloudinary présentes; un upload réel reste à tester." : "Non configuré. Valide pour un SaaS sans upload d’images; décision en Phase 17.", group: "Services" });
+  checks.push({ id: "cloudinary", label: "Cloudinary images (optionnel)", status: cloudinaryOk ? "ok" : "warning", detail: cloudinaryOk ? "Variables Cloudinary présentes; un upload réel reste à tester." : "Non configuré. Valide pour un SaaS sans upload d’images; décision en Phase 18.", group: "Services" });
 
   const enabledProviders = config?.providers ?? [];
   if (!enabledProviders.length) {
-    checks.push({ id: "payments-config", label: "Paiements (optionnel)", status: "warning", detail: "Aucun provider activé. C’est valide : les paiements ne sont configurés qu’en Phase 15 si le SaaS en a besoin.", group: "Paiements" });
+    checks.push({ id: "payments-config", label: "Paiements (optionnel)", status: "warning", detail: "Aucun provider activé. C’est valide : les paiements ne sont configurés qu’en Phase 16 si le SaaS en a besoin.", group: "Paiements" });
   }
   for (const id of enabledProviders) {
     const provider = providersCatalog[id as keyof typeof providersCatalog];
@@ -151,7 +157,12 @@ export async function getKitDashboardChecks(): Promise<KitCheck[]> {
   checks.push({ id: "mobile", label: "Mobile-first", status: exists("scripts/mobile-first-check.mjs") && exists("components/mobile-bottom-nav.tsx") ? "ok" : "missing", detail: "Navigation et gates mobile-first présents.", group: "Qualité" });
   checks.push({ id: "skeleton", label: "Skeleton loaders", status: exists("components/ui/skeleton.tsx") && exists("scripts/loading-check.mjs") ? "ok" : "missing", detail: "Primitives et contrôle de chargement présents.", group: "Qualité" });
   checks.push({ id: "seo", label: "SEO / Social Preview", status: exists("app/sitemap.ts") && exists("app/opengraph-image.tsx") && exists("scripts/seo-check.mjs") ? "ok" : "missing", detail: "Sitemap, Open Graph et SEO gate présents.", group: "Qualité" });
-  checks.push({ id: "banani", label: "Banani / Implementation Planner", status: exists("DESIGN.md") && exists("scripts/generate-implementation-plan.mjs") ? "ok" : "missing", detail: config?.banani === false ? "Banani désactivé dans la config, planner toujours disponible." : "Handoff design et planificateur présents.", group: "Qualité" });
+  {
+    const codexPath = path.join(root, ".codex/config.toml");
+    const codexText = fs.existsSync(codexPath) ? fs.readFileSync(codexPath, "utf8") : "";
+    const mcpOk = /\[\s*mcp_servers\.banani\s*\]/i.test(codexText) && /Authorization/i.test(codexText);
+    checks.push({ id: "banani", label: "Banani MCP / Implementation Planner", status: mcpOk && exists("DESIGN.md") && exists("scripts/generate-implementation-plan.mjs") ? "ok" : "missing", detail: mcpOk ? "MCP Banani configuré localement; token non affiché." : "Exécute npm run banani:prepare puis complète .codex/config.toml manuellement.", group: "Qualité" });
+  }
 
   return checks;
 }

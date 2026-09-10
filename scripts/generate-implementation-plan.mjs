@@ -5,6 +5,7 @@ import path from "node:path";
 const root = process.cwd();
 const manifestPath = path.join(root, "design/banani/screens.json");
 const outputPath = path.join(root, "generated/implementation-plan.md");
+const bananiGapPath = path.join(root, "generated/banani-gap-analysis.json");
 
 if (!fs.existsSync(manifestPath)) {
   console.error("Missing design/banani/screens.json. Import/describe Banani screens first.");
@@ -18,6 +19,7 @@ if (!screens.length) {
   process.exit(1);
 }
 
+const bananiGap = fs.existsSync(bananiGapPath) ? JSON.parse(fs.readFileSync(bananiGapPath, "utf8")) : null;
 const publicScreens = screens.filter((s) => s.auth === "public");
 const protectedScreens = screens.filter((s) => s.auth !== "public");
 const routeTable = screens
@@ -64,6 +66,8 @@ const sections = [
 | # | Écran | Route | Accès | Objectif |
 |---:|---|---|---|---|
 ${routeTable}`,
+`## 1bis. Comparaison Banani → Starter
+${bananiGap ? `- RÉUTILISER: ${bananiGap.counts?.["RÉUTILISER"] ?? 0}\n- ADAPTER: ${bananiGap.counts?.ADAPTER ?? 0}\n- CRÉER: ${bananiGap.counts?.["CRÉER"] ?? 0}\n- À CONFIRMER: ${bananiGap.counts?.["À CONFIRMER"] ?? 0}\n\nVoir \`generated/banani-gap-analysis.md\` avant toute implémentation.` : "Gap analysis Banani non disponible. Exécuter /import-banani puis npm run import-banani:analyze."}`,
 `## 2. Ordre obligatoire d'implémentation
 
 ### Phase A — Compréhension avant code

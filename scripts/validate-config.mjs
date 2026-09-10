@@ -16,6 +16,7 @@ if (emailPasswordEnabled && c.email !== "resend") errors.push("Email/password au
 if (!emailPasswordEnabled && !c.googleAuth) errors.push("Disabling email/password auth requires Google OAuth (or another auth provider added by the project)");
 const enabled = Array.isArray(c.providers) ? c.providers : [];
 const paymentsEnabled = c.paymentsEnabled === true || enabled.length > 0;
+if (c.upstashEnabled != null && typeof c.upstashEnabled !== "boolean") errors.push("upstashEnabled must be boolean when present");
 for (const p of enabled) {
   if (!providers[p]) errors.push(`Unknown provider ${p}`);
   else if (["scaffold","merchant-validation"].includes(providers[p].readiness)) errors.push(`${p} cannot be enabled (${providers[p].readiness})`);

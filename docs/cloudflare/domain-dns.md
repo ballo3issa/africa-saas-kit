@@ -2,10 +2,10 @@
 
 Cloudflare peut être utilisé comme registrar/DNS pour le domaine du SaaS, mais il n’est jamais requis par Africa SaaS Kit.
 
-Cette phase est volontairement tardive (Phase 16), après le staging et après la décision paiements.
+Cette phase est volontairement tardive (Phase 17), après le staging et après la décision paiements.
 
 ## Sans Cloudflare
-Utiliser le registrar/DNS de son choix, puis marquer la Phase 16 `skipped`.
+Utiliser le registrar/DNS de son choix, puis marquer la Phase 17 `skipped`.
 
 ## Avec Cloudflare
 1. Ajouter/acheter le domaine dans Cloudflare.

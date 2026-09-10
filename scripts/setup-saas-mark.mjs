@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import { kitVersion } from "./lib/version.mjs";
 
 const root = process.cwd();
 const dir = path.join(root, ".africa-saas");
@@ -9,11 +10,11 @@ const args = Object.fromEntries(process.argv.slice(2).filter(a=>a.startsWith("--
 const phase = Number(args.phase);
 const status = args.status || "passed";
 const note = args.note || "Validé après contrôle réel par l’agent/utilisateur.";
-if (!Number.isInteger(phase) || phase < 1 || phase > 17) throw new Error("Use --phase=1..17");
+if (!Number.isInteger(phase) || phase < 1 || phase > 20) throw new Error("Use --phase=1..20");
 if (!["passed","skipped","reset"].includes(status)) throw new Error("Use --status=passed|skipped|reset");
-let data = { version: "0.8.10", phases: {} };
+let data = { version: kitVersion, phases: {} };
 try { data = JSON.parse(fs.readFileSync(file, "utf8")); } catch {}
-data.version = "0.8.10";
+data.version = kitVersion;
 data.phases ||= {};
 if (status === "reset") delete data.phases[String(phase)];
 else data.phases[String(phase)] = { status, note, validatedAt: new Date().toISOString() };

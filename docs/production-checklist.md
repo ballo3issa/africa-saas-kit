@@ -60,11 +60,11 @@
 
 ## Domaine / DNS
 - [ ] Fournisseur de domaine/DNS choisi (Cloudflare ou autre).
-- [ ] Si Cloudflare est utilisé, Phase 16 validée avec les enregistrements exacts Vercel.
-- [ ] Si Cloudflare n’est pas utilisé, Phase 16 explicitement `skipped`.
+- [ ] Si Cloudflare est utilisé, Phase 17 validée avec les enregistrements exacts Vercel.
+- [ ] Si Cloudflare n’est pas utilisé, Phase 17 explicitement `skipped`.
 
-- [ ] Si Cloudinary est utilisé, Phase 17 validée avec upload réel + tests de refus.
-- [ ] Sinon, Phase 17 explicitement `skipped`.
+- [ ] Si Cloudinary est utilisé, Phase 18 validée avec upload réel + tests de refus.
+- [ ] Sinon, Phase 18 explicitement `skipped`.
 
 ## Conformité finale des fichiers
 
@@ -81,3 +81,17 @@
 - [ ] `npm run audit:prod` ne contient aucun HIGH/CRITICAL non accepté.
 - [ ] Les migrations `db/migrations/` sont générées, relues, testées et commitées.
 - [ ] `DATABASE_URL_DIRECT` est configurée si une connexion directe Neon est utilisée pour les migrations.
+
+
+## V0.8.26 — Security Baseline Gate
+
+- [ ] `npm run security:baseline` retourne PASS.
+- [ ] `.env.local` est ignoré par Git; aucune clé secrète n'utilise `NEXT_PUBLIC_*`.
+- [ ] Chaque nouvelle route API est classifiée pour authentification, validation serveur et rate limiting.
+- [ ] Chaque nouvelle table est classifiée RLS; toute exemption a une justification explicite.
+- [ ] Les tables utilisateur/tenant requises ont RLS + policy en base (`npm run security:db-check`).
+- [ ] Le middleware/proxy d'authentification protège toujours `/dashboard` et `/admin`.
+- [ ] La vérification email production est activée et testée.
+- [ ] Le rate limiting distribué est configuré pour les routes sensibles en production.
+- [ ] `npm run audit:prod` ne remonte aucun HIGH/CRITICAL non accepté.
+- [ ] `npm run security:release` puis `npm run verify:production` passent avant livraison.

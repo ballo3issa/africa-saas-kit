@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dns from 'node:dns/promises';
 import { execFileSync } from 'node:child_process';
+import { kitVersion, kitVersionLabel } from "./lib/version.mjs";
 
 const root = process.cwd();
 const online = process.argv.includes('--online');
@@ -39,7 +40,7 @@ add('email-verification','Vérification e-mail',verificationStatus,!emailPasswor
 const strongSecurity = !cfg || ['high','maximum'].includes(cfg.securityLevel);
 add('turnstile','Turnstile',(env.TURNSTILE_SECRET_KEY||process.env.TURNSTILE_SECRET_KEY)?'PASS':strongSecurity?'WARN':'UNVERIFIED',(env.TURNSTILE_SECRET_KEY||process.env.TURNSTILE_SECRET_KEY)?'Secret Turnstile présent':'À configurer pour protéger inscription et formulaires publics','security');
 const upstashReady = Boolean((env.UPSTASH_REDIS_REST_URL||process.env.UPSTASH_REDIS_REST_URL) && (env.UPSTASH_REDIS_REST_TOKEN||process.env.UPSTASH_REDIS_REST_TOKEN));
-add('upstash','Rate limiting distribué',upstashReady?'PASS':paymentsEnabled&&strongSecurity?'FAIL':'WARN',upstashReady?'Upstash configuré':paymentsEnabled?'UPSTASH_REDIS_REST_URL/TOKEN requis pour checkout en production':'Recommandé pour certaines routes publiques; non bloquant sans paiements','security');
+add('upstash','Cache / rate limiting distribué (optionnel)',upstashReady?'PASS':'WARN',upstashReady?'Upstash configuré':'Optionnel : Neon reste la source de vérité; sans Upstash, le cache distribué est désactivé','performance');
 const cloudinaryEnabled = cfg?.cloudinaryEnabled === true;
 const cloudinaryVarsOk = Boolean((env.CLOUDINARY_CLOUD_NAME||process.env.CLOUDINARY_CLOUD_NAME) && (env.CLOUDINARY_API_KEY||process.env.CLOUDINARY_API_KEY) && (env.CLOUDINARY_API_SECRET||process.env.CLOUDINARY_API_SECRET));
 add('cloudinary','Cloudinary images',!cfg?'UNVERIFIED':!cloudinaryEnabled?'PASS':cloudinaryVarsOk?'WARN':'FAIL',!cfg?'Configuration non générée':!cloudinaryEnabled?'Désactivé par configuration':cloudinaryVarsOk?'Variables présentes; upload réel à valider en staging':'Cloudinary activé mais variables manquantes','storage');
@@ -114,13 +115,13 @@ try {
 const weights={FAIL:0,WARN:0.5,PASS:1,UNVERIFIED:0.5};
 const score=Math.round(100*results.reduce((a,r)=>a+weights[r.status],0)/Math.max(results.length,1));
 const verdict=results.some(r=>r.status==='FAIL')?'NOT_READY':score>=90?'READY':'NEEDS_REVIEW';
-const report={version:'0.8.10',online,score,verdict,generatedAt:new Date().toISOString(),results};
+const report={version:kitVersion,online,score,verdict,generatedAt:new Date().toISOString(),results};
 fs.mkdirSync(path.join(root,'generated'),{recursive:true});
 fs.writeFileSync(path.join(root,'generated/production-doctor.json'),JSON.stringify(report,null,2));
 
 if(jsonMode) console.log(JSON.stringify(report,null,2));
 else {
-  console.log(`\nAfrica SaaS Kit — Production Doctor V0.8.10`);
+  console.log(`\nAfrica SaaS Kit — Production Doctor ${kitVersionLabel}`);
   console.log(`Score: ${score}/100 — ${verdict}\n`);
   for(const r of results) console.log(`${r.status.padEnd(4)}  ${r.label}: ${r.detail}`);
   console.log(`\nReport: generated/production-doctor.json`);

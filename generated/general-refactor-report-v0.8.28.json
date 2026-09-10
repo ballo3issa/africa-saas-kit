@@ -1,0 +1,48 @@
+{
+  "version": "0.8.28",
+  "status": "STATIC_PASS_WITH_DEPENDENCY_BLOCKER",
+  "corrected": [
+    "dashboard-server-auth-boundary",
+    "payment-raw-response-leak",
+    "mutation-request-guards",
+    "crypto-random-identifiers",
+    "production-only-hsts-upgrade",
+    "canonical-ci-wiring",
+    "server-action-auth-gate",
+    "dependency-security-floors"
+  ],
+  "staticChecksPassed": [
+    "refactor:check",
+    "security:versions",
+    "security:baseline",
+    "validation:zod-check",
+    "security:check",
+    "version:check",
+    "env:check",
+    "runtime:check",
+    "mobile:check",
+    "ui:icons-check",
+    "ui:loading-check",
+    "ui:hydration-check",
+    "seo:check",
+    "deploy:check",
+    "features:check",
+    "format:check"
+  ],
+  "negativeTestsPassed": [
+    "dashboard-auth-removal-detected",
+    "provider-raw-exposure-detected",
+    "math-random-regression-detected"
+  ],
+  "blocked": [
+    "package-lock.json absent",
+    "npm ci unavailable",
+    "npm audit unavailable",
+    "eslint unavailable",
+    "typescript full typecheck unavailable",
+    "vitest unavailable",
+    "next build unavailable",
+    "online Neon/RLS/OAuth/email/payment sandbox tests not run"
+  ],
+  "generatedAt": "2026-09-10T06:58:18.813378+00:00"
+}

@@ -24,3 +24,8 @@ Le rendu mobile est la première cible, pas une réduction du desktop. Chaque é
 - Le chargement des pages et données doit utiliser des skeleton loaders fidèles aux écrans Banani/importés.
 - Le plan d'implémentation doit lister, pour chaque écran data-driven, le fichier `loading.tsx` ou la frontière `Suspense` prévue.
 - Les skeletons sont mobile-first et doivent éviter le layout shift.
+
+## Import Banani MCP et comparaison du starter
+Après connexion Banani, utiliser `/import-banani`. Cette étape doit parcourir le design disponible via MCP, produire `design/banani/imported-design.json`, comparer les écrans avec les pages/composants/features existants et générer `generated/banani-gap-analysis.md` avant le plan d’implémentation.
+
+Le design Banani est la source de vérité visuelle ; `config/features.json` reste la source de vérité anti-doublons pour l’architecture. Une règle métier, permission, prix, workflow de paiement ou contrainte DB absente du design reste `À CONFIRMER`.

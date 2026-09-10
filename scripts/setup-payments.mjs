@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+import { kitVersion } from "./lib/version.mjs";
 
 const root = process.cwd();
 const configPath = path.join(root, "africa-saas.config.json");
@@ -35,17 +36,17 @@ function upsertEnv(key, value="") {
 }
 
 try {
-  console.log("\nAfrica SaaS Kit — Optional Payments Setup (Phase 15)\n");
+  console.log("\nAfrica SaaS Kit — Optional Payments Setup (Phase 17)\n");
   const wantsPayments = args.none ? false : !["no","false","0","off"].includes(String(await ask("Does this SaaS need online payments? (yes/no)", args.enable ?? "yes")).toLowerCase());
   if (!wantsPayments) {
     config.paymentsEnabled = false;
     config.providers = [];
     config.defaultProvider = null;
     config.methods = [];
-    config.version = "0.8.10";
+    config.version = kitVersion;
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n", { mode: 0o600 });
     console.log("✓ Payments disabled. This SaaS can be deployed without any payment provider.");
-    console.log('✓ Mark Phase 15 skipped with: npm run setup-saas:mark -- --phase=15 --status=skipped --note="SaaS sans paiements"');
+    console.log('✓ Mark Phase 17 skipped with: npm run setup-saas:mark -- --phase=17 --status=skipped --note="SaaS sans paiements"');
     process.exit(0);
   }
   const country = config.country || "CI";
@@ -60,7 +61,7 @@ try {
   const defaultProvider = String(args.default || await ask("Default payment provider", selected[0])).toLowerCase();
   if (!selected.includes(defaultProvider)) throw new Error("Default provider must be enabled");
   const methods = list(args.methods || await ask("Payment methods, comma-separated", (preset.methods || []).join(",")));
-  config.version = "0.8.10";
+  config.version = kitVersion;
   config.paymentsEnabled = true;
   config.providers = selected;
   config.defaultProvider = defaultProvider;
