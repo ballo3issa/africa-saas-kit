@@ -1,9 +1,9 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T01:35:24.910Z",
-  "greenCount": 16,
+  "generatedAt": "2026-09-11T01:40:15.278Z",
+  "greenCount": 17,
   "total": 20,
-  "nextPhase": 17,
+  "nextPhase": 18,
   "phases": [
     {
       "n": 1,
@@ -583,7 +583,12 @@
         "Tester ensuite les webhooks avec ngrok avant toute clé live."
       ],
       "validate": "La phase peut être explicitement SKIPPED pour un SaaS sans paiement.",
-      "state": "red"
+      "state": "green",
+      "savedValidation": {
+        "status": "skipped",
+        "note": "Paiements volontairement désactivés; aucun provider ni secret fournisseur configuré; Etudeo reste déployable sans paiement.",
+        "validatedAt": "2026-09-11T01:40:11.906Z"
+      }
     },
     {
       "n": 18,

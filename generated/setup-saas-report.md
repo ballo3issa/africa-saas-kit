@@ -1,6 +1,6 @@
 # Africa SaaS Kit — /setup-saas
 
-**Progression : 16/20 phases validées**
+**Progression : 17/20 phases validées**
 
 > 🟢 terminé · 🟡 partiel · 🔴 à faire · ⚪ vérification externe/non automatisable
 
@@ -38,7 +38,7 @@
   - _GitHub conserve le code et Vercel héberge le SaaS. Le staging permet de tester le vrai déploiement avant production._
 - 🟢 **Phase 16 — Configurer Upstash Redis (OPTIONNEL)** _(validée localement)_
   - _Upstash Redis est une couche rapide de cache et de données temporaires. Neon reste la source de vérité métier : Upstash ne remplace pas PostgreSQL et ne doit pas contenir les données critiques comme seule copie._
-- 🔴 **Phase 17 — Décider et configurer les paiements (OPTIONNEL)**
+- 🟢 **Phase 17 — Décider et configurer les paiements (OPTIONNEL)** _(validée localement)_
   - _Les fournisseurs de paiement permettent d’encaisser en ligne par Mobile Money ou carte, mais ils sont totalement optionnels._
 - 🔴 **Phase 18 — Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)**
   - _Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative._
@@ -49,41 +49,50 @@
 
 ---
 
-# 🔴 Phase 17 — Décider et configurer les paiements (OPTIONNEL)
+# 🔴 Phase 18 — Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)
 
 ## À quoi sert cette phase ?
 
-Les fournisseurs de paiement permettent d’encaisser en ligne par Mobile Money ou carte, mais ils sont totalement optionnels.
+Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative.
 
 ## Ce que cela apporte au SaaS
 
-Si le SaaS vend quelque chose, cette phase ajoute checkout, webhooks, réconciliation et tests sandbox. Sinon elle est simplement ignorée.
+Il peut centraliser le domaine/DNS et éventuellement servir de couche réseau devant Vercel, sans être nécessaire au fonctionnement du SaaS.
 
 ## Objectif de la phase
 
-Juste avant la mise en ligne, décider si ce SaaS a réellement besoin d’un fournisseur de paiement. Un SaaS sans paiement peut ignorer cette phase.
+Décider si le domaine et/ou le DNS du SaaS seront gérés avec Cloudflare. Cette phase est facultative et ne concerne pas Cloudflare R2.
 
 ## État actuel
 
-- 🔴 **Décision paiements** — Optionnel — décider ici si le SaaS a besoin de paiements, sinon marquer la phase skipped.
+- 🔴 **Décision Cloudflare** — Optionnel — utiliser Cloudflare pour le domaine/DNS ou marquer cette phase skipped.
 
 ## Ce que tu dois faire maintenant
 
 ### Étape 1
-Si ce SaaS N’A PAS besoin de paiement : exécuter `npm run payments:setup -- --none`, puis `npm run setup-saas:mark -- --phase=17 --status=skipped --note="SaaS sans paiement"`.
+Si tu ne veux PAS utiliser Cloudflare : exécuter `npm run cloudflare:setup -- --none`, puis marquer la phase `skipped` avec `npm run setup-saas:mark -- --phase=18 --status=skipped --note="Cloudflare non utilisé"`.
 
 ### Étape 2
-Si ce SaaS A besoin de paiement : exécuter `npm run payments:setup` seulement maintenant, choisir les providers nécessaires, puis renseigner leurs clés sandbox.
+Si tu veux utiliser Cloudflare : exécuter `npm run cloudflare:setup` puis suivre le guide généré dans `generated/cloudflare-setup.md`.
 
 ### Étape 3
-Tester ensuite les webhooks avec ngrok avant toute clé live.
+Pour un domaine acheté ou géré chez Cloudflare : préparer le domaine, puis utiliser les enregistrements DNS demandés par Vercel pour le domaine custom. Ne jamais inventer une adresse A/CNAME : reprendre exactement les valeurs affichées par Vercel pour ce projet.
+
+### Étape 4
+Si le proxy Cloudflare gêne une validation de domaine/SSL, utiliser temporairement le mode DNS only jusqu’à validation complète, puis re-tester avant d’activer un proxy.
+
+### Étape 5
+Ne jamais ajouter de token API Cloudflare dans le chat. Cette phase domaine/DNS n’exige aucun token API dans le kit.
+
+### Étape 6
+Après validation réelle du domaine/DNS, marquer la phase passée avec `npm run setup-saas:mark -- --phase=18 --status=passed --note="Cloudflare domaine/DNS validé"`.
 
 ## Assistance Computer Use pour cette phase
 
-Si paiements activés, tester checkout sandbox, retour succès/échec/pending et replay webhook; ne jamais déclencher un paiement live sans accord explicite.
+Si Cloudflare utilisé, guider le DNS dans le navigateur mais demander confirmation avant tout changement critique/achat; vérifier ensuite le domaine.
 
 ## Validation de la phase
 
-La phase peut être explicitement SKIPPED pour un SaaS sans paiement.
+La phase est soit SKIPPED (Cloudflare non utilisé), soit PASSED après validation réelle du domaine/DNS. L’absence de Cloudflare n’est jamais bloquante.
 
 Quand c’est fait, relance **`/setup-saas`** (ou `npm run setup-saas`). L’IA doit recontrôler cette phase avant de passer à la suivante.
