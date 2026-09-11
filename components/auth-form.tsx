@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { StudeoIcon } from "@/components/studeo-icon";
@@ -36,7 +36,7 @@ function isAuthField(value: PropertyKey | undefined): value is AuthField {
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
+  const [formError, setFormError] = useState("");
   const [busy, setBusy] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -45,21 +45,6 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const googleEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
   const emailId = `${mode}-email`;
   const passwordId = `${mode}-password`;
-  const toastId = useRef(0);
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = window.setTimeout(() => {
-      setToast((current) => (current?.id === toast.id ? null : current));
-    }, 4500);
-    return () => window.clearTimeout(timer);
-  }, [toast]);
-
-  function showError(message: string) {
-    toastId.current += 1;
-    setToast({ id: toastId.current, message });
-  }
-
   function clearFieldError(field: AuthField) {
     setFieldErrors((current) => {
       if (!current[field]) return current;
@@ -73,9 +58,10 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     event.preventDefault();
     setBusy(true);
     setFieldErrors({});
+    setFormError("");
 
     if (captchaEnabled && !captchaToken) {
-      showError("Veuillez terminer la vérification anti-bot.");
+      setFormError("Veuillez terminer la vérification anti-bot.");
       setBusy(false);
       return;
     }
@@ -100,9 +86,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         ? ["email", "password"]
         : ["name", "email", "password"];
       const firstField = fieldOrder.find((field) => Boolean(nextErrors[field]));
-      const message = validationMessage(firstField);
       setFieldErrors(nextErrors);
-      showError(message);
       if (isAuthField(firstField)) {
         const control = event.currentTarget.elements.namedItem(firstField);
         if (control instanceof HTMLElement) control.focus();
@@ -125,7 +109,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           fetchOptions,
         });
         if (result.error) {
-          showError(result.error.message || "Connexion impossible");
+          setFormError(result.error.message || "Connexion impossible");
           setBusy(false);
           return;
         }
@@ -146,7 +130,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           fetchOptions,
         });
         if (result.error) {
-          showError(result.error.message || "Inscription impossible");
+          setFormError(result.error.message || "Inscription impossible");
           setBusy(false);
           return;
         }
@@ -155,7 +139,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       router.push("/dashboard");
       router.refresh();
     } catch {
-      showError(
+      setFormError(
         isLogin
           ? "Connexion momentanément indisponible."
           : "Inscription momentanément indisponible.",
@@ -167,37 +151,24 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   async function googleSignIn() {
     setBusy(true);
     setFieldErrors({});
+    setFormError("");
     try {
       const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       });
       if (result?.error) {
-        showError(result.error.message || "Connexion Google impossible");
+        setFormError(result.error.message || "Connexion Google impossible");
         setBusy(false);
       }
     } catch {
-      showError("Connexion Google momentanément indisponible.");
+      setFormError("Connexion Google momentanément indisponible.");
       setBusy(false);
     }
   }
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      {toast ? (
-        <div className={styles.toast} role="alert" aria-live="assertive">
-          <span className={styles.toastIcon}><StudeoIcon name="alert" size={18} /></span>
-          <span className={styles.toastMessage}>{toast.message}</span>
-          <button
-            aria-label="Fermer la notification"
-            className={styles.toastClose}
-            type="button"
-            onClick={() => setToast(null)}
-          >
-            <StudeoIcon name="close" size={17} />
-          </button>
-        </div>
-      ) : null}
       {googleEnabled ? (
         <>
           <button
@@ -252,6 +223,8 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       ) : null}
 
       <TurnstileWidget onToken={setCaptchaToken} />
+
+      {formError ? <p className={styles.formError} role="alert">{formError}</p> : null}
 
       <button className={styles.primaryButton} disabled={busy} type="submit">
         {busy ? "Traitement…" : isLogin ? "Se connecter" : "Créer mon compte"}
