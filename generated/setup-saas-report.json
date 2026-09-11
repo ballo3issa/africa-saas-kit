@@ -1,0 +1,665 @@
+{
+  "version": "0.8.28",
+  "generatedAt": "2026-09-11T00:54:45.054Z",
+  "greenCount": 14,
+  "total": 20,
+  "nextPhase": 15,
+  "phases": [
+    {
+      "n": 1,
+      "title": "Prendre connaissance du kit et de l’outillage",
+      "goal": "Vérifier que l’environnement local peut exécuter le starter et que l’IA a lu les règles du kit.",
+      "role": "Cette phase vérifie que ton Mac, Antigravity et le kit disposent des fichiers/règles nécessaires pour travailler proprement.",
+      "benefit": "Elle évite de commencer le projet avec un environnement incomplet ou une IA qui n’a pas lu les règles du starter.",
+      "checks": [
+        {
+          "label": "Node.js >= 20",
+          "ok": true,
+          "detail": "Node 26.7.0"
+        },
+        {
+          "label": "AGENTS.md",
+          "ok": true,
+          "detail": "Règles IA du kit"
+        },
+        {
+          "label": "SECURITY.md",
+          "ok": true,
+          "detail": "Règles sécurité"
+        },
+        {
+          "label": "DESIGN.md",
+          "ok": true,
+          "detail": "Workflow Banani / design"
+        }
+      ],
+      "actions": [
+        "Ouvrir le dossier du kit dans Antigravity.",
+        "Dans l’Agent Antigravity, lancer `/setup-saas`.",
+        "L’IA doit lire AGENTS.md, SECURITY.md, DESIGN.md et README.md avant toute modification.",
+        "Exécuter `npm run features:list` pour connaître les fonctionnalités déjà présentes et éviter les doublons avant de coder."
+      ],
+      "validate": "Relancer `npm run setup-saas` et vérifier que la Phase 1 est verte.",
+      "state": "green"
+    },
+    {
+      "n": 2,
+      "title": "Activer et vérifier Computer Use / Browser Tools",
+      "goal": "S’assurer qu’Antigravity peut réellement ouvrir et manipuler le navigateur pour assister les tests visuels tout au long du projet.",
+      "role": "Antigravity intègre un Browser Subagent capable d’ouvrir, lire et manipuler Chrome. Cette phase vérifie son activation réelle; il n’existe pas de package npm computer-use à installer dans le SaaS.",
+      "benefit": "Elle permet à l’IA de vérifier visuellement les pages, responsive, formulaires, OAuth, uploads, paiements sandbox, previews Vercel, SEO et domaine final au lieu de se limiter au code.",
+      "checks": [
+        {
+          "label": "Skill /computer-use",
+          "ok": true,
+          "detail": "Workflow navigateur du kit"
+        },
+        {
+          "label": "Guide Browser Tools",
+          "ok": true,
+          "detail": "Activation et règles de sécurité"
+        },
+        {
+          "label": "Browser Subagent vérifié",
+          "ok": true,
+          "detail": "Preuve locale: Phase 13: Chrome a ouvert /api/health (status ok) et /api/readyz (status ready, database ok, Redis skipped); smoke health/readyz/auth/robots/sitemap PASS."
+        }
+      ],
+      "actions": [
+        "Exécuter `npm run computer-use:check`.",
+        "Dans Antigravity, ouvrir Settings → Browser et vérifier que Browser Tools ne sont pas désactivés. Aucun package npm supplémentaire n’est requis.",
+        "Conserver une politique de Request Review pour les actions navigateur sensibles et n’autoriser que les domaines nécessaires dans l’Allowlist.",
+        "Demander à l’agent d’utiliser réellement le Browser Subagent pour ouvrir `https://www.antigravity.google/docs/browser` et lire le titre de la page. Cette preuve ne dépend pas encore de `npm install`.",
+        "Après succès réel seulement, exécuter `npm run computer-use:mark -- --status=verified --evidence=\"Browser Subagent: documentation Antigravity ouverte et lue\"`.",
+        "Relancer `npm run computer-use:check` puis `/setup-saas`."
+      ],
+      "validate": "La phase passe uniquement après une vraie action Browser Subagent observée. Hors Antigravity, utiliser un outil navigateur équivalent ou marquer cette phase `skipped` avec justification.",
+      "state": "green"
+    },
+    {
+      "n": 3,
+      "title": "Installer les dépendances locales",
+      "goal": "Installer les packages exacts du projet et créer le lockfile qui sera conservé dans GitHub.",
+      "role": "npm installe les bibliothèques nécessaires au projet et le lockfile fige exactement les versions utilisées.",
+      "benefit": "Elle rend les installations reproductibles entre ton Mac, GitHub Actions et Vercel, et permet les audits de dépendances.",
+      "checks": [
+        {
+          "label": "package-lock.json",
+          "ok": true,
+          "detail": "Présent"
+        },
+        {
+          "label": "package.json",
+          "ok": true,
+          "detail": "Manifeste npm"
+        }
+      ],
+      "actions": [
+        "Dans le terminal Antigravity, exécuter `npm install`.",
+        "Ne pas supprimer `package-lock.json` après l’installation.",
+        "Exécuter ensuite `npm run security:check` pour un premier contrôle."
+      ],
+      "validate": "`package-lock.json` existe et `npm run security:check` ne signale pas de blocage critique.",
+      "state": "green"
+    },
+    {
+      "n": 4,
+      "title": "Configurer l’identité du SaaS",
+      "goal": "Définir le pays principal, la devise, le nom, le niveau de sécurité et les services de base. Les paiements sont volontairement reportés à la Phase 17.",
+      "role": "Cette phase définit l’identité technique du SaaS : nom, pays, devise, URL locale et niveau de sécurité.",
+      "benefit": "Elle donne au kit un contexte cohérent avant de créer la base, l’authentification et les écrans.",
+      "checks": [
+        {
+          "label": "africa-saas.config.json",
+          "ok": true,
+          "detail": "Etudeo / CI / XOF"
+        },
+        {
+          "label": ".env.local",
+          "ok": true,
+          "detail": "Présent (valeurs non affichées)"
+        }
+      ],
+      "actions": [
+        "Exécuter `npm run setup` et répondre aux questions du wizard, ou utiliser son mode non interactif si les choix sont déjà connus.",
+        "Choisir `SECURITY_LEVEL=high` par défaut pour un SaaS réel.",
+        "Ne configurer aucun provider de paiement à cette étape : ils sont optionnels et réservés à la Phase 17.",
+        "Ne jamais coller une clé secrète dans le chat : l’écrire directement dans `.env.local`."
+      ],
+      "validate": "Exécuter `npm run setup:check` puis `npm run setup-saas`.",
+      "state": "green"
+    },
+    {
+      "n": 5,
+      "title": "Créer et connecter Neon PostgreSQL",
+      "goal": "Connecter la base PostgreSQL utilisée par Drizzle et Better Auth.",
+      "role": "Neon est la base PostgreSQL du SaaS. Elle stocke les utilisateurs, plans, transactions, paramètres et données métier.",
+      "benefit": "Elle apporte une base de données cloud PostgreSQL compatible serverless, utilisée par Drizzle et Better Auth.",
+      "checks": [
+        {
+          "label": "DATABASE_URL",
+          "ok": true,
+          "detail": "Configurée (connexion externe encore à tester)"
+        }
+      ],
+      "actions": [
+        "Créer/ouvrir un compte Neon et créer un projet PostgreSQL.",
+        "Dans Neon, ouvrir Connection Details et copier la connection string recommandée pour l’application.",
+        "Dans `.env.local`, renseigner `DATABASE_URL=...` directement, sans envoyer la valeur dans le chat.",
+        "Conserver SSL activé dans la connection string Neon."
+      ],
+      "validate": "Après installation des dépendances : exécuter `npm run db:generate` puis `npm run db:migrate` sur une base de développement/staging.",
+      "state": "green"
+    },
+    {
+      "n": 6,
+      "title": "Générer Better Auth et la base d’authentification",
+      "goal": "Préparer les tables d’auth, les sessions et les secrets sans imposer un compte pour accéder au kit.",
+      "role": "Better Auth gère l’authentification : sessions, connexion, reset mot de passe, Google OAuth, 2FA et rôles.",
+      "benefit": "Elle apporte une couche d’identité sécurisée sans devoir construire soi-même la gestion des mots de passe et sessions.",
+      "checks": [
+        {
+          "label": "BETTER_AUTH_SECRET",
+          "ok": true,
+          "detail": "Configuré"
+        },
+        {
+          "label": "BETTER_AUTH_URL",
+          "ok": true,
+          "detail": "http://localhost:3000"
+        },
+        {
+          "label": "Schéma auth généré",
+          "ok": true,
+          "detail": "Fichier Better Auth"
+        }
+      ],
+      "actions": [
+        "Si `BETTER_AUTH_SECRET` manque, le générer avec une valeur aléatoire longue et l’écrire dans `.env.local`.",
+        "En local, utiliser `BETTER_AUTH_URL=http://localhost:3000`.",
+        "Exécuter `npm run auth:generate` puis inspecter le diff généré.",
+        "Exécuter ensuite `npm run db:generate && npm run db:migrate`."
+      ],
+      "validate": "Le schéma auth est généré et les migrations passent sur la base de développement.",
+      "state": "green"
+    },
+    {
+      "n": 7,
+      "title": "Configurer les emails et Google",
+      "goal": "Configurer les emails transactionnels, Google OAuth et la préparation Search Console selon les choix du projet.",
+      "role": "Resend sert aux emails transactionnels et Google sert à la connexion OAuth ainsi qu’à la préparation Search Console.",
+      "benefit": "Cette phase permet d’envoyer les emails du SaaS, proposer la connexion Google et préparer la visibilité Google du site.",
+      "checks": [
+        {
+          "label": "Resend",
+          "ok": true,
+          "required": true,
+          "detail": "RESEND_API_KEY + EMAIL_FROM configurés"
+        },
+        {
+          "label": "Google OAuth",
+          "ok": true,
+          "required": true,
+          "detail": "Client ID + Secret configurés"
+        },
+        {
+          "label": "Search Console",
+          "ok": false,
+          "required": true,
+          "detail": "Token manquant"
+        }
+      ],
+      "actions": [
+        "Si email/mot de passe est activé : Resend est requis en production. Créer une API key, vérifier le domaine expéditeur et renseigner `RESEND_API_KEY` + `EMAIL_FROM`.",
+        "Si tu ne veux pas Resend : désactiver explicitement email/mot de passe (`AUTH_EMAIL_PASSWORD_ENABLED=false`) et utiliser Google OAuth ou un autre provider d’auth ajouté au projet.",
+        "Google OAuth : créer un OAuth Web Client dans Google Cloud Console et renseigner `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` localement.",
+        "Ajouter le callback local Better Auth demandé par le projet et, plus tard, le callback du vrai domaine Vercel.",
+        "Search Console : conserver la vérification réelle pour la phase production, quand le domaine HTTPS existe."
+      ],
+      "validate": "Email/mot de passe ne doit jamais être déclaré prêt en production sans livraison email fonctionnelle. Tester Resend et Google OAuth après lancement de l’app; Search Console reste NON VÉRIFIÉE avant domaine public.",
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Resend vérifié et email test envoyé; Google OAuth testé avec callback localhost, utilisateur et session créés; Search Console différée au domaine public",
+        "validatedAt": "2026-09-10T21:26:57.743Z"
+      }
+    },
+    {
+      "n": 8,
+      "title": "Configurer la sécurité d’infrastructure",
+      "goal": "Activer les protections nécessaires au runtime : rate limiting, anti-bot et secret cron.",
+      "role": "Cette phase met en place les protections d’infrastructure comme le rate limiting, l’anti-bot et les secrets de cron.",
+      "benefit": "Elle réduit les attaques automatisées, le spam, les abus d’API et les appels non autorisés aux tâches planifiées.",
+      "checks": [
+        {
+          "label": "Turnstile",
+          "ok": false,
+          "required": false,
+          "detail": "Recommandé pour les formulaires publics"
+        },
+        {
+          "label": "CRON_SECRET",
+          "ok": true,
+          "required": false,
+          "detail": "Configuré"
+        }
+      ],
+      "actions": [
+        "Ne générer `CRON_SECRET` que si le SaaS utilise réellement un cron protégé; le cron de réconciliation paiement n’est requis que si les paiements sont activés en Phase 17.",
+        "Configurer Cloudflare Turnstile si le SaaS expose inscription, login ou formulaires publics."
+      ],
+      "validate": "Exécuter `npm run security:check`; les protections obligatoires du niveau choisi doivent être satisfaites.",
+      "state": "green"
+    },
+    {
+      "n": 9,
+      "title": "Importer le design Banani",
+      "goal": "Transformer les écrans importés en inventaire exploitable par l’IA sans coder immédiatement.",
+      "role": "Banani sert à préparer/importer les écrans et l’interface avant le codage.",
+      "benefit": "Il donne à l’IA une référence visuelle claire afin de construire le SaaS selon le design voulu au lieu d’improviser l’interface.",
+      "checks": [
+        {
+          "label": "DESIGN.md",
+          "ok": true,
+          "detail": "Règles design"
+        },
+        {
+          "label": "Banani MCP via .codex/config.toml",
+          "ok": false,
+          "detail": "Fichier présent mais Banani MCP non configuré"
+        },
+        {
+          "label": "Écrans Banani réellement importés",
+          "ok": true,
+          "detail": "Snapshot MCP + inventaire normalisé présents"
+        },
+        {
+          "label": "Gap analysis Banani → Starter",
+          "ok": true,
+          "detail": "generated/banani-gap-analysis.md présent"
+        }
+      ],
+      "actions": [
+        "Exécuter `npm run banani:prepare`. Cette commande crée seulement `.codex/config.toml` vide si nécessaire et ne l’écrase jamais.",
+        "Ouvrir `.codex/config.toml` et coller MANUELLEMENT la configuration MCP Banani obtenue depuis ton compte Banani. Ne jamais coller le token dans le chat.",
+        "Exécuter `npm run banani:check` pour vérifier la structure et la protection Git sans afficher le token.",
+        "Redémarrer/recharger Codex ou Antigravity si nécessaire afin qu’il relise la configuration MCP.",
+        "Dans Antigravity/Codex, lancer `/import-banani` afin que l’agent parcoure le design via MCP et crée `design/banani/imported-design.json` sans secret.",
+        "Exécuter `npm run import-banani:check` puis `npm run import-banani:analyze` pour comparer Banani au starter et synchroniser `design/banani/screens.json`.",
+        "Lire `generated/banani-gap-analysis.md` : RÉUTILISER / ADAPTER / CRÉER / À CONFIRMER avant toute implémentation.",
+        "Ne pas demander à Banani de décider des règles métier, des permissions ou de la sécurité.",
+        "Exécuter `npm run design:check`."
+      ],
+      "validate": "`npm run banani:check` et `npm run import-banani:check` passent, le gap analysis existe et le handoff design passe avant toute construction massive.",
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Import historique Banani du flow YlQxXVp_7E8Q vérifié dans le projet local docteur-abidjan, normalisé en 16 écrans, preflight et gap analysis passés; accès MCP actuel non configuré, fidélité visuelle à revalider avec les captures utilisateur",
+        "validatedAt": "2026-09-10T21:40:13.756Z"
+      }
+    },
+    {
+      "n": 10,
+      "title": "Générer le plan d’implémentation du SaaS",
+      "goal": "Produire l’ordre de construction complet avant de coder les fonctionnalités.",
+      "role": "Le Implementation Planner transforme les écrans et besoins en ordre de construction technique.",
+      "benefit": "Il évite de coder au hasard : l’IA planifie données, routes, permissions, composants, tests et dépendances avant d’implémenter.",
+      "checks": [
+        {
+          "label": "Planificateur",
+          "ok": true,
+          "detail": "Présent"
+        },
+        {
+          "label": "Plan généré",
+          "ok": true,
+          "detail": "generated/implementation-plan.md présent"
+        }
+      ],
+      "actions": [
+        "Exécuter `npm run import-banani:analyze` si ce n’est pas déjà fait, puis `npm run design:plan`.",
+        "L’IA doit présenter les phases d’implémentation : architecture, données, permissions, pages, auth, paiements, email/jobs, SEO, tests et production.",
+        "Toute règle métier absente des écrans doit être marquée À CONFIRMER, jamais inventée."
+      ],
+      "validate": "Le fichier `generated/implementation-plan.md` existe et l’utilisateur comprend l’ordre des phases avant le codage.",
+      "state": "green"
+    },
+    {
+      "n": 11,
+      "title": "Construire mobile-first, responsive et avec skeleton loaders",
+      "goal": "Garantir une vraie expérience mobile avant tablette/desktop.",
+      "role": "Cette phase impose une construction mobile-first, responsive et des skeleton loaders pendant les chargements.",
+      "benefit": "Elle apporte une application fluide sur smartphone, tablette et desktop, avec navigation adaptée et moins de sauts visuels.",
+      "checks": [
+        {
+          "label": "Mobile-first gate",
+          "ok": true,
+          "detail": "Présent"
+        },
+        {
+          "label": "Skeleton gate",
+          "ok": true,
+          "detail": "Présent"
+        },
+        {
+          "label": "Validation visuelle mobile réelle",
+          "ok": false,
+          "detail": "À tester sur 320/360/390/430 px puis marquer la phase après vérification"
+        }
+      ],
+      "actions": [
+        "Construire chaque écran d’abord en 320 / 360 / 390 / 430 px, puis tablette et desktop.",
+        "Prévoir navigation mobile fluide, safe areas, boutons tactiles et absence de scroll horizontal global.",
+        "Pour toute page data-driven, créer un `loading.tsx` ou un fallback Suspense avec skeleton fidèle au contenu final.",
+        "Tester les états loading, empty, error et success."
+      ],
+      "validate": "Exécuter `npm run mobile:check` et `npm run ui:loading-check`, puis effectuer une vérification visuelle réelle des viewports.",
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Interface Etudeo responsive réalisée sur 10 routes dashboard avec skeletons et formulaires d’aperçu non persistés. Vérification Chrome réelle: 70 combinaisons route/largeur (320 à 1440 px), aucun débordement ni cible tactile mobile non conforme; soumissions tâche/événement validées. verify:code et format:check passent; compte visuel temporaire supprimé.",
+        "validatedAt": "2026-09-10T22:02:24.822Z"
+      }
+    },
+    {
+      "n": 12,
+      "title": "Préparer SEO Google et partage social",
+      "goal": "Rendre les pages publiques indexables proprement et partageables avec image d’aperçu.",
+      "role": "Le SEO prépare les pages publiques pour Google et les aperçus de partage sur WhatsApp, Facebook, LinkedIn et autres.",
+      "benefit": "Il apporte metadata, canonical, sitemap, robots, Open Graph, images sociales et règles d’indexation propres.",
+      "checks": [
+        {
+          "label": "SEO gate",
+          "ok": true,
+          "detail": "Présent"
+        },
+        {
+          "label": "sitemap",
+          "ok": true,
+          "detail": "Présent"
+        },
+        {
+          "label": "Open Graph image",
+          "ok": true,
+          "detail": "Présent"
+        }
+      ],
+      "actions": [
+        "Définir title, description, canonical et Open Graph pour chaque page publique importante.",
+        "Conserver dashboard/admin/auth/setup en `noindex`.",
+        "Vérifier sitemap.xml, robots.txt, favicon, manifest et image 1200×630.",
+        "Exécuter `npm run seo:check`."
+      ],
+      "validate": "Le SEO preflight passe; l’indexation Google reste NON VÉRIFIÉE tant que Search Console n’a pas confirmé le domaine.",
+      "state": "green"
+    },
+    {
+      "n": 13,
+      "title": "Tester la qualité, la sécurité et le build",
+      "goal": "Bloquer la mise en ligne tant que le code ne compile pas et que les contrôles critiques échouent.",
+      "role": "Cette phase contrôle que le code compile, que les dépendances sont auditées et que les règles de sécurité/UI sont respectées.",
+      "benefit": "Elle détecte les régressions techniques avant d’envoyer le projet sur GitHub/Vercel.",
+      "checks": [
+        {
+          "label": "Security preflight",
+          "ok": true,
+          "detail": "Disponible"
+        },
+        {
+          "label": "Security audit",
+          "ok": true,
+          "detail": "Disponible"
+        },
+        {
+          "label": "Health / readiness",
+          "ok": true,
+          "detail": "Sondes backend présentes"
+        },
+        {
+          "label": "Vitest",
+          "ok": true,
+          "detail": "Suite unitaire présente"
+        },
+        {
+          "label": "ESLint / Prettier",
+          "ok": true,
+          "detail": "Qualité de code configurée"
+        },
+        {
+          "label": "Build production exécuté",
+          "ok": true,
+          "detail": ".next/BUILD_ID présent"
+        }
+      ],
+      "actions": [
+        "Ouvrir `/api/health` puis `/api/readyz` et vérifier les statuts backend.",
+        "Exécuter `npm run format:check`, `npm run runtime:check` et `npm run features:check`.",
+        "Exécuter `npm run lint`.",
+        "Exécuter `npm run typecheck` et `npm run test`.",
+        "Avec `npm run dev` actif, exécuter `npm run smoke:system` pour health/readyz/auth/SEO.",
+        "Exécuter `npm run build`.",
+        "Exécuter `npm run audit:prod` puis `npm audit` pour inclure aussi les dépendances de développement.",
+        "Exécuter `npm run security:check` et `npm run security:audit`.",
+        "Tester deux comptes distincts et tenter l’accès croisé à une ressource d’un autre utilisateur."
+      ],
+      "validate": "Health/readiness, format, lint, tests, typecheck et build doivent réussir; aucune vulnérabilité critique/haute non acceptée avant staging.",
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Build Next.js 16.3.4 réussi; health/readyz/auth/robots/sitemap HTTP 200 et observés dans Chrome; CI, format, lint (0 erreur), types, 24 tests, security:release PASS. Audit: 0 haute/critique, 4 modérées transitive esbuild/drizzle-kit sans correction sûre non cassante. RLS activé par migration 0001 et vérifié sur 4 tables; isolation réelle de deux comptes PASS, données temporaires supprimées.",
+        "validatedAt": "2026-09-11T00:47:39.827Z"
+      }
+    },
+    {
+      "n": 14,
+      "title": "Préparer le handoff GitHub / Vercel",
+      "goal": "Préparer la liste des variables, callbacks et contrôles nécessaires au déploiement, sans encore exiger les paiements.",
+      "role": "Le Deployment Handoff rassemble les variables, callbacks, webhooks et paramètres nécessaires au déploiement.",
+      "benefit": "Il évite d’oublier une clé ou une URL et te donne une checklist adaptée au SaaS réellement construit.",
+      "checks": [
+        {
+          "label": "Deployment handoff",
+          "ok": true,
+          "detail": "Disponible"
+        },
+        {
+          "label": "GitHub Actions",
+          "ok": true,
+          "required": false,
+          "detail": "CI recommandée"
+        },
+        {
+          "label": "Handoff de déploiement généré",
+          "ok": true,
+          "detail": "generated/deployment-handoff.md présent"
+        }
+      ],
+      "actions": [
+        "Exécuter `npm run deploy:handoff`.",
+        "Lire `generated/deployment-handoff.md` : variables Vercel, callbacks Google, cron, SEO et services activés.",
+        "Vérifier qu’aucun secret n’est commité et que le lockfile est présent.",
+        "Ne pas ajouter de variables de paiement si aucun provider n’est encore activé.",
+        "Conserver la distinction local, Preview et Production."
+      ],
+      "validate": "Exécuter `npm run deploy:check`; le handoff de base doit être prêt avant le staging.",
+      "state": "green"
+    },
+    {
+      "n": 15,
+      "title": "Préparer GitHub, Vercel et le staging",
+      "goal": "Préparer le déploiement sans exiger de paiement. Le SaaS doit pouvoir atteindre le staging même sans aucun provider.",
+      "role": "GitHub conserve le code et Vercel héberge le SaaS. Le staging permet de tester le vrai déploiement avant production.",
+      "benefit": "Cette phase apporte versionnement, CI/CD, previews et validation du SaaS dans un environnement proche de la production.",
+      "checks": [
+        {
+          "label": "Deployment handoff",
+          "ok": true,
+          "detail": "Disponible"
+        },
+        {
+          "label": "Handoff généré",
+          "ok": true,
+          "required": false,
+          "detail": "generated/deployment-handoff.md présent"
+        },
+        {
+          "label": "Staging Vercel réellement validé",
+          "ok": false,
+          "detail": "À marquer passé uniquement après un vrai test staging"
+        }
+      ],
+      "actions": [
+        "Exécuter `npm run deploy:handoff` pour préparer les variables GitHub/Vercel réellement utilisées par le projet.",
+        "Pousser le projet sur GitHub sans `.env*` ni secrets.",
+        "Créer le projet Vercel et déployer d’abord en Preview/Staging.",
+        "Tester le SaaS sans paiement : navigation, auth, base, email, mobile, SEO et fonctions métier.",
+        "Ne configurer les providers de paiement que dans la Phase 17 si le SaaS en a réellement besoin."
+      ],
+      "validate": "Le staging doit fonctionner sans dépendre d’un provider de paiement. Les paiements restent optionnels.",
+      "state": "yellow"
+    },
+    {
+      "n": 16,
+      "title": "Configurer Upstash Redis (OPTIONNEL)",
+      "goal": "Décider si ce SaaS a besoin d’un cache Redis/serverless et d’un rate limiting distribué pour réduire les lectures répétées vers Neon et stocker les états temporaires.",
+      "role": "Upstash Redis est une couche rapide de cache et de données temporaires. Neon reste la source de vérité métier : Upstash ne remplace pas PostgreSQL et ne doit pas contenir les données critiques comme seule copie.",
+      "benefit": "Cette phase peut réduire la charge et la latence sur les lectures fréquentes, centraliser le rate limiting entre instances Vercel et conserver des états temporaires avec TTL.",
+      "checks": [
+        {
+          "label": "Décision Upstash",
+          "ok": false,
+          "required": true,
+          "detail": "Optionnel — non activé"
+        },
+        {
+          "label": "Variables Redis",
+          "ok": true,
+          "required": true,
+          "detail": "UPSTASH_REDIS_REST_URL / TOKEN absents"
+        },
+        {
+          "label": "Helper cache",
+          "ok": true,
+          "detail": "Cache TTL + fallback Neon disponible"
+        }
+      ],
+      "actions": [
+        "Si le SaaS n’a pas besoin de cache/rate limiting distribué : exécuter `npm run upstash:setup -- --none`, puis `npm run setup-saas:mark -- --phase=16 --status=skipped --note=\"Upstash non utilisé\"`.",
+        "Si Upstash est utile : exécuter `npm run upstash:setup`, créer une base Redis dans Upstash Console et copier REST URL + REST TOKEN directement dans `.env.local` sans les coller dans le chat.",
+        "Exécuter `npm run upstash:check` puis `npm run upstash:check:online` pour tester réellement la connexion.",
+        "Utiliser Upstash seulement pour cache, rate limits, verrous/états temporaires et données recalculables. Conserver Neon comme source de vérité.",
+        "Pour les entrées de cache, définir un TTL. Si le cache est utilisé comme cache, l’éviction peut être activée côté Upstash.",
+        "Avant production, recopier les variables Upstash dans Vercel uniquement si cette phase a été activée."
+      ],
+      "validate": "La phase peut être SKIPPED. Si activée, `npm run upstash:check:online` doit réussir avant production et `/api/readyz` doit signaler Redis OK.",
+      "state": "yellow"
+    },
+    {
+      "n": 17,
+      "title": "Décider et configurer les paiements (OPTIONNEL)",
+      "goal": "Juste avant la mise en ligne, décider si ce SaaS a réellement besoin d’un fournisseur de paiement. Un SaaS sans paiement peut ignorer cette phase.",
+      "role": "Les fournisseurs de paiement permettent d’encaisser en ligne par Mobile Money ou carte, mais ils sont totalement optionnels.",
+      "benefit": "Si le SaaS vend quelque chose, cette phase ajoute checkout, webhooks, réconciliation et tests sandbox. Sinon elle est simplement ignorée.",
+      "checks": [
+        {
+          "label": "Décision paiements",
+          "ok": false,
+          "detail": "Optionnel — décider ici si le SaaS a besoin de paiements, sinon marquer la phase skipped."
+        }
+      ],
+      "actions": [
+        "Si ce SaaS N’A PAS besoin de paiement : exécuter `npm run payments:setup -- --none`, puis `npm run setup-saas:mark -- --phase=17 --status=skipped --note=\"SaaS sans paiement\"`.",
+        "Si ce SaaS A besoin de paiement : exécuter `npm run payments:setup` seulement maintenant, choisir les providers nécessaires, puis renseigner leurs clés sandbox.",
+        "Tester ensuite les webhooks avec ngrok avant toute clé live."
+      ],
+      "validate": "La phase peut être explicitement SKIPPED pour un SaaS sans paiement.",
+      "state": "red"
+    },
+    {
+      "n": 18,
+      "title": "Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)",
+      "goal": "Décider si le domaine et/ou le DNS du SaaS seront gérés avec Cloudflare. Cette phase est facultative et ne concerne pas Cloudflare R2.",
+      "role": "Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative.",
+      "benefit": "Il peut centraliser le domaine/DNS et éventuellement servir de couche réseau devant Vercel, sans être nécessaire au fonctionnement du SaaS.",
+      "checks": [
+        {
+          "label": "Décision Cloudflare",
+          "ok": false,
+          "detail": "Optionnel — utiliser Cloudflare pour le domaine/DNS ou marquer cette phase skipped."
+        }
+      ],
+      "actions": [
+        "Si tu ne veux PAS utiliser Cloudflare : exécuter `npm run cloudflare:setup -- --none`, puis marquer la phase `skipped` avec `npm run setup-saas:mark -- --phase=18 --status=skipped --note=\"Cloudflare non utilisé\"`.",
+        "Si tu veux utiliser Cloudflare : exécuter `npm run cloudflare:setup` puis suivre le guide généré dans `generated/cloudflare-setup.md`.",
+        "Pour un domaine acheté ou géré chez Cloudflare : préparer le domaine, puis utiliser les enregistrements DNS demandés par Vercel pour le domaine custom. Ne jamais inventer une adresse A/CNAME : reprendre exactement les valeurs affichées par Vercel pour ce projet.",
+        "Si le proxy Cloudflare gêne une validation de domaine/SSL, utiliser temporairement le mode DNS only jusqu’à validation complète, puis re-tester avant d’activer un proxy.",
+        "Ne jamais ajouter de token API Cloudflare dans le chat. Cette phase domaine/DNS n’exige aucun token API dans le kit.",
+        "Après validation réelle du domaine/DNS, marquer la phase passée avec `npm run setup-saas:mark -- --phase=18 --status=passed --note=\"Cloudflare domaine/DNS validé\"`."
+      ],
+      "validate": "La phase est soit SKIPPED (Cloudflare non utilisé), soit PASSED après validation réelle du domaine/DNS. L’absence de Cloudflare n’est jamais bloquante.",
+      "state": "red"
+    },
+    {
+      "n": 19,
+      "title": "Configurer Cloudinary pour les uploads d’images (OPTIONNEL)",
+      "goal": "Décider si le SaaS a besoin d’uploads d’images. Cloudinary est facultatif et ne doit jamais bloquer un SaaS sans médias uploadés.",
+      "role": "Cloudinary gère l’upload, le stockage, la transformation et la diffusion d’images. Son utilisation est facultative.",
+      "benefit": "Il est utile pour avatars, photos produits ou médias utilisateurs tout en gardant les secrets d’upload côté serveur.",
+      "checks": [
+        {
+          "label": "Décision Cloudinary",
+          "ok": false,
+          "detail": "Optionnel — activer Cloudinary seulement si le SaaS a besoin d’uploads d’images, sinon marquer cette phase skipped."
+        },
+        {
+          "label": "Variables Cloudinary",
+          "ok": false,
+          "required": false,
+          "detail": "Non configuré"
+        }
+      ],
+      "actions": [
+        "Si le SaaS n’a PAS besoin d’upload d’images : exécuter `npm run cloudinary:setup -- --none`, puis `npm run setup-saas:mark -- --phase=19 --status=skipped --note=\"Cloudinary non utilisé\"`.",
+        "Si le SaaS A besoin d’upload d’images : exécuter `npm run cloudinary:setup` puis suivre `generated/cloudinary-setup.md`.",
+        "Renseigner CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY et CLOUDINARY_API_SECRET directement dans `.env.local`; ne jamais envoyer l’API secret dans le chat.",
+        "Lancer l’app et tester `POST /api/uploads/images` avec un utilisateur connecté : une image valide doit réussir, SVG/fichier >10 MB/non-image/sans session doivent être refusés.",
+        "Après validation en staging, ajouter les variables Cloudinary nécessaires dans Vercel Production; Preview seulement si le projet en a besoin.",
+        "Après un vrai upload réussi, marquer la phase passée avec `npm run setup-saas:mark -- --phase=19 --status=passed --note=\"Cloudinary uploads testés\"`."
+      ],
+      "validate": "La phase est soit SKIPPED pour un SaaS sans upload d’images, soit PASSED après un vrai test d’upload et des cas de refus sécurité.",
+      "state": "red"
+    },
+    {
+      "n": 20,
+      "title": "Finaliser production, domaine et Search Console",
+      "goal": "Valider le vrai domaine HTTPS et les intégrations externes avant de déclarer le SaaS prêt.",
+      "role": "Cette phase finalise le vrai domaine HTTPS, Search Console et les derniers contrôles de production.",
+      "benefit": "Elle apporte la validation finale : domaine public, indexation Google, Production Doctor et test global de conformité des fichiers du kit.",
+      "checks": [
+        {
+          "label": "Production Doctor prêt",
+          "ok": false,
+          "detail": "À exécuter après staging/domaine"
+        },
+        {
+          "label": "Search Console vérifiée",
+          "ok": false,
+          "required": false,
+          "detail": "Toujours NON VÉRIFIÉE automatiquement avant connexion au vrai domaine"
+        }
+      ],
+      "actions": [
+        "Déployer d’abord en staging/Preview et tester les flux critiques.",
+        "Configurer le domaine custom Vercel et HTTPS avec le fournisseur DNS choisi (Cloudflare ou autre).",
+        "Mettre à jour les callbacks OAuth avec le vrai domaine et, uniquement si des paiements sont activés, mettre à jour leurs webhooks providers.",
+        "Lancer `npm run doctor:production` puis `npm run doctor:production:online`.",
+        "Dans Google Search Console, vérifier la propriété Domain via DNS puis soumettre `/sitemap.xml`.",
+        "Tester un partage réel de lien pour vérifier l’image Open Graph.",
+        "Lancer `npm run conformity:check` pour le contrôle final de conformité des fichiers, scripts et règles du kit.",
+        "Ouvrir `generated/conformity-report.md` et corriger tout FAIL avant de considérer le parcours terminé."
+      ],
+      "validate": "Le Production Doctor est satisfaisant, les flux externes sont testés et `npm run conformity:check` retourne PASS sans anomalie bloquante.",
+      "state": "red"
+    }
+  ]
+}

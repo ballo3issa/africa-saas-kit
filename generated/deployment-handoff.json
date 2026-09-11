@@ -1,0 +1,262 @@
+{
+  "generatedAt": "2026-09-11T00:49:27.084Z",
+  "variables": [
+    {
+      "name": "NEXT_PUBLIC_APP_URL",
+      "group": "Application / domaine",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "APP_NAME",
+      "group": "Application / domaine",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "DEFAULT_COUNTRY",
+      "group": "Application / domaine",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "SECURITY_LEVEL",
+      "group": "Application / domaine",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "DATABASE_URL",
+      "group": "Neon PostgreSQL",
+      "configured": true,
+      "sensitive": true,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "DATABASE_URL_DIRECT",
+      "group": "Neon PostgreSQL",
+      "configured": true,
+      "sensitive": true,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "recommended"
+    },
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "group": "Better Auth",
+      "configured": true,
+      "sensitive": true,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "BETTER_AUTH_URL",
+      "group": "Better Auth",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "AUTH_EMAIL_PASSWORD_ENABLED",
+      "group": "Better Auth",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "AUTH_REQUIRE_EMAIL_VERIFICATION",
+      "group": "Better Auth",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "always"
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "group": "Resend",
+      "configured": true,
+      "sensitive": true,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "email"
+    },
+    {
+      "name": "EMAIL_FROM",
+      "group": "Resend",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "email"
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "group": "Google Cloud / Search Console",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "google-oauth"
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "group": "Google Cloud / Search Console",
+      "configured": true,
+      "sensitive": true,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "google-oauth"
+    },
+    {
+      "name": "NEXT_PUBLIC_GOOGLE_AUTH_ENABLED",
+      "group": "Google Cloud / Search Console",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "google-oauth"
+    },
+    {
+      "name": "GOOGLE_SITE_VERIFICATION",
+      "group": "Google Cloud / Search Console",
+      "configured": false,
+      "sensitive": false,
+      "vercel": [
+        "Production"
+      ],
+      "required": "seo"
+    },
+    {
+      "name": "GOOGLE_SEARCH_CONSOLE_ENABLED",
+      "group": "Google Cloud / Search Console",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production"
+      ],
+      "required": "optional"
+    },
+    {
+      "name": "TURNSTILE_SECRET_KEY",
+      "group": "Sécurité / rate limiting / cron",
+      "configured": false,
+      "sensitive": true,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "optional"
+    },
+    {
+      "name": "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+      "group": "Sécurité / rate limiting / cron",
+      "configured": false,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "optional"
+    },
+    {
+      "name": "NEXT_PUBLIC_APP_NAME",
+      "group": "SEO / branding public",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "seo"
+    },
+    {
+      "name": "NEXT_PUBLIC_APP_DESCRIPTION",
+      "group": "SEO / branding public",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "seo"
+    },
+    {
+      "name": "NEXT_PUBLIC_APP_LANGUAGE",
+      "group": "SEO / branding public",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "seo"
+    },
+    {
+      "name": "NEXT_PUBLIC_APP_LOCALE",
+      "group": "SEO / branding public",
+      "configured": true,
+      "sensitive": false,
+      "vercel": [
+        "Production",
+        "Preview"
+      ],
+      "required": "seo"
+    }
+  ],
+  "providers": [],
+  "externalUrls": {
+    "googleOAuth": "<TON-DOMAINE-HTTPS>/api/auth/callback/google",
+    "cron": null,
+    "sitemap": "<TON-DOMAINE-HTTPS>/sitemap.xml"
+  }
+}

@@ -1,5 +1,4 @@
 import { StudeoPageSkeleton } from "@/components/studeo-page-skeleton";
-
 export default function Loading() {
-  return <StudeoPageSkeleton />;
+  return <StudeoPageSkeleton cards={6} />;
 }

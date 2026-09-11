@@ -1,3 +1,124 @@
-import { eq, desc } from "drizzle-orm";
-import { db } from "@/db";import { credits,payments,subscriptions,plans } from "@/db/schema";import { requireUser } from "@/lib/auth/session";import { hasAppRole } from "@/lib/auth/permissions";import { DashboardNav } from "@/components/dashboard-nav";
-export default async function Page(){const s=await requireUser();const role=(s.user as any).role;const [credit]=await db.select().from(credits).where(eq(credits.userId,s.user.id)).limit(1);const subs=await db.select({subscription:subscriptions,plan:plans}).from(subscriptions).leftJoin(plans,eq(subscriptions.planId,plans.id)).where(eq(subscriptions.userId,s.user.id));const tx=await db.select().from(payments).where(eq(payments.userId,s.user.id)).orderBy(desc(payments.createdAt)).limit(5);return <main className="shell"><DashboardNav admin={hasAppRole(role,"admin")}/><h1>Bonjour {s.user.name}</h1><div className="grid"><div className="card"><h3>Crédits</h3><strong>{credit?.balance??0}</strong></div><div className="card"><h3>Abonnements</h3><strong>{subs.filter(x=>x.subscription.status==="active").length}</strong></div><div className="card"><h3>Paiements récents</h3><strong>{tx.length}</strong></div></div><h2>Mes abonnements</h2>{subs.length===0?<p className="muted">Aucun abonnement actif.</p>:subs.map(x=><div className="card" key={x.subscription.id}><strong>{x.plan?.name??x.subscription.planId}</strong><p>{x.subscription.status} · fin {x.subscription.currentPeriodEnd?.toLocaleDateString("fr-FR")??"—"}</p></div>)}</main>}
+import Link from "next/link";
+import { requireUser } from "@/lib/auth/session";
+import {
+  CourseCard,
+  DemoBadge,
+  NoticeBanner,
+  SectionTitle,
+  StudeoShell,
+  TaskItem,
+} from "@/components/studeo-shell";
+import { StudeoIcon } from "@/components/studeo-icon";
+
+export default async function Page() {
+  const session = await requireUser();
+  const firstName = session.user.name?.split(" ")[0] || "Étudiant";
+  const today = new Intl.DateTimeFormat("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "Africa/Abidjan",
+  }).format(new Date());
+
+  return (
+    <StudeoShell
+      active="/dashboard"
+      eyebrow={capitalize(today)}
+      title={`Bonjour, ${firstName}`}
+      userName={session.user.name || firstName}
+      headerAction={
+        <>
+          <label className="studeo-header-search">
+            <span className="sr-only">Rechercher dans votre espace</span>
+            <StudeoIcon name="search" size={17} />
+            <input type="search" placeholder="Rechercher…" />
+          </label>
+          <DemoBadge />
+        </>
+      }
+    >
+      <div className="studeo-dashboard-grid">
+        <div>
+          <section
+            className="studeo-hero-card"
+            aria-labelledby="next-course-title"
+          >
+            <div>
+              <p>Prochain cours</p>
+              <h2 id="next-course-title">Mathématiques</h2>
+            </div>
+            <div className="studeo-hero-meta">
+              <span>08:30 – 09:30</span>
+              <span>Dans 25 min</span>
+              <span>Salle 204</span>
+            </div>
+          </section>
+
+          <SectionTitle action={<Link href="/dashboard/week">Voir tout</Link>}>
+            Cours du jour
+          </SectionTitle>
+          <div className="studeo-course-list">
+            <CourseCard
+              subject="Mathématiques"
+              time="08:30 – 09:30"
+              room="Salle 204"
+              featured
+            />
+            <CourseCard
+              subject="Français"
+              time="10:00 – 11:00"
+              room="Salle 105"
+              tone="orange"
+            />
+            <CourseCard
+              subject="Physique"
+              time="14:00 – 15:00"
+              room="Labo"
+              tone="violet"
+            />
+          </div>
+        </div>
+
+        <div>
+          <SectionTitle
+            action={<Link href="/dashboard/create/task">Ajouter</Link>}
+          >
+            À faire aujourd&apos;hui
+          </SectionTitle>
+          <div className="studeo-panel">
+            <TaskItem>Exercices de mathématiques</TaskItem>
+            <TaskItem badge="Urgent">Réviser l&apos;anglais</TaskItem>
+            <TaskItem done>Lire le chapitre d&apos;histoire</TaskItem>
+          </div>
+
+          <SectionTitle>Ta journée</SectionTitle>
+          <div className="studeo-panel">
+            <div className="studeo-progress-head">
+              <strong>Progression</strong>
+              <p>3/5 tâches</p>
+            </div>
+            <div
+              className="studeo-progress-track"
+              aria-label="60 % des tâches terminées"
+            >
+              <span />
+            </div>
+            <p className="studeo-progress-copy">
+              Encore 2 tâches, tu y es presque.
+            </p>
+          </div>
+
+          <SectionTitle>Échéance</SectionTitle>
+          <NoticeBanner
+            title="Contrôle de mathématiques"
+            detail="Vendredi · Chapitre sur les intégrales"
+          />
+        </div>
+      </div>
+    </StudeoShell>
+  );
+}
+
+function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}

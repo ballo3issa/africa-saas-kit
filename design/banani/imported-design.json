@@ -1,0 +1,279 @@
+{
+  "version": "1.0",
+  "project": {
+    "id": "YlQxXVp_7E8Q",
+    "name": "Etudeo",
+    "source": "banani-mcp",
+    "observedAt": "2026-09-08T19:46:44Z"
+  },
+  "screens": [
+    {
+      "id": "today-mobile",
+      "name": "Aujourd'hui — Mobile",
+      "route": "/dashboard",
+      "auth": "authenticated",
+      "purpose": "Présenter la journée de l'élève, le prochain cours, les cours du jour et les tâches prioritaires.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "mobile",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans Today.jsx. Navigation basse mobile. Les sources de données et règles de progression restent À CONFIRMER."
+    },
+    {
+      "id": "today-desktop",
+      "name": "Aujourd'hui — Desktop",
+      "route": "/dashboard",
+      "auth": "authenticated",
+      "purpose": "Variante desktop de la journée avec navigation latérale, recherche, cours et tâches.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans TodayDesktop.jsx. Même route que la variante mobile; comportement responsive à unifier."
+    },
+    {
+      "id": "week-mobile",
+      "name": "Semaine — Mobile",
+      "route": "/dashboard/week",
+      "auth": "authenticated",
+      "purpose": "Afficher le calendrier hebdomadaire, les événements à venir et un résumé de la semaine sur mobile.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "mobile",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans WeekMobile.jsx. Les règles de création et de récurrence des événements restent À CONFIRMER."
+    },
+    {
+      "id": "week-desktop",
+      "name": "Semaine — Desktop",
+      "route": "/dashboard/week",
+      "auth": "authenticated",
+      "purpose": "Variante desktop du calendrier hebdomadaire avec grille, échéances et résumé.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans WeekDesktop.jsx. Même route que la variante mobile; comportement responsive à unifier."
+    },
+    {
+      "id": "study-mobile",
+      "name": "Étudier — Mobile",
+      "route": "/dashboard/study",
+      "auth": "authenticated",
+      "purpose": "Permettre de choisir une matière et une durée avant de démarrer une séance d'étude.",
+      "states": ["loading", "default", "empty", "error", "submitting", "success", "unauthorized", "offline"],
+      "viewport": "mobile",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans StudyMobile.jsx. Le chronomètre, la persistance et les règles de complétion restent À CONFIRMER."
+    },
+    {
+      "id": "study-desktop",
+      "name": "Étudier — Desktop",
+      "route": "/dashboard/study",
+      "auth": "authenticated",
+      "purpose": "Variante desktop de la préparation d'une séance d'étude avec matière, durée et statistiques.",
+      "states": ["loading", "default", "empty", "error", "submitting", "success", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans StudyDesktop.jsx. Même route que la variante mobile; logique métier À CONFIRMER."
+    },
+    {
+      "id": "messages-mobile",
+      "name": "Messages — Mobile",
+      "route": "/dashboard/messages",
+      "auth": "authenticated",
+      "purpose": "Lister les conversations, demandes de contact et messages récents sur mobile.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "mobile",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans MessagesMobile.jsx. Le temps réel, les contacts autorisés et les permissions restent À CONFIRMER."
+    },
+    {
+      "id": "messages-desktop",
+      "name": "Messages — Desktop",
+      "route": "/dashboard/messages",
+      "auth": "authenticated",
+      "purpose": "Variante desktop de la messagerie avec liste des conversations et zone de discussion.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans MessagesDesktop.jsx. Même route que la variante mobile; règles de messagerie À CONFIRMER."
+    },
+    {
+      "id": "history-desktop",
+      "name": "Historique — Desktop",
+      "route": "/dashboard/history",
+      "auth": "authenticated",
+      "purpose": "Afficher les séances d'étude passées, la concentration et les performances de l'élève.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé uniquement en desktop dans HistoryDesktop.jsx. Variante mobile et calcul des métriques À CONFIRMER."
+    },
+    {
+      "id": "notifications-desktop",
+      "name": "Notifications — Desktop",
+      "route": "/dashboard/notifications",
+      "auth": "authenticated",
+      "purpose": "Afficher les rappels, nouveaux messages, objectifs atteints et ressources disponibles.",
+      "states": ["loading", "default", "empty", "error", "success", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé uniquement en desktop dans NotificationsDesktop.jsx. Canaux, déclencheurs et variante mobile À CONFIRMER."
+    },
+    {
+      "id": "create-desktop",
+      "name": "Créer — Desktop",
+      "route": "/dashboard/create",
+      "auth": "authenticated",
+      "purpose": "Présenter les options de création: tâche, événement, rappel, groupe d'étude, ressource ou note.",
+      "states": ["default", "unauthorized"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé uniquement en desktop dans CreateDesktop.jsx. Les options réellement livrées et la variante mobile restent À CONFIRMER."
+    },
+    {
+      "id": "create-event-mobile",
+      "name": "Créer un événement — Mobile",
+      "route": "/dashboard/create/event",
+      "auth": "authenticated",
+      "purpose": "Créer un événement avec type, matière, date, heure, durée, lieu, notification et description.",
+      "states": ["loading", "default", "submitting", "success", "validation-error", "error", "unauthorized", "offline"],
+      "viewport": "mobile",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans CreateEventMobile.jsx. Validation, stockage et règles de notification À CONFIRMER."
+    },
+    {
+      "id": "create-event-desktop",
+      "name": "Créer un événement — Desktop",
+      "route": "/dashboard/create/event",
+      "auth": "authenticated",
+      "purpose": "Variante desktop du formulaire de création d'événement avec aperçu.",
+      "states": ["loading", "default", "submitting", "success", "validation-error", "error", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans CreateEventDesktop.jsx. Même route que la variante mobile; logique serveur À CONFIRMER."
+    },
+    {
+      "id": "create-task-desktop",
+      "name": "Créer une tâche — Desktop",
+      "route": "/dashboard/create/task",
+      "auth": "authenticated",
+      "purpose": "Créer une tâche avec description, matière, priorité et date limite.",
+      "states": ["loading", "default", "submitting", "success", "validation-error", "error", "unauthorized", "offline"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé uniquement en desktop dans CreateTaskDesktop.jsx. Variante mobile, validation et stockage À CONFIRMER."
+    },
+    {
+      "id": "more-mobile",
+      "name": "Plus — Menu principal Mobile",
+      "route": "/dashboard/more",
+      "auth": "authenticated",
+      "purpose": "Regrouper les destinations secondaires, le compte, les paramètres, l'aide et la déconnexion.",
+      "states": ["default", "submitting", "error", "unauthorized"],
+      "viewport": "mobile",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans MoreMenu.jsx. La déconnexion doit rester une action serveur/auth sécurisée."
+    },
+    {
+      "id": "more-desktop",
+      "name": "Plus — Menu principal Desktop",
+      "route": "/dashboard/more",
+      "auth": "authenticated",
+      "purpose": "Variante desktop du menu secondaire et de la gestion du compte.",
+      "states": ["default", "submitting", "error", "unauthorized"],
+      "viewport": "desktop",
+      "keyElements": [],
+      "interactions": [],
+      "dataNeeds": [],
+      "integrations": [],
+      "notes": "Observé dans MoreMenuDesktop.jsx. Même route que la variante mobile."
+    }
+  ],
+  "designSystem": {
+    "colors": [
+      "background: #f7f8fa",
+      "foreground: #0f1117",
+      "primary: #4f6ef7",
+      "surface: #ffffff",
+      "border: #e4e6ec",
+      "mutedForeground: #8b90a7",
+      "success: #22c55e",
+      "warning: #f97316",
+      "danger: #ef4444"
+    ],
+    "typography": ["Inter — corps et titres"],
+    "spacing": [],
+    "radii": ["sm: 6px", "md: 10px", "lg: 16px", "xl: 24px"],
+    "navigation": [
+      "BottomNav mobile fixe à cinq emplacements avec action centrale de création",
+      "Navigation latérale desktop"
+    ],
+    "notes": [
+      "Snapshot historique importé depuis le projet local docteur-abidjan.",
+      "Les sources JSX et captures restent accessibles uniquement via le flow Banani d'origine."
+    ]
+  },
+  "components": [
+    { "id": "bottom-nav", "name": "BottomNav", "purpose": "Navigation mobile fixe à cinq emplacements avec action centrale de création." },
+    { "id": "course-card", "name": "CourseCard", "purpose": "Carte compacte de cours avec horaire, matière et compte à rebours optionnel." },
+    { "id": "deadline-banner", "name": "DeadlineBanner", "purpose": "Alerte visuelle pour une échéance ou un contrôle à venir." },
+    { "id": "progress-bar", "name": "ProgressBar", "purpose": "Progression de la journée selon le nombre de tâches réalisées." },
+    { "id": "section-header", "name": "SectionHeader", "purpose": "En-tête de section avec icône et action secondaire optionnelles." },
+    { "id": "task-item", "name": "TaskItem", "purpose": "Ligne de tâche avec état terminé et badge optionnel." }
+  ],
+  "flows": [
+    {
+      "id": "YlQxXVp_7E8Q",
+      "url": "https://app.banani.co/flow/YlQxXVp_7E8Q",
+      "displayName": "Planif Études"
+    }
+  ],
+  "unverified": [
+    "Les détails keyElements, interactions, dataNeeds et integrations ne sont pas conservés dans le snapshot historique.",
+    "La fidélité visuelle exacte doit être vérifiée avec les captures fournies par l'utilisateur ou un nouvel accès au flow Banani.",
+    "Les règles métier et de sécurité décrites dans l'ancien projet ne sont pas automatiquement transférées à Etudeo."
+  ]
+}

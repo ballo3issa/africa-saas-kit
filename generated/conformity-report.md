@@ -1,14 +1,12 @@
 # Africa SaaS Kit — Rapport de conformité final
 
 **Statut : PASS**
-**PASS : 190 · WARN : 3 · FAIL : 0**
+**PASS : 190 · WARN : 1 · FAIL : 0**
 
 ## Échecs bloquants
 - ✅ Aucun
 
 ## Avertissements
-- ⚠️ africa-saas.config.json absent — normal seulement si le setup n’a pas encore été exécuté
-- ⚠️ Deployment handoff non généré — lancer npm run deploy:handoff avant mise en ligne
 - ⚠️ Production Doctor non généré — lancer npm run doctor:production avant mise en ligne
 
 ## Contrôles conformes
@@ -167,7 +165,7 @@
 - ✅ gitignore: .env.test
 - ✅ gitignore: .africa-saas/
 - ✅ gitignore: .codex/config.toml
-- ✅ .env.local absent du workspace
+- ✅ .env.local local présent et couvert par .gitignore
 - ✅ .env.production absent du workspace
 - ✅ .env.development absent du workspace
 - ✅ .env.test absent du workspace

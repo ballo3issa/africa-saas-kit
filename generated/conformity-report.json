@@ -1,6 +1,6 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-10T20:26:47.477Z",
+  "generatedAt": "2026-09-11T00:50:07.402Z",
   "status": "PASS",
   "passes": [
     "Fichier requis: AGENTS.md",
@@ -158,7 +158,7 @@
     "gitignore: .env.test",
     "gitignore: .africa-saas/",
     "gitignore: .codex/config.toml",
-    ".env.local absent du workspace",
+    ".env.local local présent et couvert par .gitignore",
     ".env.production absent du workspace",
     ".env.development absent du workspace",
     ".env.test absent du workspace",
@@ -195,8 +195,6 @@
     "package-lock.json présent"
   ],
   "warnings": [
-    "africa-saas.config.json absent — normal seulement si le setup n’a pas encore été exécuté",
-    "Deployment handoff non généré — lancer npm run deploy:handoff avant mise en ligne",
     "Production Doctor non généré — lancer npm run doctor:production avant mise en ligne"
   ],
   "failures": []
