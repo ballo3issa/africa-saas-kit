@@ -1,9 +1,9 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T01:40:15.278Z",
-  "greenCount": 17,
+  "generatedAt": "2026-09-11T01:57:40.336Z",
+  "greenCount": 18,
   "total": 20,
-  "nextPhase": 18,
+  "nextPhase": 19,
   "phases": [
     {
       "n": 1,
@@ -62,7 +62,7 @@
         {
           "label": "Browser Subagent vérifié",
           "ok": true,
-          "detail": "Preuve locale: Phase 15: Vercel Preview Ready; auth inscription/connexion/session/dashboard 200; 26 contrôles Chrome sur 13 routes à 390 et 1440 px sans échec; captures login et dashboard inspectées; protection SSO réactivée."
+          "detail": "Preuve locale: Phase 18: DNS Cloudflare public vérifié sur 1.1.1.1 pour apex et www vers 76.76.21.21; certificats HTTPS Vercel valides; Chrome affiche Etudeo sur les deux domaines sans erreur certificat; protection SSO réactivée."
         }
       ],
       "actions": [
@@ -612,7 +612,12 @@
         "Après validation réelle du domaine/DNS, marquer la phase passée avec `npm run setup-saas:mark -- --phase=18 --status=passed --note=\"Cloudflare domaine/DNS validé\"`."
       ],
       "validate": "La phase est soit SKIPPED (Cloudflare non utilisé), soit PASSED après validation réelle du domaine/DNS. L’absence de Cloudflare n’est jamais bloquante.",
-      "state": "red"
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Cloudflare DNS validé: docteur-abidjan.win et www en A DNS only vers 76.76.21.21; propagation publique 1.1.1.1 confirmée; alias et certificats HTTPS Vercel validés; Chrome affiche Etudeo sur les deux domaines.",
+        "validatedAt": "2026-09-11T01:57:34.566Z"
+      }
     },
     {
       "n": 19,

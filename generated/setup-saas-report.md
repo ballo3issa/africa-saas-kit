@@ -1,6 +1,6 @@
 # Africa SaaS Kit — /setup-saas
 
-**Progression : 17/20 phases validées**
+**Progression : 18/20 phases validées**
 
 > 🟢 terminé · 🟡 partiel · 🔴 à faire · ⚪ vérification externe/non automatisable
 
@@ -40,7 +40,7 @@
   - _Upstash Redis est une couche rapide de cache et de données temporaires. Neon reste la source de vérité métier : Upstash ne remplace pas PostgreSQL et ne doit pas contenir les données critiques comme seule copie._
 - 🟢 **Phase 17 — Décider et configurer les paiements (OPTIONNEL)** _(validée localement)_
   - _Les fournisseurs de paiement permettent d’encaisser en ligne par Mobile Money ou carte, mais ils sont totalement optionnels._
-- 🔴 **Phase 18 — Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)**
+- 🟢 **Phase 18 — Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)** _(validée localement)_
   - _Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative._
 - 🔴 **Phase 19 — Configurer Cloudinary pour les uploads d’images (OPTIONNEL)**
   - _Cloudinary gère l’upload, le stockage, la transformation et la diffusion d’images. Son utilisation est facultative._
@@ -49,50 +49,51 @@
 
 ---
 
-# 🔴 Phase 18 — Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)
+# 🔴 Phase 19 — Configurer Cloudinary pour les uploads d’images (OPTIONNEL)
 
 ## À quoi sert cette phase ?
 
-Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative.
+Cloudinary gère l’upload, le stockage, la transformation et la diffusion d’images. Son utilisation est facultative.
 
 ## Ce que cela apporte au SaaS
 
-Il peut centraliser le domaine/DNS et éventuellement servir de couche réseau devant Vercel, sans être nécessaire au fonctionnement du SaaS.
+Il est utile pour avatars, photos produits ou médias utilisateurs tout en gardant les secrets d’upload côté serveur.
 
 ## Objectif de la phase
 
-Décider si le domaine et/ou le DNS du SaaS seront gérés avec Cloudflare. Cette phase est facultative et ne concerne pas Cloudflare R2.
+Décider si le SaaS a besoin d’uploads d’images. Cloudinary est facultatif et ne doit jamais bloquer un SaaS sans médias uploadés.
 
 ## État actuel
 
-- 🔴 **Décision Cloudflare** — Optionnel — utiliser Cloudflare pour le domaine/DNS ou marquer cette phase skipped.
+- 🔴 **Décision Cloudinary** — Optionnel — activer Cloudinary seulement si le SaaS a besoin d’uploads d’images, sinon marquer cette phase skipped.
+- ⚪ **Variables Cloudinary** — Non configuré
 
 ## Ce que tu dois faire maintenant
 
 ### Étape 1
-Si tu ne veux PAS utiliser Cloudflare : exécuter `npm run cloudflare:setup -- --none`, puis marquer la phase `skipped` avec `npm run setup-saas:mark -- --phase=18 --status=skipped --note="Cloudflare non utilisé"`.
+Si le SaaS n’a PAS besoin d’upload d’images : exécuter `npm run cloudinary:setup -- --none`, puis `npm run setup-saas:mark -- --phase=19 --status=skipped --note="Cloudinary non utilisé"`.
 
 ### Étape 2
-Si tu veux utiliser Cloudflare : exécuter `npm run cloudflare:setup` puis suivre le guide généré dans `generated/cloudflare-setup.md`.
+Si le SaaS A besoin d’upload d’images : exécuter `npm run cloudinary:setup` puis suivre `generated/cloudinary-setup.md`.
 
 ### Étape 3
-Pour un domaine acheté ou géré chez Cloudflare : préparer le domaine, puis utiliser les enregistrements DNS demandés par Vercel pour le domaine custom. Ne jamais inventer une adresse A/CNAME : reprendre exactement les valeurs affichées par Vercel pour ce projet.
+Renseigner CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY et CLOUDINARY_API_SECRET directement dans `.env.local`; ne jamais envoyer l’API secret dans le chat.
 
 ### Étape 4
-Si le proxy Cloudflare gêne une validation de domaine/SSL, utiliser temporairement le mode DNS only jusqu’à validation complète, puis re-tester avant d’activer un proxy.
+Lancer l’app et tester `POST /api/uploads/images` avec un utilisateur connecté : une image valide doit réussir, SVG/fichier >10 MB/non-image/sans session doivent être refusés.
 
 ### Étape 5
-Ne jamais ajouter de token API Cloudflare dans le chat. Cette phase domaine/DNS n’exige aucun token API dans le kit.
+Après validation en staging, ajouter les variables Cloudinary nécessaires dans Vercel Production; Preview seulement si le projet en a besoin.
 
 ### Étape 6
-Après validation réelle du domaine/DNS, marquer la phase passée avec `npm run setup-saas:mark -- --phase=18 --status=passed --note="Cloudflare domaine/DNS validé"`.
+Après un vrai upload réussi, marquer la phase passée avec `npm run setup-saas:mark -- --phase=19 --status=passed --note="Cloudinary uploads testés"`.
 
 ## Assistance Computer Use pour cette phase
 
-Si Cloudflare utilisé, guider le DNS dans le navigateur mais demander confirmation avant tout changement critique/achat; vérifier ensuite le domaine.
+Si Cloudinary utilisé, tester un upload réel et les refus de sécurité depuis l’UI, sans afficher CLOUDINARY_API_SECRET.
 
 ## Validation de la phase
 
-La phase est soit SKIPPED (Cloudflare non utilisé), soit PASSED après validation réelle du domaine/DNS. L’absence de Cloudflare n’est jamais bloquante.
+La phase est soit SKIPPED pour un SaaS sans upload d’images, soit PASSED après un vrai test d’upload et des cas de refus sécurité.
 
 Quand c’est fait, relance **`/setup-saas`** (ou `npm run setup-saas`). L’IA doit recontrôler cette phase avant de passer à la suivante.
