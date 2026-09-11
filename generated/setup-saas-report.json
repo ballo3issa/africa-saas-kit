@@ -1,9 +1,9 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T01:28:01.415Z",
-  "greenCount": 15,
+  "generatedAt": "2026-09-11T01:35:24.910Z",
+  "greenCount": 16,
   "total": 20,
-  "nextPhase": 16,
+  "nextPhase": 17,
   "phases": [
     {
       "n": 1,
@@ -532,7 +532,7 @@
       "checks": [
         {
           "label": "Décision Upstash",
-          "ok": false,
+          "ok": true,
           "required": true,
           "detail": "Optionnel — non activé"
         },
@@ -557,7 +557,12 @@
         "Avant production, recopier les variables Upstash dans Vercel uniquement si cette phase a été activée."
       ],
       "validate": "La phase peut être SKIPPED. Si activée, `npm run upstash:check:online` doit réussir avant production et `/api/readyz` doit signaler Redis OK.",
-      "state": "yellow"
+      "state": "green",
+      "savedValidation": {
+        "status": "skipped",
+        "note": "Upstash volontairement non utilisé; npm run upstash:check retourne SKIPPED; aucune variable UPSTASH dans le Preview Vercel; /api/readyz staging validé avec Redis skipped et Neon database ok.",
+        "validatedAt": "2026-09-11T01:35:21.246Z"
+      }
     },
     {
       "n": 17,
