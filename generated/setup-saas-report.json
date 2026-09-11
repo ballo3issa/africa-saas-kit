@@ -1,9 +1,9 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T01:57:40.336Z",
-  "greenCount": 18,
+  "generatedAt": "2026-09-11T02:02:17.425Z",
+  "greenCount": 19,
   "total": 20,
-  "nextPhase": 19,
+  "nextPhase": 20,
   "phases": [
     {
       "n": 1,
@@ -647,7 +647,12 @@
         "Après un vrai upload réussi, marquer la phase passée avec `npm run setup-saas:mark -- --phase=19 --status=passed --note=\"Cloudinary uploads testés\"`."
       ],
       "validate": "La phase est soit SKIPPED pour un SaaS sans upload d’images, soit PASSED après un vrai test d’upload et des cas de refus sécurité.",
-      "state": "red"
+      "state": "green",
+      "savedValidation": {
+        "status": "skipped",
+        "note": "Cloudinary volontairement non utilisé; aucune variable Cloudinary configurée; Etudeo ne nécessite pas d’upload d’images pour le moment.",
+        "validatedAt": "2026-09-11T02:02:09.141Z"
+      }
     },
     {
       "n": 20,

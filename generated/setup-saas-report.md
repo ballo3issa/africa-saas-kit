@@ -1,6 +1,6 @@
 # Africa SaaS Kit — /setup-saas
 
-**Progression : 18/20 phases validées**
+**Progression : 19/20 phases validées**
 
 > 🟢 terminé · 🟡 partiel · 🔴 à faire · ⚪ vérification externe/non automatisable
 
@@ -42,58 +42,64 @@
   - _Les fournisseurs de paiement permettent d’encaisser en ligne par Mobile Money ou carte, mais ils sont totalement optionnels._
 - 🟢 **Phase 18 — Configurer Cloudflare pour le domaine/DNS (OPTIONNEL)** _(validée localement)_
   - _Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative._
-- 🔴 **Phase 19 — Configurer Cloudinary pour les uploads d’images (OPTIONNEL)**
+- 🟢 **Phase 19 — Configurer Cloudinary pour les uploads d’images (OPTIONNEL)** _(validée localement)_
   - _Cloudinary gère l’upload, le stockage, la transformation et la diffusion d’images. Son utilisation est facultative._
 - 🔴 **Phase 20 — Finaliser production, domaine et Search Console**
   - _Cette phase finalise le vrai domaine HTTPS, Search Console et les derniers contrôles de production._
 
 ---
 
-# 🔴 Phase 19 — Configurer Cloudinary pour les uploads d’images (OPTIONNEL)
+# 🔴 Phase 20 — Finaliser production, domaine et Search Console
 
 ## À quoi sert cette phase ?
 
-Cloudinary gère l’upload, le stockage, la transformation et la diffusion d’images. Son utilisation est facultative.
+Cette phase finalise le vrai domaine HTTPS, Search Console et les derniers contrôles de production.
 
 ## Ce que cela apporte au SaaS
 
-Il est utile pour avatars, photos produits ou médias utilisateurs tout en gardant les secrets d’upload côté serveur.
+Elle apporte la validation finale : domaine public, indexation Google, Production Doctor et test global de conformité des fichiers du kit.
 
 ## Objectif de la phase
 
-Décider si le SaaS a besoin d’uploads d’images. Cloudinary est facultatif et ne doit jamais bloquer un SaaS sans médias uploadés.
+Valider le vrai domaine HTTPS et les intégrations externes avant de déclarer le SaaS prêt.
 
 ## État actuel
 
-- 🔴 **Décision Cloudinary** — Optionnel — activer Cloudinary seulement si le SaaS a besoin d’uploads d’images, sinon marquer cette phase skipped.
-- ⚪ **Variables Cloudinary** — Non configuré
+- 🔴 **Production Doctor prêt** — À exécuter après staging/domaine
+- ⚪ **Search Console vérifiée** — Toujours NON VÉRIFIÉE automatiquement avant connexion au vrai domaine
 
 ## Ce que tu dois faire maintenant
 
 ### Étape 1
-Si le SaaS n’a PAS besoin d’upload d’images : exécuter `npm run cloudinary:setup -- --none`, puis `npm run setup-saas:mark -- --phase=19 --status=skipped --note="Cloudinary non utilisé"`.
+Déployer d’abord en staging/Preview et tester les flux critiques.
 
 ### Étape 2
-Si le SaaS A besoin d’upload d’images : exécuter `npm run cloudinary:setup` puis suivre `generated/cloudinary-setup.md`.
+Configurer le domaine custom Vercel et HTTPS avec le fournisseur DNS choisi (Cloudflare ou autre).
 
 ### Étape 3
-Renseigner CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY et CLOUDINARY_API_SECRET directement dans `.env.local`; ne jamais envoyer l’API secret dans le chat.
+Mettre à jour les callbacks OAuth avec le vrai domaine et, uniquement si des paiements sont activés, mettre à jour leurs webhooks providers.
 
 ### Étape 4
-Lancer l’app et tester `POST /api/uploads/images` avec un utilisateur connecté : une image valide doit réussir, SVG/fichier >10 MB/non-image/sans session doivent être refusés.
+Lancer `npm run doctor:production` puis `npm run doctor:production:online`.
 
 ### Étape 5
-Après validation en staging, ajouter les variables Cloudinary nécessaires dans Vercel Production; Preview seulement si le projet en a besoin.
+Dans Google Search Console, vérifier la propriété Domain via DNS puis soumettre `/sitemap.xml`.
 
 ### Étape 6
-Après un vrai upload réussi, marquer la phase passée avec `npm run setup-saas:mark -- --phase=19 --status=passed --note="Cloudinary uploads testés"`.
+Tester un partage réel de lien pour vérifier l’image Open Graph.
+
+### Étape 7
+Lancer `npm run conformity:check` pour le contrôle final de conformité des fichiers, scripts et règles du kit.
+
+### Étape 8
+Ouvrir `generated/conformity-report.md` et corriger tout FAIL avant de considérer le parcours terminé.
 
 ## Assistance Computer Use pour cette phase
 
-Si Cloudinary utilisé, tester un upload réel et les refus de sécurité depuis l’UI, sans afficher CLOUDINARY_API_SECRET.
+Tester le domaine final, HTTPS, Open Graph, robots, sitemap et Search Console; garder les validations externes NON VÉRIFIÉES tant qu’elles ne sont pas observées.
 
 ## Validation de la phase
 
-La phase est soit SKIPPED pour un SaaS sans upload d’images, soit PASSED après un vrai test d’upload et des cas de refus sécurité.
+Le Production Doctor est satisfaisant, les flux externes sont testés et `npm run conformity:check` retourne PASS sans anomalie bloquante.
 
 Quand c’est fait, relance **`/setup-saas`** (ou `npm run setup-saas`). L’IA doit recontrôler cette phase avant de passer à la suivante.
