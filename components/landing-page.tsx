@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ScrollAwareHeader } from "@/components/scroll-aware-header";
 import { StudeoIcon, type StudeoIconName } from "@/components/studeo-icon";
 import { siteConfig } from "@/lib/seo/site";
 import styles from "./landing-page.module.css";
@@ -126,7 +127,7 @@ export function LandingPage() {
         }}
       />
 
-      <header className={styles.header}>
+      <ScrollAwareHeader className={styles.header}>
         <nav className={styles.nav} aria-label="Navigation principale">
           <a className={styles.brandLink} href="#accueil">
             <Brand />
@@ -145,7 +146,7 @@ export function LandingPage() {
             </Link>
           </div>
         </nav>
-      </header>
+      </ScrollAwareHeader>
 
       <section className={styles.hero} id="accueil">
         <div className={styles.heroGlow} aria-hidden="true" />

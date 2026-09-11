@@ -24,13 +24,24 @@
   top: 0;
   z-index: 50;
   padding-top: env(safe-area-inset-top, 0px);
-  background: rgba(255, 255, 255, 0.86);
-  border-bottom: 1px solid rgba(228, 230, 236, 0.82);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    backdrop-filter 220ms ease;
+}
+
+.header[data-scroll-state="compact"] {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(228, 230, 236, 0.72);
   box-shadow:
-    0 1px 0 rgba(15, 17, 23, 0.03),
-    0 12px 32px rgba(37, 52, 98, 0.07);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  backdrop-filter: blur(18px) saturate(150%);
+    0 1px 0 rgba(15, 17, 23, 0.025),
+    0 8px 24px rgba(37, 52, 98, 0.055);
+  -webkit-backdrop-filter: blur(16px) saturate(145%);
+  backdrop-filter: blur(16px) saturate(145%);
 }
 
 .nav,
@@ -48,6 +59,14 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 16px;
+  transition:
+    min-height 220ms ease,
+    padding-block 220ms ease;
+}
+
+.header[data-scroll-state="compact"] .nav {
+  min-height: 60px;
+  padding-block: 6px;
 }
 
 .brandLink {
@@ -77,6 +96,16 @@
   color: #fff;
   background: var(--landing-primary);
   border-radius: 10px;
+  transition:
+    width 220ms ease,
+    height 220ms ease,
+    border-radius 220ms ease;
+}
+
+.header[data-scroll-state="compact"] .brandMark {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
 }
 
 .navLinks {
@@ -800,6 +829,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .header,
+  .nav,
+  .brandMark,
   .primaryButtonSmall,
   .primaryButton,
   .secondaryButton {
