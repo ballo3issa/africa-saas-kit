@@ -1,7 +1,7 @@
 {
   "project": "Etudeo",
   "source": "banani-mcp",
-  "importedAt": "2026-09-08T19:46:44Z",
+  "importedAt": "2026-09-11T02:47:19Z",
   "screens": [
     {
       "id": "today-mobile",
@@ -231,10 +231,7 @@
       "route": "/dashboard/create",
       "auth": "authenticated",
       "purpose": "Présenter les options de création: tâche, événement, rappel, groupe d'étude, ressource ou note.",
-      "states": [
-        "default",
-        "unauthorized"
-      ],
+      "states": ["default", "unauthorized"],
       "notes": "Observé uniquement en desktop dans CreateDesktop.jsx. Les options réellement livrées et la variante mobile restent À CONFIRMER.",
       "viewport": "desktop",
       "keyElements": [],
@@ -317,12 +314,7 @@
       "route": "/dashboard/more",
       "auth": "authenticated",
       "purpose": "Regrouper les destinations secondaires, le compte, les paramètres, l'aide et la déconnexion.",
-      "states": [
-        "default",
-        "submitting",
-        "error",
-        "unauthorized"
-      ],
+      "states": ["default", "submitting", "error", "unauthorized"],
       "notes": "Observé dans MoreMenu.jsx. La déconnexion doit rester une action serveur/auth sécurisée.",
       "viewport": "mobile",
       "keyElements": [],
@@ -336,17 +328,47 @@
       "route": "/dashboard/more",
       "auth": "authenticated",
       "purpose": "Variante desktop du menu secondaire et de la gestion du compte.",
-      "states": [
-        "default",
-        "submitting",
-        "error",
-        "unauthorized"
-      ],
+      "states": ["default", "submitting", "error", "unauthorized"],
       "notes": "Observé dans MoreMenuDesktop.jsx. Même route que la variante mobile.",
       "viewport": "desktop",
       "keyElements": [],
       "interactions": [],
       "dataNeeds": [],
+      "integrations": []
+    },
+    {
+      "id": "landing-desktop",
+      "name": "Studeo — Landing Page",
+      "route": "/",
+      "auth": "public",
+      "purpose": "Présenter le produit de planification scolaire, ses fonctionnalités, son fonctionnement, des témoignages, des offres tarifaires et des appels à l'inscription.",
+      "states": ["default"],
+      "notes": "Observé directement via Banani MCP dans LandingPage.jsx. Le design impose minWidth 1440px et ne fournit pas de variante mobile/tablette : le responsive 320–1024 px est À CONFIRMER. La marque Studeo doit être harmonisée avec Etudeo. Les CTA, ancres, FAQ, démo et liens légaux sont visuels mais leurs destinations restent À CONFIRMER. Les paiements sont désactivés : les cartes tarifaires n'autorisent aucun checkout.",
+      "viewport": "desktop",
+      "keyElements": [
+        "Navigation avec marque Studeo, ancres Fonctionnalités, Témoignages, Tarifs et FAQ",
+        "Hero avec promesse, image d'élève ivoirienne, deux appels à l'action et aperçu du tableau de bord",
+        "Bandeau d'établissements",
+        "Grille de six fonctionnalités",
+        "Parcours en trois étapes",
+        "Trois cartes de témoignages",
+        "Trois cartes tarifaires Gratuit, Élève et Famille",
+        "Appel à l'action final et pied de page"
+      ],
+      "interactions": [
+        "Naviguer vers les sections Fonctionnalités, Témoignages, Tarifs et FAQ",
+        "Ouvrir la connexion",
+        "Démarrer une inscription gratuite",
+        "Voir une démonstration",
+        "Sélectionner une offre",
+        "Ouvrir Confidentialité, CGU ou Contact"
+      ],
+      "dataNeeds": [
+        "Contenu marketing statique",
+        "Offres et tarifs affichés",
+        "Témoignages et identités affichés",
+        "Image de hero"
+      ],
       "integrations": []
     }
   ]

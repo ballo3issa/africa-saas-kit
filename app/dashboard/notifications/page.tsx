@@ -19,12 +19,7 @@ const notifications: Array<[StudeoIconName, string, string, string]> = [
     "Je t'envoie les notes du cours",
     "Il y a 2h",
   ],
-  [
-    "check",
-    "Objectif atteint !",
-    "Vous avez étudié 5h cette semaine 🎉",
-    "Hier",
-  ],
+  ["check", "Objectif atteint !", "Vous avez étudié 5h cette semaine", "Hier"],
   [
     "clipboard",
     "Devoir Français à rendre",
@@ -32,7 +27,7 @@ const notifications: Array<[StudeoIconName, string, string, string]> = [
     "Mar 16 sept",
   ],
   [
-    "sparkles",
+    "book",
     "Suggestion de révision",
     "Vous progressez bien en anglais, continuez !",
     "Lun 15 sept",

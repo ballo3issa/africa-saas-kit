@@ -1,11 +1,11 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-10T21:39:23.505Z",
+  "generatedAt": "2026-09-11T02:47:58.269Z",
   "project": "Etudeo",
   "counts": {
     "RÉUTILISER": 0,
-    "ADAPTER": 2,
-    "CRÉER": 14,
+    "ADAPTER": 17,
+    "CRÉER": 0,
     "À CONFIRMER": 0
   },
   "results": [
@@ -17,6 +17,7 @@
       "reason": "La route existe déjà (app/dashboard/page.tsx) ; préserver la logique et adapter le rendu au design.",
       "existingPage": "app/dashboard/page.tsx",
       "componentCandidates": [
+        "components/._mobile-bottom-nav.tsx",
         "components/dashboard-nav.tsx",
         "components/mobile-bottom-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -46,10 +47,11 @@
       "id": "week-mobile",
       "name": "Semaine — Mobile",
       "route": "/dashboard/week",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/week/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/week/page.tsx",
       "componentCandidates": [
+        "components/._mobile-bottom-nav.tsx",
         "components/dashboard-nav.tsx",
         "components/mobile-bottom-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -63,9 +65,9 @@
       "id": "week-desktop",
       "name": "Semaine — Desktop",
       "route": "/dashboard/week",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/week/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/week/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -79,10 +81,11 @@
       "id": "study-mobile",
       "name": "Étudier — Mobile",
       "route": "/dashboard/study",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/study/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/study/page.tsx",
       "componentCandidates": [
+        "components/._mobile-bottom-nav.tsx",
         "components/dashboard-nav.tsx",
         "components/mobile-bottom-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -96,9 +99,9 @@
       "id": "study-desktop",
       "name": "Étudier — Desktop",
       "route": "/dashboard/study",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/study/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/study/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -112,10 +115,11 @@
       "id": "messages-mobile",
       "name": "Messages — Mobile",
       "route": "/dashboard/messages",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/messages/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/messages/page.tsx",
       "componentCandidates": [
+        "components/._mobile-bottom-nav.tsx",
         "components/dashboard-nav.tsx",
         "components/mobile-bottom-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -129,9 +133,9 @@
       "id": "messages-desktop",
       "name": "Messages — Desktop",
       "route": "/dashboard/messages",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/messages/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/messages/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -145,9 +149,9 @@
       "id": "history-desktop",
       "name": "Historique — Desktop",
       "route": "/dashboard/history",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/history/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/history/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -161,9 +165,9 @@
       "id": "notifications-desktop",
       "name": "Notifications — Desktop",
       "route": "/dashboard/notifications",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/notifications/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/notifications/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -177,9 +181,9 @@
       "id": "create-desktop",
       "name": "Créer — Desktop",
       "route": "/dashboard/create",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/create/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/create/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -193,10 +197,11 @@
       "id": "create-event-mobile",
       "name": "Créer un événement — Mobile",
       "route": "/dashboard/create/event",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/create/event/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/create/event/page.tsx",
       "componentCandidates": [
+        "components/._mobile-bottom-nav.tsx",
         "components/dashboard-nav.tsx",
         "components/mobile-bottom-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -210,9 +215,9 @@
       "id": "create-event-desktop",
       "name": "Créer un événement — Desktop",
       "route": "/dashboard/create/event",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/create/event/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/create/event/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -226,9 +231,9 @@
       "id": "create-task-desktop",
       "name": "Créer une tâche — Desktop",
       "route": "/dashboard/create/task",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/create/task/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/create/task/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -242,10 +247,11 @@
       "id": "more-mobile",
       "name": "Plus — Menu principal Mobile",
       "route": "/dashboard/more",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/more/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/more/page.tsx",
       "componentCandidates": [
+        "components/._mobile-bottom-nav.tsx",
         "components/dashboard-nav.tsx",
         "components/mobile-bottom-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -259,9 +265,9 @@
       "id": "more-desktop",
       "name": "Plus — Menu principal Desktop",
       "route": "/dashboard/more",
-      "classification": "CRÉER",
-      "reason": "Aucune page existante avec cette route.",
-      "existingPage": null,
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/dashboard/more/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/dashboard/more/page.tsx",
       "componentCandidates": [
         "components/dashboard-nav.tsx",
         "components/setup-saas-dashboard.tsx"
@@ -269,6 +275,37 @@
       "auth": "authenticated",
       "dataNeeds": [],
       "interactions": [],
+      "integrations": []
+    },
+    {
+      "id": "landing-desktop",
+      "name": "Studeo — Landing Page",
+      "route": "/",
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/page.tsx",
+      "componentCandidates": [
+        "components/._studeo-page-skeleton.tsx",
+        "components/studeo-page-skeleton.tsx",
+        "components/._studeo-icon.tsx",
+        "components/._studeo-preview-forms.tsx",
+        "components/._studeo-shell.tsx"
+      ],
+      "auth": "public",
+      "dataNeeds": [
+        "Contenu marketing statique",
+        "Offres et tarifs affichés",
+        "Témoignages et identités affichés",
+        "Image de hero"
+      ],
+      "interactions": [
+        "Naviguer vers les sections Fonctionnalités, Témoignages, Tarifs et FAQ",
+        "Ouvrir la connexion",
+        "Démarrer une inscription gratuite",
+        "Voir une démonstration",
+        "Sélectionner une offre",
+        "Ouvrir Confidentialité, CGU ou Contact"
+      ],
       "integrations": []
     }
   ],
