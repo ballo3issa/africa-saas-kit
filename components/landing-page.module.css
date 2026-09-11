@@ -28,13 +28,14 @@
   border-bottom: 1px solid transparent;
   box-shadow: none;
   transition:
-    background-color 220ms ease,
-    border-color 220ms ease,
-    box-shadow 220ms ease,
-    backdrop-filter 220ms ease;
+    background-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    backdrop-filter 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.header[data-scroll-state="compact"] {
+.header[data-scroll-state="compact"],
+.header[data-menu-open="true"] {
   background: rgba(255, 255, 255, 0.9);
   border-bottom-color: rgba(228, 230, 236, 0.72);
   box-shadow:
@@ -60,8 +61,8 @@
   gap: 12px;
   padding: 10px 16px;
   transition:
-    min-height 220ms ease,
-    padding-block 220ms ease;
+    min-height 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    padding-block 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .header[data-scroll-state="compact"] .nav {
@@ -97,9 +98,9 @@
   background: var(--landing-primary);
   border-radius: 10px;
   transition:
-    width 220ms ease,
-    height 220ms ease,
-    border-radius 220ms ease;
+    width 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .header[data-scroll-state="compact"] .brandMark {
@@ -110,6 +111,127 @@
 
 .navLinks {
   display: none;
+}
+
+.mobileMenuButton {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--landing-ink);
+  background: rgba(238, 241, 253, 0.82);
+  border: 1px solid rgba(79, 110, 247, 0.12);
+  border-radius: 12px;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.mobileMenuButton svg {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobileMenuButton[aria-expanded="true"] {
+  color: #fff;
+  background: var(--landing-primary);
+  border-color: var(--landing-primary);
+}
+
+.mobileMenuButton[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  background: #fff;
+  border-top: 1px solid transparent;
+  box-shadow: 0 18px 36px rgba(37, 52, 98, 0.08);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  backdrop-filter: blur(18px) saturate(145%);
+  transition:
+    grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    visibility 280ms,
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms ease;
+}
+
+.mobileMenu[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  border-top-color: rgba(228, 230, 236, 0.72);
+}
+
+.mobileMenuClip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mobileMenuInner {
+  width: min(100%, 1180px);
+  display: grid;
+  gap: 4px;
+  margin-inline: auto;
+  padding: 10px 16px 16px;
+}
+
+.mobileMenuInner > a {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 14px;
+  color: var(--landing-ink);
+  border-radius: 12px;
+  font-size: 0.94rem;
+  font-weight: 750;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.mobileMenuActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--landing-border);
+}
+
+.mobileMenuActions a {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid var(--landing-border);
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.mobileMenuActions a:last-child {
+  color: #fff;
+  background: var(--landing-primary);
+  border-color: var(--landing-primary);
 }
 
 .navActions {
@@ -625,6 +747,7 @@
 }
 
 .brandLink:focus-visible,
+.mobileMenuButton:focus-visible,
 .nav a:focus-visible,
 .page a:focus-visible {
   outline: 3px solid #1d4ed8;
@@ -639,10 +762,38 @@
   }
 
   .secondaryButton:hover,
-  .loginLink:hover,
-  .navLinks a:hover {
+  .loginLink:hover {
     color: var(--landing-primary-dark);
     background: var(--landing-soft);
+  }
+
+  .navLinks a:hover {
+    color: var(--landing-primary-dark);
+    background: rgba(238, 241, 253, 0.72);
+    transform: translateY(-1px);
+  }
+
+  .navLinks a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .mobileMenuButton:hover {
+    color: var(--landing-primary-dark);
+    background: #fff;
+    border-color: rgba(79, 110, 247, 0.28);
+    transform: translateY(-1px);
+  }
+
+  .mobileMenuInner > a:hover {
+    color: var(--landing-primary-dark);
+    background: var(--landing-soft);
+    transform: translateX(4px);
+  }
+}
+
+@media (max-width: 359px) {
+  .navActions > .primaryButtonSmall {
+    display: none;
   }
 }
 
@@ -725,6 +876,7 @@
   }
 
   .navLinks a {
+    position: relative;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -733,6 +885,29 @@
     color: var(--landing-muted);
     font-size: 0.85rem;
     font-weight: 700;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .navLinks a::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 5px;
+    left: 12px;
+    height: 2px;
+    background: var(--landing-primary);
+    border-radius: 999px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobileMenuButton,
+  .mobileMenu {
+    display: none;
   }
 
   .heroInner {
@@ -832,6 +1007,12 @@
   .header,
   .nav,
   .brandMark,
+  .mobileMenu,
+  .mobileMenuButton,
+  .mobileMenuButton svg,
+  .mobileMenuInner > a,
+  .navLinks a,
+  .navLinks a::after,
   .primaryButtonSmall,
   .primaryButton,
   .secondaryButton {

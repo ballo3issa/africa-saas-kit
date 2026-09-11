@@ -10,6 +10,7 @@ export type StudeoIconName =
   | "chevron-right"
   | "clipboard"
   | "clock"
+  | "close"
   | "file"
   | "flask"
   | "globe"
@@ -77,6 +78,7 @@ const paths: Record<StudeoIconName, ReactNode> = {
       <path d="M12 7v5l3 2" />
     </>
   ),
+  close: <path d="m6 6 12 12M18 6 6 18" />,
   file: (
     <>
       <path d="M6 2h8l4 4v16H6Z" />
