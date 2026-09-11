@@ -128,6 +128,62 @@
   display: grid;
 }
 
+.toast {
+  position: fixed;
+  z-index: 50;
+  top: max(16px, env(safe-area-inset-top, 0px));
+  right: 16px;
+  left: 16px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  max-width: 430px;
+  min-height: 58px;
+  margin-inline: auto;
+  padding: 10px 10px 10px 13px;
+  border: 1px solid #f2c9ce;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.97);
+  color: #8f2330;
+  box-shadow: 0 18px 48px rgba(35, 27, 52, 0.18);
+  animation: toast-enter 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  backdrop-filter: blur(12px);
+}
+
+.toastIcon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff0f2;
+  color: #c23b4b;
+}
+
+.toastMessage {
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.toastClose {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #8f6670;
+  cursor: pointer;
+}
+
+.toastClose:hover {
+  background: #fff0f2;
+  color: #8f2330;
+}
+
 .googleButton,
 .primaryButton {
   width: 100%;
@@ -205,9 +261,17 @@
 }
 
 .inputFrame:focus-within {
-  border-color: var(--auth-primary);
+  border-color: #c5cada;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.14);
+  color: #68718c;
+  box-shadow: 0 8px 22px rgba(25, 33, 64, 0.08), 0 0 0 3px rgba(79, 110, 247, 0.06);
+}
+
+.inputFrame[data-invalid="true"] {
+  border-color: #e7a8b0;
+  background: #fffafb;
+  color: #b54856;
+  box-shadow: 0 0 0 3px rgba(194, 59, 75, 0.07);
 }
 
 .input {
@@ -259,15 +323,12 @@
   font-size: 0.78rem;
 }
 
-.error {
-  margin: 0 0 14px;
-  padding: 11px 12px;
-  border: 1px solid #fecaca;
-  border-radius: 10px;
-  background: #fef2f2;
-  color: #b91c1c;
-  font-size: 0.82rem;
-  line-height: 1.45;
+.fieldError {
+  margin: -1px 2px 0;
+  color: #b43a49;
+  font-size: 0.75rem;
+  font-weight: 550;
+  line-height: 1.4;
 }
 
 .primaryButton {
@@ -313,6 +374,22 @@
   outline-offset: 3px;
 }
 
+.toastClose:focus-visible {
+  outline: 3px solid rgba(180, 58, 73, 0.2);
+  outline-offset: 2px;
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (min-width: 768px) {
   .brandPanel {
     min-height: 230px;
@@ -336,10 +413,11 @@
   }
 
   .brandPanel {
-    display: flex;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: clamp(34px, 4vh, 44px);
     min-height: 100dvh;
-    flex-direction: column;
-    justify-content: space-between;
     padding: 50px clamp(42px, 4.45vw, 64px);
   }
 
@@ -355,7 +433,7 @@
   .eyebrow {
     width: fit-content;
     gap: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 30px;
     padding: 7px 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
@@ -388,7 +466,7 @@
   .benefits {
     display: grid;
     gap: 12px;
-    margin-top: 28px;
+    margin-top: 32px;
   }
 
   .benefit {
@@ -409,6 +487,7 @@
   }
 
   .proof {
+    margin-top: 4px;
     padding: 18px 20px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 16px;
@@ -466,5 +545,9 @@
   .primaryButton,
   .inputFrame {
     transition: none;
+  }
+
+  .toast {
+    animation: none;
   }
 }
