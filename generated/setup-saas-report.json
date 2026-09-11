@@ -1,9 +1,9 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T00:54:45.054Z",
-  "greenCount": 14,
+  "generatedAt": "2026-09-11T01:28:01.415Z",
+  "greenCount": 15,
   "total": 20,
-  "nextPhase": 15,
+  "nextPhase": 16,
   "phases": [
     {
       "n": 1,
@@ -62,7 +62,7 @@
         {
           "label": "Browser Subagent vérifié",
           "ok": true,
-          "detail": "Preuve locale: Phase 13: Chrome a ouvert /api/health (status ok) et /api/readyz (status ready, database ok, Redis skipped); smoke health/readyz/auth/robots/sitemap PASS."
+          "detail": "Preuve locale: Phase 15: Vercel Preview Ready; auth inscription/connexion/session/dashboard 200; 26 contrôles Chrome sur 13 routes à 390 et 1440 px sans échec; captures login et dashboard inspectées; protection SSO réactivée."
         }
       ],
       "actions": [
@@ -516,7 +516,12 @@
         "Ne configurer les providers de paiement que dans la Phase 17 si le SaaS en a réellement besoin."
       ],
       "validate": "Le staging doit fonctionner sans dépendre d’un provider de paiement. Les paiements restent optionnels.",
-      "state": "yellow"
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Commit d7cdab6 poussé sur main; GitHub CI et Security guard réussis; Vercel Preview dpl_BxwJYsfbLsLr76pxsASXHfgVkVqn Ready; health/readyz/auth et 26 contrôles navigateur mobile/desktop réussis; staging protégé par SSO.",
+        "validatedAt": "2026-09-11T01:27:57.222Z"
+      }
     },
     {
       "n": 16,

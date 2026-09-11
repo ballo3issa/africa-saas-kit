@@ -1,6 +1,6 @@
 # Africa SaaS Kit — /setup-saas
 
-**Progression : 14/20 phases validées**
+**Progression : 15/20 phases validées**
 
 > 🟢 terminé · 🟡 partiel · 🔴 à faire · ⚪ vérification externe/non automatisable
 
@@ -34,7 +34,7 @@
   - _Cette phase contrôle que le code compile, que les dépendances sont auditées et que les règles de sécurité/UI sont respectées._
 - 🟢 **Phase 14 — Préparer le handoff GitHub / Vercel**
   - _Le Deployment Handoff rassemble les variables, callbacks, webhooks et paramètres nécessaires au déploiement._
-- 🟡 **Phase 15 — Préparer GitHub, Vercel et le staging**
+- 🟢 **Phase 15 — Préparer GitHub, Vercel et le staging** _(validée localement)_
   - _GitHub conserve le code et Vercel héberge le SaaS. Le staging permet de tester le vrai déploiement avant production._
 - 🟡 **Phase 16 — Configurer Upstash Redis (OPTIONNEL)**
   - _Upstash Redis est une couche rapide de cache et de données temporaires. Neon reste la source de vérité métier : Upstash ne remplace pas PostgreSQL et ne doit pas contenir les données critiques comme seule copie._
@@ -49,49 +49,52 @@
 
 ---
 
-# 🟡 Phase 15 — Préparer GitHub, Vercel et le staging
+# 🟡 Phase 16 — Configurer Upstash Redis (OPTIONNEL)
 
 ## À quoi sert cette phase ?
 
-GitHub conserve le code et Vercel héberge le SaaS. Le staging permet de tester le vrai déploiement avant production.
+Upstash Redis est une couche rapide de cache et de données temporaires. Neon reste la source de vérité métier : Upstash ne remplace pas PostgreSQL et ne doit pas contenir les données critiques comme seule copie.
 
 ## Ce que cela apporte au SaaS
 
-Cette phase apporte versionnement, CI/CD, previews et validation du SaaS dans un environnement proche de la production.
+Cette phase peut réduire la charge et la latence sur les lectures fréquentes, centraliser le rate limiting entre instances Vercel et conserver des états temporaires avec TTL.
 
 ## Objectif de la phase
 
-Préparer le déploiement sans exiger de paiement. Le SaaS doit pouvoir atteindre le staging même sans aucun provider.
+Décider si ce SaaS a besoin d’un cache Redis/serverless et d’un rate limiting distribué pour réduire les lectures répétées vers Neon et stocker les états temporaires.
 
 ## État actuel
 
-- 🟢 **Deployment handoff** — Disponible
-- 🟢 **Handoff généré** — generated/deployment-handoff.md présent
-- 🔴 **Staging Vercel réellement validé** — À marquer passé uniquement après un vrai test staging
+- 🔴 **Décision Upstash** — Optionnel — non activé
+- 🟢 **Variables Redis** — UPSTASH_REDIS_REST_URL / TOKEN absents
+- 🟢 **Helper cache** — Cache TTL + fallback Neon disponible
 
 ## Ce que tu dois faire maintenant
 
 ### Étape 1
-Exécuter `npm run deploy:handoff` pour préparer les variables GitHub/Vercel réellement utilisées par le projet.
+Si le SaaS n’a pas besoin de cache/rate limiting distribué : exécuter `npm run upstash:setup -- --none`, puis `npm run setup-saas:mark -- --phase=16 --status=skipped --note="Upstash non utilisé"`.
 
 ### Étape 2
-Pousser le projet sur GitHub sans `.env*` ni secrets.
+Si Upstash est utile : exécuter `npm run upstash:setup`, créer une base Redis dans Upstash Console et copier REST URL + REST TOKEN directement dans `.env.local` sans les coller dans le chat.
 
 ### Étape 3
-Créer le projet Vercel et déployer d’abord en Preview/Staging.
+Exécuter `npm run upstash:check` puis `npm run upstash:check:online` pour tester réellement la connexion.
 
 ### Étape 4
-Tester le SaaS sans paiement : navigation, auth, base, email, mobile, SEO et fonctions métier.
+Utiliser Upstash seulement pour cache, rate limits, verrous/états temporaires et données recalculables. Conserver Neon comme source de vérité.
 
 ### Étape 5
-Ne configurer les providers de paiement que dans la Phase 17 si le SaaS en a réellement besoin.
+Pour les entrées de cache, définir un TTL. Si le cache est utilisé comme cache, l’éviction peut être activée côté Upstash.
+
+### Étape 6
+Avant production, recopier les variables Upstash dans Vercel uniquement si cette phase a été activée.
 
 ## Assistance Computer Use pour cette phase
 
-Tester la Preview Vercel dans le navigateur sur mobile et desktop avant toute configuration live.
+Si Upstash est activé, guider la création Redis, puis vérifier /api/readyz après le test REST PING. Aucun token ne doit apparaître dans le chat.
 
 ## Validation de la phase
 
-Le staging doit fonctionner sans dépendre d’un provider de paiement. Les paiements restent optionnels.
+La phase peut être SKIPPED. Si activée, `npm run upstash:check:online` doit réussir avant production et `/api/readyz` doit signaler Redis OK.
 
 Quand c’est fait, relance **`/setup-saas`** (ou `npm run setup-saas`). L’IA doit recontrôler cette phase avant de passer à la suivante.
