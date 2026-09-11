@@ -1,6 +1,6 @@
 # Africa SaaS Kit — /setup-saas
 
-**Progression : 19/20 phases validées**
+**Progression : 20/20 phases validées**
 
 > 🟢 terminé · 🟡 partiel · 🔴 à faire · ⚪ vérification externe/non automatisable
 
@@ -44,62 +44,11 @@
   - _Cloudflare peut gérer ou fournir le domaine et le DNS du SaaS. Son utilisation est facultative._
 - 🟢 **Phase 19 — Configurer Cloudinary pour les uploads d’images (OPTIONNEL)** _(validée localement)_
   - _Cloudinary gère l’upload, le stockage, la transformation et la diffusion d’images. Son utilisation est facultative._
-- 🔴 **Phase 20 — Finaliser production, domaine et Search Console**
+- 🟢 **Phase 20 — Finaliser production, domaine et Search Console** _(validée localement)_
   - _Cette phase finalise le vrai domaine HTTPS, Search Console et les derniers contrôles de production._
 
 ---
 
-# 🔴 Phase 20 — Finaliser production, domaine et Search Console
+# 🟢 Toutes les phases locales sont validées
 
-## À quoi sert cette phase ?
-
-Cette phase finalise le vrai domaine HTTPS, Search Console et les derniers contrôles de production.
-
-## Ce que cela apporte au SaaS
-
-Elle apporte la validation finale : domaine public, indexation Google, Production Doctor et test global de conformité des fichiers du kit.
-
-## Objectif de la phase
-
-Valider le vrai domaine HTTPS et les intégrations externes avant de déclarer le SaaS prêt.
-
-## État actuel
-
-- 🔴 **Production Doctor prêt** — À exécuter après staging/domaine
-- ⚪ **Search Console vérifiée** — Toujours NON VÉRIFIÉE automatiquement avant connexion au vrai domaine
-
-## Ce que tu dois faire maintenant
-
-### Étape 1
-Déployer d’abord en staging/Preview et tester les flux critiques.
-
-### Étape 2
-Configurer le domaine custom Vercel et HTTPS avec le fournisseur DNS choisi (Cloudflare ou autre).
-
-### Étape 3
-Mettre à jour les callbacks OAuth avec le vrai domaine et, uniquement si des paiements sont activés, mettre à jour leurs webhooks providers.
-
-### Étape 4
-Lancer `npm run doctor:production` puis `npm run doctor:production:online`.
-
-### Étape 5
-Dans Google Search Console, vérifier la propriété Domain via DNS puis soumettre `/sitemap.xml`.
-
-### Étape 6
-Tester un partage réel de lien pour vérifier l’image Open Graph.
-
-### Étape 7
-Lancer `npm run conformity:check` pour le contrôle final de conformité des fichiers, scripts et règles du kit.
-
-### Étape 8
-Ouvrir `generated/conformity-report.md` et corriger tout FAIL avant de considérer le parcours terminé.
-
-## Assistance Computer Use pour cette phase
-
-Tester le domaine final, HTTPS, Open Graph, robots, sitemap et Search Console; garder les validations externes NON VÉRIFIÉES tant qu’elles ne sont pas observées.
-
-## Validation de la phase
-
-Le Production Doctor est satisfaisant, les flux externes sont testés et `npm run conformity:check` retourne PASS sans anomalie bloquante.
-
-Quand c’est fait, relance **`/setup-saas`** (ou `npm run setup-saas`). L’IA doit recontrôler cette phase avant de passer à la suivante.
+Passe aux tests externes/staging encore marqués NON VÉRIFIÉS, puis au Production Doctor online.

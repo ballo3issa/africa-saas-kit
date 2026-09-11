@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T01:27:52.575Z",
+  "generatedAt": "2026-09-11T02:21:23.499Z",
   "variables": [
     {
       "name": "NEXT_PUBLIC_APP_URL",
@@ -134,59 +134,6 @@
       "required": "email"
     },
     {
-      "name": "GOOGLE_CLIENT_ID",
-      "group": "Google Cloud / Search Console",
-      "configured": true,
-      "sensitive": false,
-      "vercel": [
-        "Production",
-        "Preview"
-      ],
-      "required": "google-oauth"
-    },
-    {
-      "name": "GOOGLE_CLIENT_SECRET",
-      "group": "Google Cloud / Search Console",
-      "configured": true,
-      "sensitive": true,
-      "vercel": [
-        "Production",
-        "Preview"
-      ],
-      "required": "google-oauth"
-    },
-    {
-      "name": "NEXT_PUBLIC_GOOGLE_AUTH_ENABLED",
-      "group": "Google Cloud / Search Console",
-      "configured": true,
-      "sensitive": false,
-      "vercel": [
-        "Production",
-        "Preview"
-      ],
-      "required": "google-oauth"
-    },
-    {
-      "name": "GOOGLE_SITE_VERIFICATION",
-      "group": "Google Cloud / Search Console",
-      "configured": false,
-      "sensitive": false,
-      "vercel": [
-        "Production"
-      ],
-      "required": "seo"
-    },
-    {
-      "name": "GOOGLE_SEARCH_CONSOLE_ENABLED",
-      "group": "Google Cloud / Search Console",
-      "configured": true,
-      "sensitive": false,
-      "vercel": [
-        "Production"
-      ],
-      "required": "optional"
-    },
-    {
       "name": "TURNSTILE_SECRET_KEY",
       "group": "Sécurité / rate limiting / cron",
       "configured": false,
@@ -255,8 +202,9 @@
   ],
   "providers": [],
   "externalUrls": {
-    "googleOAuth": "<TON-DOMAINE-HTTPS>/api/auth/callback/google",
+    "googleOAuth": null,
     "cron": null,
-    "sitemap": "<TON-DOMAINE-HTTPS>/sitemap.xml"
+    "sitemap": "<TON-DOMAINE-HTTPS>/sitemap.xml",
+    "searchConsole": null
   }
 }

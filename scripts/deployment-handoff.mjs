@@ -26,6 +26,8 @@ const providers = readJson('config/providers.json', {});
 const appCfg = readJson('africa-saas.config.json', {});
 const selected = Array.isArray(appCfg.providers) ? appCfg.providers : [];
 const paymentsEnabled = appCfg.paymentsEnabled === true || selected.length > 0;
+const googleOAuthEnabled = appCfg.googleAuth === true;
+const searchConsoleEnabled = appCfg.searchConsole === true;
 const base = '<TON-DOMAINE-HTTPS>';
 const configured = (name) => Boolean(env[name] && env[name].trim());
 const cloudinaryEnabled = appCfg.cloudinaryEnabled === true || ['CLOUDINARY_CLOUD_NAME','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET'].some(configured);
@@ -39,8 +41,18 @@ for (const [id,p] of Object.entries(providers)) {
   providerRows.push({id,label:p.label||id,readiness:p.readiness||'unknown',enabled,env:names.map(name=>({name,configured:configured(name)})),webhook:`${base}/api/webhooks/${id}`});
 }
 
-const visibleGroups = deployment.groups.filter(group => (paymentsEnabled || group.id !== "payments-core") && (cloudinaryEnabled || group.id !== "cloudinary"));
-const variableRows = visibleGroups.flatMap(group => group.variables.filter(v => (paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name)) && (upstashEnabled || !["UPSTASH_REDIS_REST_URL","UPSTASH_REDIS_REST_TOKEN"].includes(v.name))).map(v => ({...v,group:group.label,configured:configured(v.name)})));
+const visibleVariables = (group) => group.variables.filter(v =>
+  (paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name)) &&
+  (upstashEnabled || !["UPSTASH_REDIS_REST_URL","UPSTASH_REDIS_REST_TOKEN"].includes(v.name)) &&
+  (googleOAuthEnabled || !["GOOGLE_CLIENT_ID","GOOGLE_CLIENT_SECRET","NEXT_PUBLIC_GOOGLE_AUTH_ENABLED"].includes(v.name)) &&
+  (searchConsoleEnabled || !["GOOGLE_SITE_VERIFICATION","GOOGLE_SEARCH_CONSOLE_ENABLED"].includes(v.name))
+);
+const visibleGroups = deployment.groups.filter(group =>
+  (paymentsEnabled || group.id !== "payments-core") &&
+  (cloudinaryEnabled || group.id !== "cloudinary") &&
+  visibleVariables(group).length > 0
+);
+const variableRows = visibleGroups.flatMap(group => visibleVariables(group).map(v => ({...v,group:group.label,configured:configured(v.name)})));
 const missing = variableRows.filter(v => ['always','production-security'].includes(v.required) && !v.configured);
 
 const md = [];
@@ -60,7 +72,7 @@ for (const group of visibleGroups) {
   md.push(`### ${group.label}`);
   md.push('| Variable | État local | Secret ? | Vercel | Obligatoire quand | Où obtenir / quoi mettre |');
   md.push('|---|---|---:|---|---|---|');
-  for (const v of group.variables.filter(v => (paymentsEnabled || !["PAYMENT_WEBHOOK_BASE_URL","PAYMENT_DEFAULT_PROVIDER","CRON_SECRET"].includes(v.name)) && (upstashEnabled || !["UPSTASH_REDIS_REST_URL","UPSTASH_REDIS_REST_TOKEN"].includes(v.name)))) {
+  for (const v of visibleVariables(group)) {
     md.push(`| \`${v.name}\` | ${configured(v.name)?'✅ CONFIGURÉE':'❌ MANQUANTE'} | ${v.sensitive?'Oui':'Non'} | ${(v.vercel||[]).join(' + ')} | ${v.required} | ${v.source} |`);
   }
   md.push('');
@@ -84,11 +96,11 @@ md.push('## 4. Cloudinary — uploads d’images');
 md.push(cloudinaryEnabled ? 'Cloudinary est activé : ajouter ses variables dans Vercel et effectuer un upload réel en staging.' : 'Cloudinary n’est pas activé. C’est valide pour un SaaS sans upload d’images.');
 md.push('');
 md.push('## 5. URLs externes à enregistrer après choix du domaine');
-md.push(`- Google OAuth callback : \`${base}/api/auth/callback/google\``);
+if (googleOAuthEnabled) md.push(`- Google OAuth callback : \`${base}/api/auth/callback/google\``);
 if (paymentsEnabled) md.push(`- Cron réconciliation : \`${base}/api/cron/reconcile-payments\``);
 md.push(`- Sitemap : \`${base}/sitemap.xml\``);
 md.push(`- Robots : \`${base}/robots.txt\``);
-md.push('- Search Console : ajouter la propriété Domain, vérifier DNS, puis soumettre `/sitemap.xml`.');
+if (searchConsoleEnabled) md.push('- Search Console : ajouter la propriété Domain, vérifier DNS, puis soumettre `/sitemap.xml`.');
 md.push('');
 md.push('## 6. Ordre de mise en ligne — l’IA doit guider pas à pas');
 md.push('1. **Gate GitHub** — repo, lockfile, sécurité Git, CI.');
@@ -96,10 +108,10 @@ md.push('2. **Gate Vercel Project** — importer le repo sans encore annoncer la
 md.push('3. **Gate Domain** — connecter le domaine final et attendre HTTPS valide.');
 md.push('4. **Gate Environment** — renseigner les variables Vercel groupe par groupe.');
 md.push('5. **Gate Database** — appliquer les migrations Neon sur la base de production et vérifier.');
-md.push('6. **Gate OAuth/Email** — callback Google, domaine Resend, email de test.');
+md.push(googleOAuthEnabled ? '6. **Gate OAuth/Email** — callback Google, domaine Resend, email de test.' : '6. **Gate OAuth/Email** — Google OAuth ignoré; valider le domaine Resend et un email de test.');
 md.push(paymentsEnabled ? '7. **Gate Payments** — URLs webhook du domaine final + clés production seulement après sandbox validé.' : '7. **Gate Payments** — ignoré : aucun paiement activé pour ce SaaS.');
 md.push(paymentsEnabled ? '8. **Gate Cron** — exécuter `npm run cron:generate`, configurer `CRON_SECRET`, puis valider la réconciliation sur Vercel.' : '8. **Gate Cron paiement** — ignoré : paiements désactivés.');
-md.push('9. **Gate SEO** — Search Console, sitemap, canonical, social preview.');
+md.push(searchConsoleEnabled ? '9. **Gate SEO** — Search Console, sitemap, canonical, social preview.' : '9. **Gate SEO** — Search Console ignorée; valider sitemap, canonical et social preview.');
 md.push('10. **Gate Final** — `npm run verify:production` puis `npm run doctor:production:online`.');
 md.push('');
 md.push('## 7. Règles de sécurité pendant le handoff');
@@ -117,7 +129,7 @@ md.push('- Statut production réel : **NON VÉRIFIÉ** tant que les gates dynami
 
 fs.mkdirSync(path.join(root,'generated'), {recursive:true});
 fs.writeFileSync(path.join(root,'generated/deployment-handoff.md'), md.join('\n')+'\n');
-fs.writeFileSync(path.join(root,'generated/deployment-handoff.json'), JSON.stringify({generatedAt:new Date().toISOString(), variables:variableRows.map(v=>({name:v.name,group:v.group,configured:v.configured,sensitive:v.sensitive,vercel:v.vercel,required:v.required})),providers:providerRows,externalUrls:{googleOAuth:`${base}/api/auth/callback/google`,cron:paymentsEnabled?`${base}/api/cron/reconcile-payments`:null,sitemap:`${base}/sitemap.xml`}},null,2));
+fs.writeFileSync(path.join(root,'generated/deployment-handoff.json'), JSON.stringify({generatedAt:new Date().toISOString(), variables:variableRows.map(v=>({name:v.name,group:v.group,configured:v.configured,sensitive:v.sensitive,vercel:v.vercel,required:v.required})),providers:providerRows,externalUrls:{googleOAuth:googleOAuthEnabled?`${base}/api/auth/callback/google`:null,cron:paymentsEnabled?`${base}/api/cron/reconcile-payments`:null,sitemap:`${base}/sitemap.xml`,searchConsole:searchConsoleEnabled?base:null}},null,2));
 console.log('Deployment handoff generated:');
 console.log('  generated/deployment-handoff.md');
 console.log('  generated/deployment-handoff.json');

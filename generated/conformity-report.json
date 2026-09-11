@@ -1,6 +1,6 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T02:02:22.790Z",
+  "generatedAt": "2026-09-11T02:22:27.965Z",
   "status": "PASS",
   "passes": [
     "Fichier requis: AGENTS.md",
@@ -194,8 +194,6 @@
     "SEO crawl files présents",
     "package-lock.json présent"
   ],
-  "warnings": [
-    "Production Doctor non généré — lancer npm run doctor:production avant mise en ligne"
-  ],
+  "warnings": [],
   "failures": []
 }

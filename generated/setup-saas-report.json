@@ -1,9 +1,9 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T02:02:17.425Z",
-  "greenCount": 19,
+  "generatedAt": "2026-09-11T02:20:02.010Z",
+  "greenCount": 20,
   "total": 20,
-  "nextPhase": 20,
+  "nextPhase": null,
   "phases": [
     {
       "n": 1,
@@ -62,7 +62,7 @@
         {
           "label": "Browser Subagent vérifié",
           "ok": true,
-          "detail": "Preuve locale: Phase 18: DNS Cloudflare public vérifié sur 1.1.1.1 pour apex et www vers 76.76.21.21; certificats HTTPS Vercel valides; Chrome affiche Etudeo sur les deux domaines sans erreur certificat; protection SSO réactivée."
+          "detail": "Preuve locale: Phase 20: production docteur-abidjan.win vérifiée dans Chrome; 91 contrôles sur 13 écrans et 7 largeurs, auth email/session/dashboard réussis, Google OAuth absent, aucun overflow; health/readyz/robots/sitemap/OG HTTP 200."
         }
       ],
       "actions": [
@@ -199,14 +199,14 @@
         {
           "label": "Google OAuth",
           "ok": true,
-          "required": true,
-          "detail": "Client ID + Secret configurés"
+          "required": false,
+          "detail": "Non sélectionné"
         },
         {
           "label": "Search Console",
-          "ok": false,
-          "required": true,
-          "detail": "Token manquant"
+          "ok": true,
+          "required": false,
+          "detail": "Non sélectionné"
         }
       ],
       "actions": [
@@ -663,8 +663,8 @@
       "checks": [
         {
           "label": "Production Doctor prêt",
-          "ok": false,
-          "detail": "À exécuter après staging/domaine"
+          "ok": true,
+          "detail": "Verdict READY"
         },
         {
           "label": "Search Console vérifiée",
@@ -684,7 +684,12 @@
         "Ouvrir `generated/conformity-report.md` et corriger tout FAIL avant de considérer le parcours terminé."
       ],
       "validate": "Le Production Doctor est satisfaisant, les flux externes sont testés et `npm run conformity:check` retourne PASS sans anomalie bloquante.",
-      "state": "red"
+      "state": "green",
+      "savedValidation": {
+        "status": "passed",
+        "note": "Production Vercel READY; domaines apex/www HTTPS 200; doctor online READY 95; Neon/RLS, auth email, Resend, SEO technique, 91 contrôles responsive et conformité 190/190 validés. Google OAuth et Search Console désactivés selon décision utilisateur.",
+        "validatedAt": "2026-09-11T02:19:58.294Z"
+      }
     }
   ]
 }

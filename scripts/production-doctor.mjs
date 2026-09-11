@@ -83,7 +83,7 @@ try {
 } catch { add('package','package.json','FAIL','package.json illisible','core'); }
 
 if (online) {
-  const appUrl=(env.NEXT_PUBLIC_APP_URL||env.APP_URL||process.env.NEXT_PUBLIC_APP_URL||process.env.APP_URL||'').replace(/\/$/,'');
+  const appUrl=(process.env.NEXT_PUBLIC_APP_URL||process.env.APP_URL||env.NEXT_PUBLIC_APP_URL||env.APP_URL||'').replace(/\/$/,'');
   if(!appUrl) add('online-url','URL production','FAIL','APP_URL ou NEXT_PUBLIC_APP_URL requis pour --online','network');
   else {
     try {

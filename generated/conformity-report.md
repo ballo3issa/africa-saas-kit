@@ -1,13 +1,13 @@
 # Africa SaaS Kit — Rapport de conformité final
 
 **Statut : PASS**
-**PASS : 190 · WARN : 1 · FAIL : 0**
+**PASS : 190 · WARN : 0 · FAIL : 0**
 
 ## Échecs bloquants
 - ✅ Aucun
 
 ## Avertissements
-- ⚠️ Production Doctor non généré — lancer npm run doctor:production avant mise en ligne
+- ✅ Aucun
 
 ## Contrôles conformes
 - ✅ Fichier requis: AGENTS.md

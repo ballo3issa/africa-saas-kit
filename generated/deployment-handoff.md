@@ -38,15 +38,6 @@
 | `RESEND_API_KEY` | ✅ CONFIGURÉE | Oui | Production + Preview | email | Resend > API Keys. |
 | `EMAIL_FROM` | ✅ CONFIGURÉE | Non | Production + Preview | email | Adresse d'envoi vérifiée chez Resend. |
 
-### Google Cloud / Search Console
-| Variable | État local | Secret ? | Vercel | Obligatoire quand | Où obtenir / quoi mettre |
-|---|---|---:|---|---|---|
-| `GOOGLE_CLIENT_ID` | ✅ CONFIGURÉE | Non | Production + Preview | google-oauth | Google Cloud Console > APIs & Services > Credentials > OAuth 2.0 Client ID. |
-| `GOOGLE_CLIENT_SECRET` | ✅ CONFIGURÉE | Oui | Production + Preview | google-oauth | Google Cloud Console > OAuth client secret. |
-| `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED` | ✅ CONFIGURÉE | Non | Production + Preview | google-oauth | Activer le bouton Google après configuration complète. |
-| `GOOGLE_SITE_VERIFICATION` | ❌ MANQUANTE | Non | Production | seo | Google Search Console > méthode de vérification HTML/meta, valeur content uniquement. |
-| `GOOGLE_SEARCH_CONSOLE_ENABLED` | ✅ CONFIGURÉE | Non | Production | optional | Activer seulement si l'intégration API Search Console OAuth est réellement utilisée. |
-
 ### Sécurité / rate limiting / cron
 | Variable | État local | Secret ? | Vercel | Obligatoire quand | Où obtenir / quoi mettre |
 |---|---|---:|---|---|---|
@@ -77,10 +68,8 @@ Aucun provider sélectionné. C’est valide : ce SaaS est configuré sans paiem
 Cloudinary n’est pas activé. C’est valide pour un SaaS sans upload d’images.
 
 ## 5. URLs externes à enregistrer après choix du domaine
-- Google OAuth callback : `<TON-DOMAINE-HTTPS>/api/auth/callback/google`
 - Sitemap : `<TON-DOMAINE-HTTPS>/sitemap.xml`
 - Robots : `<TON-DOMAINE-HTTPS>/robots.txt`
-- Search Console : ajouter la propriété Domain, vérifier DNS, puis soumettre `/sitemap.xml`.
 
 ## 6. Ordre de mise en ligne — l’IA doit guider pas à pas
 1. **Gate GitHub** — repo, lockfile, sécurité Git, CI.
@@ -88,10 +77,10 @@ Cloudinary n’est pas activé. C’est valide pour un SaaS sans upload d’imag
 3. **Gate Domain** — connecter le domaine final et attendre HTTPS valide.
 4. **Gate Environment** — renseigner les variables Vercel groupe par groupe.
 5. **Gate Database** — appliquer les migrations Neon sur la base de production et vérifier.
-6. **Gate OAuth/Email** — callback Google, domaine Resend, email de test.
+6. **Gate OAuth/Email** — Google OAuth ignoré; valider le domaine Resend et un email de test.
 7. **Gate Payments** — ignoré : aucun paiement activé pour ce SaaS.
 8. **Gate Cron paiement** — ignoré : paiements désactivés.
-9. **Gate SEO** — Search Console, sitemap, canonical, social preview.
+9. **Gate SEO** — Search Console ignorée; valider sitemap, canonical et social preview.
 10. **Gate Final** — `npm run verify:production` puis `npm run doctor:production:online`.
 
 ## 7. Règles de sécurité pendant le handoff
@@ -102,7 +91,7 @@ Cloudinary n’est pas activé. C’est valide pour un SaaS sans upload d’imag
 - Les clés sandbox/test et live doivent rester séparées.
 
 ## 8. Résumé automatique
-- Variables suivies : **23**
+- Variables suivies : **18**
 - Variables de base critiques manquantes localement : **0**
 - Providers listés : **0**
 - Statut production réel : **NON VÉRIFIÉ** tant que les gates dynamiques ne sont pas passés.

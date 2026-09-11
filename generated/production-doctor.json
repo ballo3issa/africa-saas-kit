@@ -1,0 +1,212 @@
+{
+  "version": "0.8.28",
+  "online": true,
+  "score": 95,
+  "verdict": "READY",
+  "generatedAt": "2026-09-11T02:22:34.859Z",
+  "results": [
+    {
+      "id": "config",
+      "label": "Configuration SaaS",
+      "status": "PASS",
+      "detail": "africa-saas.config.json présent",
+      "category": "setup"
+    },
+    {
+      "id": "env",
+      "label": "Variables environnement",
+      "status": "PASS",
+      "detail": ".env.local présent",
+      "category": "setup"
+    },
+    {
+      "id": "gitignore",
+      "label": "Protection .env",
+      "status": "PASS",
+      "detail": ".gitignore doit couvrir .env*",
+      "category": "security"
+    },
+    {
+      "id": "lockfile",
+      "label": "Lockfile dépendances",
+      "status": "PASS",
+      "detail": "Un lockfile réel doit être commité",
+      "category": "security"
+    },
+    {
+      "id": "auth-secret",
+      "label": "Secret Better Auth",
+      "status": "PASS",
+      "detail": "Secret présent et suffisamment long",
+      "category": "auth"
+    },
+    {
+      "id": "database",
+      "label": "Neon DATABASE_URL",
+      "status": "PASS",
+      "detail": "DATABASE_URL requis côté serveur",
+      "category": "database"
+    },
+    {
+      "id": "resend",
+      "label": "Resend",
+      "status": "PASS",
+      "detail": "Clé Resend + EMAIL_FROM présents",
+      "category": "email"
+    },
+    {
+      "id": "email-verification",
+      "label": "Vérification e-mail",
+      "status": "PASS",
+      "detail": "Vérification e-mail activée",
+      "category": "auth"
+    },
+    {
+      "id": "turnstile",
+      "label": "Turnstile",
+      "status": "WARN",
+      "detail": "À configurer pour protéger inscription et formulaires publics",
+      "category": "security"
+    },
+    {
+      "id": "upstash",
+      "label": "Cache / rate limiting distribué (optionnel)",
+      "status": "WARN",
+      "detail": "Optionnel : Neon reste la source de vérité; sans Upstash, le cache distribué est désactivé",
+      "category": "performance"
+    },
+    {
+      "id": "cloudinary",
+      "label": "Cloudinary images",
+      "status": "PASS",
+      "detail": "Désactivé par configuration",
+      "category": "storage"
+    },
+    {
+      "id": "r2",
+      "label": "Cloudflare R2",
+      "status": "PASS",
+      "detail": "Désactivé par configuration",
+      "category": "storage"
+    },
+    {
+      "id": "google-oauth",
+      "label": "Google Cloud OAuth",
+      "status": "PASS",
+      "detail": "Désactivé par configuration",
+      "category": "google"
+    },
+    {
+      "id": "search-console",
+      "label": "Google Search Console",
+      "status": "PASS",
+      "detail": "Désactivé par configuration",
+      "category": "google"
+    },
+    {
+      "id": "payments-mode",
+      "label": "Paiements",
+      "status": "PASS",
+      "detail": "Désactivés par configuration — aucun provider requis pour ce SaaS",
+      "category": "payments"
+    },
+    {
+      "id": "webhooks",
+      "label": "Routes webhooks",
+      "status": "PASS",
+      "detail": "Non requises : paiements désactivés",
+      "category": "payments"
+    },
+    {
+      "id": "reconcile",
+      "label": "Réconciliation paiements",
+      "status": "PASS",
+      "detail": "Non requise : paiements désactivés",
+      "category": "payments"
+    },
+    {
+      "id": "security-audit",
+      "label": "Audit sécurité",
+      "status": "PASS",
+      "detail": "Exécuter npm run security:audit avant production",
+      "category": "security"
+    },
+    {
+      "id": "mobile-first",
+      "label": "Mobile-first foundations",
+      "status": "PASS",
+      "detail": "Exécuter npm run mobile:check et valider visuellement les viewports avant production",
+      "category": "design"
+    },
+    {
+      "id": "banani-plan",
+      "label": "Plan implémentation Banani",
+      "status": "PASS",
+      "detail": "Après import des écrans: npm run design:plan",
+      "category": "design"
+    },
+    {
+      "id": "csp-hardening",
+      "label": "CSP sans unsafe-inline",
+      "status": "WARN",
+      "detail": "CSP compatible Next.js mais encore permissive: passer à des nonces avant niveau maximum",
+      "category": "security"
+    },
+    {
+      "id": "pinned-deps",
+      "label": "Versions dépendances",
+      "status": "PASS",
+      "detail": "Versions explicites",
+      "category": "security"
+    },
+    {
+      "id": "dns",
+      "label": "DNS",
+      "status": "PASS",
+      "detail": "docteur-abidjan.win → 76.76.21.21",
+      "category": "network"
+    },
+    {
+      "id": "https",
+      "label": "HTTPS",
+      "status": "PASS",
+      "detail": "URL HTTPS",
+      "category": "network"
+    },
+    {
+      "id": "headers-online",
+      "label": "Headers production",
+      "status": "PASS",
+      "detail": "Headers critiques présents",
+      "category": "security"
+    },
+    {
+      "id": "seo-online",
+      "label": "SEO metadata production",
+      "status": "PASS",
+      "detail": "Canonical, description et Open Graph détectés",
+      "category": "google"
+    },
+    {
+      "id": "endpoint-/robots.txt",
+      "label": "/robots.txt",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "category": "google"
+    },
+    {
+      "id": "endpoint-/sitemap.xml",
+      "label": "/sitemap.xml",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "category": "google"
+    },
+    {
+      "id": "security-check",
+      "label": "Security preflight",
+      "status": "PASS",
+      "detail": "npm run security:check passe",
+      "category": "security"
+    }
+  ]
+}
