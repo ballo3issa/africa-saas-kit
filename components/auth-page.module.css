@@ -1,0 +1,470 @@
+.page {
+  --auth-primary: #4f6ef7;
+  --auth-foreground: #0f1117;
+  --auth-muted: #72788f;
+  --auth-border: #e4e6ec;
+  --auth-input: #f0f1f5;
+  min-height: 100dvh;
+  background: #f7f8fa;
+  color: var(--auth-foreground);
+}
+
+.brandPanel {
+  position: relative;
+  isolation: isolate;
+  min-height: 168px;
+  overflow: hidden;
+  padding: max(24px, env(safe-area-inset-top, 0px)) 20px 26px;
+  background: var(--auth-primary);
+  color: #fff;
+}
+
+.orbTop,
+.orbBottom {
+  position: absolute;
+  z-index: -1;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+}
+
+.orbTop {
+  width: 240px;
+  height: 240px;
+  top: -130px;
+  right: -75px;
+}
+
+.orbBottom {
+  width: 170px;
+  height: 170px;
+  bottom: -105px;
+  left: -62px;
+}
+
+.brandLink,
+.brandMark,
+.eyebrow,
+.benefit,
+.person {
+  display: flex;
+  align-items: center;
+}
+
+.brandLink {
+  width: fit-content;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.brandLink:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.brandMark {
+  width: 38px;
+  height: 38px;
+  justify-content: center;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--auth-primary);
+  box-shadow: 0 8px 24px rgba(25, 43, 126, 0.16);
+}
+
+.mobilePromise {
+  max-width: 310px;
+  margin: 25px 0 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.brandContent,
+.proof {
+  display: none;
+}
+
+.formPanel {
+  display: grid;
+  place-items: start center;
+  padding: 34px 20px max(40px, env(safe-area-inset-bottom, 0px));
+}
+
+.formContainer {
+  width: min(100%, 400px);
+}
+
+.heading {
+  margin: 0 0 6px;
+  font-size: clamp(1.75rem, 8vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.switchPrompt {
+  margin: 0 0 28px;
+  color: var(--auth-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.textLink,
+.forgotLink {
+  color: var(--auth-primary);
+  font-weight: 700;
+}
+
+.textLink:hover,
+.forgotLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.form {
+  display: grid;
+}
+
+.googleButton,
+.primaryButton {
+  width: 100%;
+  min-height: 50px;
+  border-radius: 12px;
+  font-size: 0.94rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease,
+    background 180ms ease;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px solid var(--auth-border);
+  background: #fff;
+  color: var(--auth-foreground);
+}
+
+.googleButton:hover {
+  transform: translateY(-1px);
+  border-color: #cfd4e1;
+  box-shadow: 0 8px 24px rgba(15, 17, 23, 0.07);
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+.divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 22px;
+  color: var(--auth-muted);
+  font-size: 0.75rem;
+  font-weight: 550;
+}
+
+.divider::before,
+.divider::after {
+  height: 1px;
+  background: var(--auth-border);
+  content: "";
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.fieldLabel {
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.inputFrame {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--auth-input);
+  color: #8b90a7;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.inputFrame:focus-within {
+  border-color: var(--auth-primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.14);
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--auth-foreground);
+  font-size: 0.91rem;
+}
+
+.input::placeholder {
+  color: #969bae;
+  opacity: 1;
+}
+
+.revealButton {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  place-items: center;
+  margin-right: -11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #747b91;
+  cursor: pointer;
+}
+
+.revealButton:hover {
+  background: rgba(79, 110, 247, 0.09);
+  color: var(--auth-primary);
+}
+
+.forgotRow {
+  display: flex;
+  justify-content: flex-end;
+  margin: -4px 0 24px;
+}
+
+.forgotLink {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.error {
+  margin: 0 0 14px;
+  padding: 11px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.primaryButton {
+  border: 1px solid var(--auth-primary);
+  background: var(--auth-primary);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(79, 110, 247, 0.22);
+}
+
+.primaryButton:hover {
+  transform: translateY(-1px);
+  background: #425fdc;
+  box-shadow: 0 13px 28px rgba(79, 110, 247, 0.28);
+}
+
+.googleButton:disabled,
+.primaryButton:disabled {
+  cursor: wait;
+  opacity: 0.64;
+  transform: none;
+  box-shadow: none;
+}
+
+.legal {
+  margin: 22px 0 0;
+  color: var(--auth-muted);
+  font-size: 0.74rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.legalLabel {
+  color: var(--auth-primary);
+  font-weight: 650;
+}
+
+.googleButton:focus-visible,
+.primaryButton:focus-visible,
+.revealButton:focus-visible,
+.textLink:focus-visible,
+.forgotLink:focus-visible {
+  outline: 3px solid rgba(79, 110, 247, 0.34);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .brandPanel {
+    min-height: 230px;
+    padding: 32px 48px;
+  }
+
+  .mobilePromise {
+    max-width: 440px;
+    font-size: 0.95rem;
+  }
+
+  .formPanel {
+    padding: 54px 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    display: grid;
+    grid-template-columns: minmax(400px, 40.3%) minmax(0, 1fr);
+  }
+
+  .brandPanel {
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px clamp(42px, 4.45vw, 64px);
+  }
+
+  .mobilePromise {
+    display: none;
+  }
+
+  .brandContent,
+  .proof {
+    display: block;
+  }
+
+  .eyebrow {
+    width: fit-content;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.74rem;
+    font-weight: 650;
+  }
+
+  .brandTitle {
+    max-width: 430px;
+    margin: 0;
+    font-size: clamp(2.25rem, 3.1vw, 2.65rem);
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+  }
+
+  .brandTitleMuted {
+    color: rgba(255, 255, 255, 0.58);
+  }
+
+  .brandDescription {
+    max-width: 370px;
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.88rem;
+    line-height: 1.72;
+  }
+
+  .benefits {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .benefit {
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.84rem;
+    font-weight: 550;
+  }
+
+  .benefitIcon {
+    display: grid;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .proof {
+    padding: 18px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .proofText {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+
+  .person {
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .avatar {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 999px;
+    background: #eef0fd;
+    color: var(--auth-primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+
+  .personName,
+  .personMeta {
+    margin: 0;
+  }
+
+  .personName {
+    font-size: 0.82rem;
+    font-weight: 750;
+  }
+
+  .personMeta {
+    margin-top: 2px;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.7rem;
+  }
+
+  .formPanel {
+    place-items: center;
+    padding: 56px clamp(48px, 6vw, 88px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .googleButton,
+  .primaryButton,
+  .inputFrame {
+    transition: none;
+  }
+}

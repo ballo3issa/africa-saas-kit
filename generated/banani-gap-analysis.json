@@ -1,10 +1,10 @@
 {
   "version": "0.8.28",
-  "generatedAt": "2026-09-11T02:47:58.269Z",
+  "generatedAt": "2026-09-11T04:15:59.702Z",
   "project": "Etudeo",
   "counts": {
     "RÉUTILISER": 0,
-    "ADAPTER": 17,
+    "ADAPTER": 18,
     "CRÉER": 0,
     "À CONFIRMER": 0
   },
@@ -285,11 +285,11 @@
       "reason": "La route existe déjà (app/page.tsx) ; préserver la logique et adapter le rendu au design.",
       "existingPage": "app/page.tsx",
       "componentCandidates": [
+        "components/._landing-page.tsx",
         "components/._studeo-page-skeleton.tsx",
+        "components/landing-page.tsx",
         "components/studeo-page-skeleton.tsx",
-        "components/._studeo-icon.tsx",
-        "components/._studeo-preview-forms.tsx",
-        "components/._studeo-shell.tsx"
+        "components/._landing-header.tsx"
       ],
       "auth": "public",
       "dataNeeds": [
@@ -307,7 +307,50 @@
         "Ouvrir Confidentialité, CGU ou Contact"
       ],
       "integrations": []
+    },
+    {
+      "id": "login-desktop",
+      "name": "Connexion",
+      "route": "/login",
+      "classification": "ADAPTER",
+      "reason": "La route existe déjà (app/(auth)/login/page.tsx) ; préserver la logique et adapter le rendu au design.",
+      "existingPage": "app/(auth)/login/page.tsx",
+      "componentCandidates": [],
+      "auth": "public",
+      "dataNeeds": [
+        "Adresse email",
+        "Mot de passe",
+        "Session utilisateur"
+      ],
+      "interactions": [
+        "Se connecter avec Google",
+        "Se connecter avec email et mot de passe",
+        "Afficher ou masquer le mot de passe",
+        "Ouvrir l'inscription",
+        "Ouvrir la récupération de mot de passe",
+        "Ouvrir les CGU ou la Politique de confidentialité"
+      ],
+      "integrations": [
+        "Google OAuth",
+        "Better Auth"
+      ]
     }
   ],
-  "featureHints": []
+  "featureHints": [
+    {
+      "feature": "auth",
+      "status": "EXISTANT",
+      "description": "Better Auth, rôles, organisations, 2FA"
+    },
+    {
+      "feature": "email",
+      "status": "EXISTANT",
+      "description": "Emails transactionnels Resend; requis si email/password + vérification/récupération sont activés"
+    },
+    {
+      "feature": "google",
+      "status": "EXISTANT",
+      "description": "Google OAuth + Search Console"
+    }
+  ]
 }

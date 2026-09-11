@@ -17,9 +17,13 @@ export type StudeoIconName =
   | "graduation"
   | "help"
   | "history"
+  | "eye"
+  | "eye-off"
   | "landmark"
   | "languages"
+  | "lock"
   | "logout"
+  | "mail"
   | "menu"
   | "message"
   | "notebook"
@@ -115,6 +119,18 @@ const paths: Record<StudeoIconName, ReactNode> = {
       <path d="M3 3v5h5M12 7v5l3 2" />
     </>
   ),
+  eye: (
+    <>
+      <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="2.5" />
+    </>
+  ),
+  "eye-off": (
+    <>
+      <path d="m3 3 18 18" />
+      <path d="M10.6 6.2A10.7 10.7 0 0 1 12 6c6 0 9.5 6 9.5 6a15.7 15.7 0 0 1-2.1 2.8M6.1 6.1C3.8 7.7 2.5 12 2.5 12s3.5 6 9.5 6a9.7 9.7 0 0 0 3-.5M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+    </>
+  ),
   landmark: (
     <>
       <path d="m3 9 9-6 9 6M5 10h14M6 10v8M10 10v8M14 10v8M18 10v8M3 21h18" />
@@ -125,9 +141,21 @@ const paths: Record<StudeoIconName, ReactNode> = {
       <path d="M4 5h7M7.5 3v2c0 4-1.5 7-4.5 9M5 9c1 2 2.5 3.5 4.5 4.5M13 20l4-10 4 10M14.5 16h5" />
     </>
   ),
+  lock: (
+    <>
+      <rect x="5" y="10" width="14" height="11" rx="2" />
+      <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" />
+    </>
+  ),
   logout: (
     <>
       <path d="M10 4H5v16h5M14 8l4 4-4 4M8 12h10" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m4 7 8 6 8-6" />
     </>
   ),
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,

@@ -4,7 +4,7 @@
     "id": "YlQxXVp_7E8Q",
     "name": "Etudeo",
     "source": "banani-mcp",
-    "observedAt": "2026-09-11T02:47:19Z"
+    "observedAt": "2026-09-11T04:07:00Z"
   },
   "screens": [
     {
@@ -374,6 +374,36 @@
       ],
       "integrations": [],
       "notes": "Observé directement via Banani MCP dans LandingPage.jsx. Le design impose minWidth 1440px et ne fournit pas de variante mobile/tablette : le responsive 320–1024 px est À CONFIRMER. La marque Studeo doit être harmonisée avec Etudeo. Les CTA, ancres, FAQ, démo et liens légaux sont visuels mais leurs destinations restent À CONFIRMER. Les paiements sont désactivés : les cartes tarifaires n'autorisent aucun checkout."
+    },
+    {
+      "id": "login-desktop",
+      "name": "Connexion",
+      "route": "/login",
+      "auth": "public",
+      "purpose": "Permettre la connexion à Etudeo avec Google ou avec une adresse e-mail et un mot de passe.",
+      "states": ["default", "submitting", "validation-error", "error", "success"],
+      "viewport": "desktop",
+      "keyElements": [
+        "Panneau de marque bleu avec logo, promesse produit, trois bénéfices et témoignage",
+        "Titre Bon retour et lien vers l'inscription",
+        "Bouton principal Continuer avec Google avec logo Google",
+        "Séparateur ou par email",
+        "Champs adresse email et mot de passe avec icônes",
+        "Lien Mot de passe oublié",
+        "Bouton Se connecter",
+        "Liens CGU et Politique de confidentialité"
+      ],
+      "interactions": [
+        "Se connecter avec Google",
+        "Se connecter avec email et mot de passe",
+        "Afficher ou masquer le mot de passe",
+        "Ouvrir l'inscription",
+        "Ouvrir la récupération de mot de passe",
+        "Ouvrir les CGU ou la Politique de confidentialité"
+      ],
+      "dataNeeds": ["Adresse email", "Mot de passe", "Session utilisateur"],
+      "integrations": ["Google OAuth", "Better Auth"],
+      "notes": "Observé directement via Banani MCP dans LoginPage.jsx. La composition est desktop fixe à 1440×900 ; aucune variante mobile/tablette n'a été fournie. La marque Studeo doit être harmonisée avec Etudeo. Le témoignage et l'affirmation « des milliers d'élèves » restent À CONFIRMER. L'icône décorative sparkles ne doit pas être importée."
     }
   ],
   "designSystem": {
@@ -401,12 +431,14 @@
     "navigation": [
       "BottomNav mobile fixe à cinq emplacements avec action centrale de création",
       "Navigation latérale desktop",
-      "Navigation marketing desktop avec ancres de sections, connexion et inscription"
+      "Navigation marketing desktop avec ancres de sections, connexion et inscription",
+      "Écran d'authentification desktop en deux panneaux avec Google OAuth prioritaire"
     ],
     "notes": [
       "Les 17 écrans connus du flow Planif Études ont été relus directement via Banani MCP le 11 septembre 2026.",
       "La landing page Banani est une composition desktop fixe ; son adaptation mobile-first doit préserver les tokens sans conserver minWidth 1440px.",
-      "L'icône décorative sparkles visible dans le hero doit être remplacée par une icône fonctionnelle conforme au Premium Icon Gate."
+      "L'icône décorative sparkles visible dans le hero doit être remplacée par une icône fonctionnelle conforme au Premium Icon Gate.",
+      "L'écran Connexion Banani a été relu le 11 septembre 2026 ; son adaptation mobile-first reste à concevoir."
     ]
   },
   "components": [
@@ -464,6 +496,11 @@
       "id": "landing-footer",
       "name": "LandingFooter",
       "purpose": "Pied de page public avec marque et liens légaux."
+    },
+    {
+      "id": "auth-split-layout",
+      "name": "AuthSplitLayout",
+      "purpose": "Composition d'authentification responsive avec panneau de marque et formulaire."
     }
   ],
   "flows": [
@@ -480,6 +517,9 @@
     "L'image hero est référencée par l'API d'image temporaire du flow Banani ; l'asset final et ses droits d'utilisation restent À CONFIRMER.",
     "Le design ne contient pas de section FAQ malgré l'ancre de navigation correspondante.",
     "Les destinations exactes des CTA, de la démo, de Confidentialité, des CGU et de Contact restent À CONFIRMER.",
+    "Banani n'a transmis que l'écran Connexion dans la sélection actuelle ; le design exact de l'écran Inscription reste À CONFIRMER.",
+    "La composition mobile et tablette des pages d'authentification n'est pas fournie par Banani et doit être adaptée selon les règles mobile-first du kit.",
+    "Le témoignage Aïssatou K. et l'affirmation « des milliers d'élèves » visibles sur Connexion restent À CONFIRMER avant publication.",
     "Les règles métier et de sécurité ne sont pas déduites du JSX Banani et restent régies par l'architecture Etudeo."
   ]
 }

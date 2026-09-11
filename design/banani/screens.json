@@ -1,7 +1,7 @@
 {
   "project": "Etudeo",
   "source": "banani-mcp",
-  "importedAt": "2026-09-11T02:47:19Z",
+  "importedAt": "2026-09-11T04:07:00Z",
   "screens": [
     {
       "id": "today-mobile",
@@ -231,7 +231,10 @@
       "route": "/dashboard/create",
       "auth": "authenticated",
       "purpose": "Présenter les options de création: tâche, événement, rappel, groupe d'étude, ressource ou note.",
-      "states": ["default", "unauthorized"],
+      "states": [
+        "default",
+        "unauthorized"
+      ],
       "notes": "Observé uniquement en desktop dans CreateDesktop.jsx. Les options réellement livrées et la variante mobile restent À CONFIRMER.",
       "viewport": "desktop",
       "keyElements": [],
@@ -314,7 +317,12 @@
       "route": "/dashboard/more",
       "auth": "authenticated",
       "purpose": "Regrouper les destinations secondaires, le compte, les paramètres, l'aide et la déconnexion.",
-      "states": ["default", "submitting", "error", "unauthorized"],
+      "states": [
+        "default",
+        "submitting",
+        "error",
+        "unauthorized"
+      ],
       "notes": "Observé dans MoreMenu.jsx. La déconnexion doit rester une action serveur/auth sécurisée.",
       "viewport": "mobile",
       "keyElements": [],
@@ -328,7 +336,12 @@
       "route": "/dashboard/more",
       "auth": "authenticated",
       "purpose": "Variante desktop du menu secondaire et de la gestion du compte.",
-      "states": ["default", "submitting", "error", "unauthorized"],
+      "states": [
+        "default",
+        "submitting",
+        "error",
+        "unauthorized"
+      ],
       "notes": "Observé dans MoreMenuDesktop.jsx. Même route que la variante mobile.",
       "viewport": "desktop",
       "keyElements": [],
@@ -342,7 +355,9 @@
       "route": "/",
       "auth": "public",
       "purpose": "Présenter le produit de planification scolaire, ses fonctionnalités, son fonctionnement, des témoignages, des offres tarifaires et des appels à l'inscription.",
-      "states": ["default"],
+      "states": [
+        "default"
+      ],
       "notes": "Observé directement via Banani MCP dans LandingPage.jsx. Le design impose minWidth 1440px et ne fournit pas de variante mobile/tablette : le responsive 320–1024 px est À CONFIRMER. La marque Studeo doit être harmonisée avec Etudeo. Les CTA, ancres, FAQ, démo et liens légaux sont visuels mais leurs destinations restent À CONFIRMER. Les paiements sont désactivés : les cartes tarifaires n'autorisent aucun checkout.",
       "viewport": "desktop",
       "keyElements": [
@@ -370,6 +385,49 @@
         "Image de hero"
       ],
       "integrations": []
+    },
+    {
+      "id": "login-desktop",
+      "name": "Connexion",
+      "route": "/login",
+      "auth": "public",
+      "purpose": "Permettre la connexion à Etudeo avec Google ou avec une adresse e-mail et un mot de passe.",
+      "states": [
+        "default",
+        "submitting",
+        "validation-error",
+        "error",
+        "success"
+      ],
+      "notes": "Observé directement via Banani MCP dans LoginPage.jsx. La composition est desktop fixe à 1440×900 ; aucune variante mobile/tablette n'a été fournie. La marque Studeo doit être harmonisée avec Etudeo. Le témoignage et l'affirmation « des milliers d'élèves » restent À CONFIRMER. L'icône décorative sparkles ne doit pas être importée.",
+      "viewport": "desktop",
+      "keyElements": [
+        "Panneau de marque bleu avec logo, promesse produit, trois bénéfices et témoignage",
+        "Titre Bon retour et lien vers l'inscription",
+        "Bouton principal Continuer avec Google avec logo Google",
+        "Séparateur ou par email",
+        "Champs adresse email et mot de passe avec icônes",
+        "Lien Mot de passe oublié",
+        "Bouton Se connecter",
+        "Liens CGU et Politique de confidentialité"
+      ],
+      "interactions": [
+        "Se connecter avec Google",
+        "Se connecter avec email et mot de passe",
+        "Afficher ou masquer le mot de passe",
+        "Ouvrir l'inscription",
+        "Ouvrir la récupération de mot de passe",
+        "Ouvrir les CGU ou la Politique de confidentialité"
+      ],
+      "dataNeeds": [
+        "Adresse email",
+        "Mot de passe",
+        "Session utilisateur"
+      ],
+      "integrations": [
+        "Google OAuth",
+        "Better Auth"
+      ]
     }
   ]
 }
